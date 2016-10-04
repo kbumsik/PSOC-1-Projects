@@ -1,0 +1,14 @@
+# DO NOT DELETE
+./obj/boot.o : \
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8ssc.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab\lab1\lab1\lib\GLOBAL~1.INC\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab\lab1\lab1\memory.inc
+./obj/main.o :  ./lib/PSoCAPI.inc\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab\lab1\lab1\memory.inc
+./lib/obj/psocconfig.o :  ./lib/GLOBAL~1.INC\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab\lab1\lab1\memory.inc
+./lib/obj/psocconfigtbl.o : \
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc

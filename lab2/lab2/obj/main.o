@@ -1,0 +1,14 @@
+XH
+H 1 areas 1 global symbols
+M main.c
+A text size 2 flags 0
+dbfile ./main.c
+dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab\lab2\lab2\main.c
+dbfunc e main 0 fV
+dbline FFFFFFFF 0
+dbline A 0
+dbline FFFFFFFE 0
+dbline 0 0
+S _main Def0000
+T 00 00 8F FF
+R 00 00 00 00
