@@ -1,0 +1,30 @@
+Starting MAKE...
+creating project.mk 
+
+lib/fanpwm.asm
+
+lib/fanpwmint.asm
+
+lib/lcd_1.asm
+
+lib/psocconfig.asm
+
+lib/psocconfigtbl.asm
+
+lib/tachtimer.asm
+
+lib/tachtimerint.asm
+
+./boot.asm
+
+Linking..
+
+  ROM 17% full. 2760 out of 16384 bytes used (does not include absolute areas).
+
+  RAM 26% full. 66 bytes used (does not include stack usage).
+
+Built with ICCM8C STD V7.05.00
+
+ 
+Lab4D - 0 error(s) 0 warning(s) 05:34:00
+

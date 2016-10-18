@@ -1,0 +1,781 @@
+                        .module main.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile ./main.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile ./main.c
+ 0000           _line1_head::
+ 0000                   .blkb 6
+                        .area idata(rom,lit)
+ 0000 52504D3A2000      .byte 'R,'P,'M,58,32,0
+                        .area data(ram, con, rel)
+ 0006                   .dbfile ./main.c
+ 0006                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\main.c
+ 0006                   .dbsym e line1_head _line1_head A[6:6]c
+ 0006           _line2_head::
+ 0006                   .blkb 6
+                        .area idata(rom,lit)
+ 0006 50574D3A2000      .byte 'P,'W,'M,58,32,0
+                        .area data(ram, con, rel)
+ 000C                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\main.c
+ 000C                   .dbsym e line2_head _line2_head A[6:6]c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\main.c
+ 0000                   .dbfunc e itoa _itoa fV
+ 0000           ;          digit -> X+4
+ 0000           ;              n -> X+2
+ 0000           ;              d -> X+0
+ 0000           ;           base -> X-9
+ 0000           ;            str -> X-7
+ 0000           ;          input -> X-5
+ 0000           _itoa::
+ 0000                   .dbline -1
+ 0000 10                push X
+ 0001 4F                mov X,SP
+ 0002 3808              add SP,8
+ 0004                   .dbline 19
+ 0004           ; //----------------------------------------------------------------------------
+ 0004           ; // C main line
+ 0004           ; //----------------------------------------------------------------------------
+ 0004           ; 
+ 0004           ; #include <m8c.h>        // part specific constants and macros
+ 0004           ; #include "PSoCAPI.h"    // PSoC API definitions for all User Modules
+ 0004           ; #include <string.h>
+ 0004           ; #include <stddef.h>
+ 0004           ; 
+ 0004           ; // CONST keyword will let the string stored in Flash.
+ 0004           ; // So it does not take SRAM.
+ 0004           ; CONST char line1_head[] = "RPM: ";    
+ 0004           ; CONST char line2_head[] = "PWM: ";
+ 0004           ; 
+ 0004           ; void itoa(unsigned short input, char *str, int base);
+ 0004           ; void LCD_line_print(char *str, unsigned char line);
+ 0004           ; 
+ 0004           ; void itoa(unsigned short input, char *str, int base)
+ 0004           ; {
+ 0004                   .dbline 20
+ 0004           ;       int n = 0;
+ 0004 560300            mov [X+3],0
+ 0007 560200            mov [X+2],0
+ 000A                   .dbline 21
+ 000A           ;       unsigned int d = 1;
+ 000A 560101            mov [X+1],1
+ 000D 560000            mov [X+0],0
+ 0010 801A              xjmp L3
+ 0012           L2:
+ 0012                   .dbline 23
+ 0012           ;       while ((input / d) >= base)
+ 0012           ;       {
+ 0012                   .dbline 24
+ 0012           ;               d *= base;
+ 0012 52F7              mov A,[X-9]
+ 0014 08                push A
+ 0015 52F8              mov A,[X-8]
+ 0017 08                push A
+ 0018 5200              mov A,[X+0]
+ 001A 08                push A
+ 001B 5201              mov A,[X+1]
+ 001D 08                push A
+ 001E 7C0000            xcall __mul16
+ 0021 38FC              add SP,-4
+ 0023 5100              mov A,[__rX]
+ 0025 5401              mov [X+1],A
+ 0027 5100              mov A,[__rY]
+ 0029 5400              mov [X+0],A
+ 002B                   .dbline 25
+ 002B           ;       }
+ 002B           L3:
+ 002B                   .dbline 22
+ 002B 5200              mov A,[X+0]
+ 002D 08                push A
+ 002E 5201              mov A,[X+1]
+ 0030 08                push A
+ 0031 52FB              mov A,[X-5]
+ 0033 08                push A
+ 0034 52FC              mov A,[X-4]
+ 0036 08                push A
+ 0037 7C0000            xcall __divmodu_16X16_16
+ 003A 18                pop A
+ 003B 5300              mov [__r1],A
+ 003D 18                pop A
+ 003E 5300              mov [__r0],A
+ 0040 38FE              add SP,-2
+ 0042 5100              mov A,[__r1]
+ 0044 13F8              sub A,[X-8]
+ 0046 5100              mov A,[__r0]
+ 0048 1BF7              sbb A,[X-9]
+ 004A DFC7              jnc L2
+ 004C           X0:
+ 004C 80AB              xjmp L6
+ 004E           L5:
+ 004E                   .dbline 27
+ 004E           ;       while (d != 0)
+ 004E           ;       {
+ 004E                   .dbline 28
+ 004E           ;               int digit = input / d;
+ 004E 5200              mov A,[X+0]
+ 0050 08                push A
+ 0051 5201              mov A,[X+1]
+ 0053 08                push A
+ 0054 52FB              mov A,[X-5]
+ 0056 08                push A
+ 0057 52FC              mov A,[X-4]
+ 0059 08                push A
+ 005A 7C0000            xcall __divmodu_16X16_16
+ 005D 18                pop A
+ 005E 5300              mov [__r1],A
+ 0060 18                pop A
+ 0061 5300              mov [__r0],A
+ 0063 38FE              add SP,-2
+ 0065 5100              mov A,[__r1]
+ 0067 5405              mov [X+5],A
+ 0069 5100              mov A,[__r0]
+ 006B 5404              mov [X+4],A
+ 006D                   .dbline 29
+ 006D           ;               input %= d;
+ 006D 5200              mov A,[X+0]
+ 006F 08                push A
+ 0070 5201              mov A,[X+1]
+ 0072 08                push A
+ 0073 52FB              mov A,[X-5]
+ 0075 08                push A
+ 0076 52FC              mov A,[X-4]
+ 0078 08                push A
+ 0079 7C0000            xcall __divmodu_16X16_16
+ 007C 38FE              add SP,-2
+ 007E 18                pop A
+ 007F 54FC              mov [X-4],A
+ 0081 18                pop A
+ 0082 54FB              mov [X-5],A
+ 0084                   .dbline 30
+ 0084           ;               d /= base;
+ 0084 52F7              mov A,[X-9]
+ 0086 08                push A
+ 0087 52F8              mov A,[X-8]
+ 0089 08                push A
+ 008A 5200              mov A,[X+0]
+ 008C 08                push A
+ 008D 5201              mov A,[X+1]
+ 008F 08                push A
+ 0090 7C0000            xcall __divmodu_16X16_16
+ 0093 18                pop A
+ 0094 5401              mov [X+1],A
+ 0096 18                pop A
+ 0097 5400              mov [X+0],A
+ 0099 38FE              add SP,-2
+ 009B                   .dbline 31
+ 009B           ;               if (n || digit > 0 || d == 0)
+ 009B 3D0200            cmp [X+2],0
+ 009E B020              jnz L11
+ 00A0 3D0300            cmp [X+3],0
+ 00A3 B01B              jnz L11
+ 00A5           X1:
+ 00A5 5000              mov A,0
+ 00A7 1305              sub A,[X+5]
+ 00A9 5204              mov A,[X+4]
+ 00AB 3180              xor A,-128
+ 00AD 5300              mov [__rX],A
+ 00AF 5080              mov A,(0 ^ 0x80)
+ 00B1 1A00              sbb A,[__rX]
+ 00B3 C00B              jc L11
+ 00B5           X2:
+ 00B5 3D0000            cmp [X+0],0
+ 00B8 B03F              jnz L8
+ 00BA 3D0100            cmp [X+1],0
+ 00BD B03A              jnz L8
+ 00BF           X3:
+ 00BF           L11:
+ 00BF                   .dbline 33
+ 00BF           ;               {
+ 00BF           ;                       *str++ = digit + ((digit < 10)? '0': 'a' - 10);
+ 00BF                   .dbline 33
+ 00BF 52FA              mov A,[X-6]
+ 00C1 5300              mov [__r1],A
+ 00C3 52F9              mov A,[X-7]
+ 00C5 5300              mov [__r0],A
+ 00C7 5100              mov A,[__r1]
+ 00C9 0101              add A,1
+ 00CB 54FA              mov [X-6],A
+ 00CD 5100              mov A,[__r0]
+ 00CF 0900              adc A,0
+ 00D1 54F9              mov [X-7],A
+ 00D3 5205              mov A,[X+5]
+ 00D5 110A              sub A,10
+ 00D7 5204              mov A,[X+4]
+ 00D9 3180              xor A,-128
+ 00DB 1980              sbb A,(0 ^ 0x80)
+ 00DD D009              jnc L13
+ 00DF           X4:
+ 00DF 560730            mov [X+7],48
+ 00E2 560600            mov [X+6],0
+ 00E5 8007              xjmp L14
+ 00E7           L13:
+ 00E7 560757            mov [X+7],87
+ 00EA 560600            mov [X+6],0
+ 00ED           L14:
+ 00ED 5205              mov A,[X+5]
+ 00EF 0307              add A,[X+7]
+ 00F1 3F00              mvi [__r1],A
+ 00F3                   .dbline 34
+ 00F3           ;                       n++;
+ 00F3 7703              inc [X+3]
+ 00F5 0F0200            adc [X+2],0
+ 00F8                   .dbline 35
+ 00F8           ;               }
+ 00F8           L8:
+ 00F8                   .dbline 36
+ 00F8           ;       }
+ 00F8           L6:
+ 00F8                   .dbline 26
+ 00F8 3D0000            cmp [X+0],0
+ 00FB BF52              jnz L5
+ 00FD 3D0100            cmp [X+1],0
+ 0100 BF4D              jnz L5
+ 0102           X5:
+ 0102                   .dbline 37
+ 0102           ;       *str = '\0';
+ 0102 52FA              mov A,[X-6]
+ 0104 5300              mov [__r1],A
+ 0106 5000              mov A,0
+ 0108 3F00              mvi [__r1],A
+ 010A                   .dbline -2
+ 010A           L1:
+ 010A 38F8              add SP,-8
+ 010C 20                pop X
+ 010D                   .dbline 0 ; func end
+ 010D 7F                ret
+ 010E                   .dbsym l digit 4 I
+ 010E                   .dbsym l n 2 I
+ 010E                   .dbsym l d 0 i
+ 010E                   .dbsym l base -9 I
+ 010E                   .dbsym l str -7 pc
+ 010E                   .dbsym l input -5 s
+ 010E                   .dbend
+                        .area bss(ram, con, rel)
+ 0000                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\main.c
+ 0000           L16:
+ 0000                   .blkb 17
+                        .area text(rom, con, rel)
+ 010E                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\main.c
+ 010E                   .dbfunc e LCD_line_print _LCD_line_print fV
+ 010E                   .dbsym s buffer L16 A[17:17]c
+ 010E           ;           line -> X-6
+ 010E           ;            str -> X-5
+ 010E           _LCD_line_print::
+ 010E                   .dbline -1
+ 010E 10                push X
+ 010F 4F                mov X,SP
+ 0110                   .dbline 41
+ 0110           ; }
+ 0110           ; 
+ 0110           ; void LCD_line_print(char *str, unsigned char line)
+ 0110           ; {
+ 0110                   .dbline 43
+ 0110           ;       static char buffer[17];
+ 0110           ;       memset(buffer, ' ', 16);
+ 0110 5000              mov A,0
+ 0112 08                push A
+ 0113 5010              mov A,16
+ 0115 08                push A
+ 0116 5000              mov A,0
+ 0118 08                push A
+ 0119 5020              mov A,32
+ 011B 08                push A
+ 011C 5000              mov A,>L16
+ 011E 08                push A
+ 011F 5000              mov A,<L16
+ 0121 08                push A
+ 0122 7C0000            xcall _memset
+ 0125 38FA              add SP,-6
+ 0127                   .dbline 44
+ 0127           ;       memcpy(buffer, str, strlen(str));
+ 0127 52FB              mov A,[X-5]
+ 0129 08                push A
+ 012A 52FC              mov A,[X-4]
+ 012C 08                push A
+ 012D 7C0000            xcall _strlen
+ 0130 5100              mov A,[__r0]
+ 0132 08                push A
+ 0133 5100              mov A,[__r1]
+ 0135 08                push A
+ 0136 52FB              mov A,[X-5]
+ 0138 08                push A
+ 0139 52FC              mov A,[X-4]
+ 013B 08                push A
+ 013C 5000              mov A,>L16
+ 013E 08                push A
+ 013F 5000              mov A,<L16
+ 0141 08                push A
+ 0142 7C0000            xcall _memcpy
+ 0145 38F8              add SP,-8
+ 0147                   .dbline 45
+ 0147           ;       buffer[17] = '\0';
+ 0147 551100            mov [L16+17],0
+ 014A                   .dbline 46
+ 014A           ;       LCD_1_Position(line, 0);
+ 014A 10                push X
+ 014B 5000              mov A,0
+ 014D 08                push A
+ 014E 52FA              mov A,[X-6]
+ 0150 20                pop X
+ 0151 7C0000            xcall _LCD_1_Position
+ 0154                   .dbline 47
+ 0154           ;       LCD_1_PrString(buffer);
+ 0154 5000              mov A,>L16
+ 0156 08                push A
+ 0157 5000              mov A,<L16
+ 0159 5C                mov X,A
+ 015A 18                pop A
+ 015B 7C0000            xcall _LCD_1_PrString
+ 015E 20                pop X
+ 015F                   .dbline -2
+ 015F           L15:
+ 015F 20                pop X
+ 0160                   .dbline 0 ; func end
+ 0160 7F                ret
+ 0161                   .dbsym l line -6 c
+ 0161                   .dbsym l str -5 pc
+ 0161                   .dbend
+                        .area data(ram, con, rel)
+ 000C                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\main.c
+ 000C           _wControlState::
+ 000C                   .blkb 2
+                        .area idata(rom,lit)
+ 000C 03E8              .word 1000
+                        .area data(ram, con, rel)
+ 000E                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\main.c
+ 000E                   .dbsym e wControlState _wControlState s
+ 000E           _cNumCycles::
+ 000E                   .blkb 1
+                        .area idata(rom,lit)
+ 000E FF                .byte 255
+                        .area data(ram, con, rel)
+ 000F                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\main.c
+ 000F                   .dbsym e cNumCycles _cNumCycles c
+ 000F           _bDataAvailable::
+ 000F                   .blkb 1
+                        .area idata(rom,lit)
+ 000F 00                .byte 0
+                        .area data(ram, con, rel)
+ 0010                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\main.c
+ 0010                   .dbsym e bDataAvailable _bDataAvailable c
+ 0010           _wSpeedRPM::
+ 0010                   .blkb 2
+                        .area idata(rom,lit)
+ 0010 0000              .word 0
+                        .area data(ram, con, rel)
+ 0012                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\main.c
+ 0012                   .dbsym e wSpeedRPM _wSpeedRPM s
+                        .area bss(ram, con, rel)
+ 0011                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\main.c
+ 0011           L19:
+ 0011                   .blkb 17
+                        .area text(rom, con, rel)
+ 0161                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\main.c
+ 0161                   .dbfunc e main _main fV
+ 0161                   .dbsym s str_buf L19 A[17:17]c
+ 0161           ;            tmp -> X+2
+ 0161           ;             pw -> X+1
+ 0161           ;   bSwitchState -> X+0
+ 0161           _main::
+ 0161                   .dbline -1
+ 0161 10                push X
+ 0162 4F                mov X,SP
+ 0163 3806              add SP,6
+ 0165                   .dbline 59
+ 0165           ; }
+ 0165           ; 
+ 0165           ; // global variables
+ 0165           ; unsigned short wControlState = 1000;
+ 0165           ; unsigned short wFirstValue;
+ 0165           ; unsigned short wLastValue;
+ 0165           ; char cNumCycles = (char )-1;
+ 0165           ; unsigned char bDataAvailable = 0;
+ 0165           ; unsigned short wSpeedRPM = 0;
+ 0165           ; 
+ 0165           ; void main(void)
+ 0165           ; {
+ 0165                   .dbline 68
+ 0165           ;       // variable declaration
+ 0165           ;       static char str_buf[17];
+ 0165           ;       unsigned char pw;
+ 0165           ;       char bSwitchState;
+ 0165           ;       long int tmp;
+ 0165           ;       
+ 0165           ;       // initialize interrupt
+ 0165           ;       //INT_MSK0 |= 0x40;
+ 0165           ;       M8C_EnableGInt;
+ 0165 7101                      or  F, 01h
+ 0167           
+ 0167                   .dbline 69
+ 0167           ;       FanPWM_EnableInt();
+ 0167 10                push X
+ 0168 7C0000            xcall _FanPWM_EnableInt
+ 016B                   .dbline 74
+ 016B           ; 
+ 016B           ;       //SleepTimer_EnableInt();
+ 016B           ;       
+ 016B           ;       // initialize PWM module
+ 016B           ;       FanPWM_Start();
+ 016B 7C0000            xcall _FanPWM_Start
+ 016E                   .dbline 77
+ 016E           ;       
+ 016E           ;       // init 16 bit timer
+ 016E           ;       TachTimer_Start();
+ 016E 7C0000            xcall _TachTimer_Start
+ 0171                   .dbline 80
+ 0171           ;       
+ 0171           ;       // init LCD module
+ 0171           ;       LCD_1_Start();
+ 0171 7C0000            xcall _LCD_1_Start
+ 0174                   .dbline 83
+ 0174           ;       
+ 0174           ;       // start PWM and LCD
+ 0174           ;       pw = FanPWM_bReadPulseWidth();
+ 0174 7C0000            xcall _FanPWM_bReadPulseWidth
+ 0177 20                pop X
+ 0178 5401              mov [X+1],A
+ 017A                   .dbline 84
+ 017A           ;       pw = 255;
+ 017A 5601FF            mov [X+1],-1
+ 017D                   .dbline 85
+ 017D           ;       FanPWM_WritePulseWidth(pw);
+ 017D 10                push X
+ 017E 5201              mov A,[X+1]
+ 0180 7C0000            xcall _FanPWM_WritePulseWidth
+ 0183 20                pop X
+ 0184                   .dbline 86
+ 0184           ;       strcpy(str_buf, line2_head);
+ 0184 5006              mov A,>_line2_head
+ 0186 08                push A
+ 0187 5006              mov A,<_line2_head
+ 0189 08                push A
+ 018A 5011              mov A,>L19
+ 018C 08                push A
+ 018D 5011              mov A,<L19
+ 018F 08                push A
+ 0190 7C0000            xcall _strcpy
+ 0193 38FC              add SP,-4
+ 0195                   .dbline 87
+ 0195           ;       itoa(pw, str_buf + 5, 10);
+ 0195 5000              mov A,0
+ 0197 08                push A
+ 0198 500A              mov A,10
+ 019A 08                push A
+ 019B 5016              mov A,>L19+5
+ 019D 08                push A
+ 019E 5016              mov A,<L19+5
+ 01A0 08                push A
+ 01A1 5201              mov A,[X+1]
+ 01A3 5300              mov [__r1],A
+ 01A5 5000              mov A,0
+ 01A7 08                push A
+ 01A8 5100              mov A,[__r1]
+ 01AA 08                push A
+ 01AB 9E53              xcall _itoa
+ 01AD                   .dbline 88
+ 01AD           ;       LCD_line_print(str_buf, 1);
+ 01AD 5001              mov A,1
+ 01AF 08                push A
+ 01B0 5011              mov A,>L19
+ 01B2 08                push A
+ 01B3 5011              mov A,<L19
+ 01B5 08                push A
+ 01B6 9F56              xcall _LCD_line_print
+ 01B8 38F7              add SP,-9
+ 01BA                   .dbline 92
+ 01BA           ;       
+ 01BA           ;       
+ 01BA           ;       // infinite loop with debouncing.
+ 01BA           ;       bSwitchState = 0;
+ 01BA 560000            mov [X+0],0
+ 01BD 814C              xjmp L22
+ 01BF           L21:
+ 01BF                   .dbline 94
+ 01BF           ;       while (1)
+ 01BF           ;       {
+ 01BF                   .dbline 106
+ 01BF           ;               
+ 01BF           ;               // print out
+ 01BF           ;               //tmp = TachTimer_wReadTimerSaveCV();
+ 01BF           ;               //strcpy(str_buf, line1_head);
+ 01BF           ;               //itoa((unsigned short)tmp, str_buf + strlen(line1_head), 10);
+ 01BF           ;               //LCD_line_print(str_buf, 0);
+ 01BF           ;               // FIXME: The sleep has a problem with the overall freq
+ 01BF           ;               //M8C_Sleep;
+ 01BF           ;               //INT_CLR0 = INT_CLR0 & ~0x40;
+ 01BF           ;               
+ 01BF           ;               // debouncing
+ 01BF           ;               bSwitchState <<= 1;
+ 01BF 6600              asl [X+0]
+ 01C1                   .dbline 107
+ 01C1           ;               bSwitchState &= 0x0f;
+ 01C1 27000F            and [X+0],15
+ 01C4                   .dbline 108
+ 01C4           ;               bSwitchState |= (PRT1DR & 0x01);
+ 01C4 5D04              mov A,REG[0x4]
+ 01C6 2101              and A,1
+ 01C8 2D00              or [X+0],A
+ 01CA                   .dbline 109
+ 01CA           ;               if(bSwitchState == 0x07)
+ 01CA 3D0007            cmp [X+0],7
+ 01CD B05F              jnz L24
+ 01CF                   .dbline 112
+ 01CF           ;               {                       
+ 01CF           ;                       // increase the pulse width
+ 01CF           ;                       pw = FanPWM_bReadPulseWidth() - 1;
+ 01CF                   .dbline 112
+ 01CF 10                push X
+ 01D0 7C0000            xcall _FanPWM_bReadPulseWidth
+ 01D3 20                pop X
+ 01D4 1101              sub A,1
+ 01D6 5401              mov [X+1],A
+ 01D8                   .dbline 113
+ 01D8           ;                       if (pw <= 0)
+ 01D8 5000              mov A,0
+ 01DA 3B01              cmp A,[X+1]
+ 01DC C004              jc L26
+ 01DE           X7:
+ 01DE                   .dbline 115
+ 01DE           ;                       {
+ 01DE           ;                               pw = 255;
+ 01DE                   .dbline 115
+ 01DE 5601FF            mov [X+1],-1
+ 01E1                   .dbline 116
+ 01E1           ;                       }
+ 01E1           L26:
+ 01E1                   .dbline 117
+ 01E1           ;                       FanPWM_WritePulseWidth(pw);
+ 01E1 10                push X
+ 01E2 5201              mov A,[X+1]
+ 01E4 7C0000            xcall _FanPWM_WritePulseWidth
+ 01E7 20                pop X
+ 01E8                   .dbline 120
+ 01E8           ;                       
+ 01E8           ;                       // print out
+ 01E8           ;                       strcpy(str_buf, line2_head);
+ 01E8 5006              mov A,>_line2_head
+ 01EA 08                push A
+ 01EB 5006              mov A,<_line2_head
+ 01ED 08                push A
+ 01EE 5011              mov A,>L19
+ 01F0 08                push A
+ 01F1 5011              mov A,<L19
+ 01F3 08                push A
+ 01F4 7C0000            xcall _strcpy
+ 01F7                   .dbline 121
+ 01F7           ;                       itoa(pw, str_buf + strlen(line2_head), 10);
+ 01F7 5006              mov A,>_line2_head
+ 01F9 08                push A
+ 01FA 5006              mov A,<_line2_head
+ 01FC 08                push A
+ 01FD 7C0000            xcall _strlen
+ 0200 38FA              add SP,-6
+ 0202 5000              mov A,0
+ 0204 08                push A
+ 0205 500A              mov A,10
+ 0207 08                push A
+ 0208 060011            add [__r1],<L19
+ 020B 0E0011            adc [__r0],>L19
+ 020E 5100              mov A,[__r0]
+ 0210 08                push A
+ 0211 5100              mov A,[__r1]
+ 0213 08                push A
+ 0214 5201              mov A,[X+1]
+ 0216 5300              mov [__r1],A
+ 0218 5000              mov A,0
+ 021A 08                push A
+ 021B 5100              mov A,[__r1]
+ 021D 08                push A
+ 021E 9DE0              xcall _itoa
+ 0220                   .dbline 122
+ 0220           ;                       LCD_line_print(str_buf, 1);
+ 0220 5001              mov A,1
+ 0222 08                push A
+ 0223 5011              mov A,>L19
+ 0225 08                push A
+ 0226 5011              mov A,<L19
+ 0228 08                push A
+ 0229 9EE3              xcall _LCD_line_print
+ 022B 38F7              add SP,-9
+ 022D                   .dbline 123
+ 022D           ;               }
+ 022D           L24:
+ 022D                   .dbline 126
+ 022D           ;               
+ 022D           ;               // Main control loop
+ 022D           ;               if (bDataAvailable == 1)
+ 022D 3C0F01            cmp [_bDataAvailable],1
+ 0230 B0D9              jnz L28
+ 0232                   .dbline 129
+ 0232           ;               {
+ 0232           ;                       // clear it
+ 0232           ;                       bDataAvailable = 0;
+ 0232                   .dbline 129
+ 0232 550F00            mov [_bDataAvailable],0
+ 0235                   .dbline 133
+ 0235           ;                       // calculate the fan speed
+ 0235           ;                       
+ 0235           ;                       // and post it along with the value of cNumCyles, to the LCD
+ 0235           ;                       tmp = 0;
+ 0235 560200            mov [X+2],0
+ 0238 560300            mov [X+3],0
+ 023B 560400            mov [X+4],0
+ 023E 560500            mov [X+5],0
+ 0241                   .dbline 134
+ 0241           ;                       tmp = 45*100000*cNumCycles;
+ 0241 5F000E            mov [__r3],[_cNumCycles]
+ 0244 5000              mov A,0
+ 0246 08                push A
+ 0247 08                push A
+ 0248 08                push A
+ 0249 5100              mov A,[__r3]
+ 024B 08                push A
+ 024C 5000              mov A,0
+ 024E 08                push A
+ 024F 5044              mov A,68
+ 0251 08                push A
+ 0252 50AA              mov A,-86
+ 0254 08                push A
+ 0255 5020              mov A,32
+ 0257 08                push A
+ 0258 7C0000            xcall __mul_32X32_32
+ 025B 38FC              add SP,-4
+ 025D 18                pop A
+ 025E 5405              mov [X+5],A
+ 0260 18                pop A
+ 0261 5404              mov [X+4],A
+ 0263 18                pop A
+ 0264 5403              mov [X+3],A
+ 0266 18                pop A
+ 0267 5402              mov [X+2],A
+ 0269                   .dbline 135
+ 0269           ;                       tmp += (wFirstValue - wLastValue)/2;
+ 0269 5125              mov A,[_wFirstValue+1]
+ 026B 1223              sub A,[_wLastValue+1]
+ 026D 5300              mov [__r1],A
+ 026F 5124              mov A,[_wFirstValue]
+ 0271 1A22              sbb A,[_wLastValue]
+ 0273 5300              mov [__r0],A
+ 0275 70FB              and F,-5
+ 0277 6E00              rrc [__r0]
+ 0279 6E00              rrc [__r1]
+ 027B 5100              mov A,[__r1]
+ 027D 0505              add [X+5],A
+ 027F 5100              mov A,[__r0]
+ 0281 0D04              adc [X+4],A
+ 0283 5000              mov A,0
+ 0285 0F0300            adc [X+3],0
+ 0288 0F0200            adc [X+2],0
+ 028B                   .dbline 136
+ 028B           ;                       tmp /= (wFirstValue - wLastValue);
+ 028B 5125              mov A,[_wFirstValue+1]
+ 028D 1223              sub A,[_wLastValue+1]
+ 028F 5300              mov [__r1],A
+ 0291 5124              mov A,[_wFirstValue]
+ 0293 1A22              sbb A,[_wLastValue]
+ 0295 5300              mov [__r2],A
+ 0297 5000              mov A,0
+ 0299 08                push A
+ 029A 08                push A
+ 029B 5100              mov A,[__r2]
+ 029D 08                push A
+ 029E 5100              mov A,[__r1]
+ 02A0 08                push A
+ 02A1 5202              mov A,[X+2]
+ 02A3 08                push A
+ 02A4 5203              mov A,[X+3]
+ 02A6 08                push A
+ 02A7 5204              mov A,[X+4]
+ 02A9 08                push A
+ 02AA 5205              mov A,[X+5]
+ 02AC 08                push A
+ 02AD 7C0000            xcall __divmod_32X32_32
+ 02B0 18                pop A
+ 02B1 5405              mov [X+5],A
+ 02B3 18                pop A
+ 02B4 5404              mov [X+4],A
+ 02B6 18                pop A
+ 02B7 5403              mov [X+3],A
+ 02B9 18                pop A
+ 02BA 5402              mov [X+2],A
+ 02BC 38FC              add SP,-4
+ 02BE                   .dbline 137
+ 02BE           ;                       wSpeedRPM = (unsigned short)tmp;
+ 02BE 5205              mov A,[X+5]
+ 02C0 5300              mov [__r1],A
+ 02C2 5204              mov A,[X+4]
+ 02C4 5F1100            mov [_wSpeedRPM+1],[__r1]
+ 02C7 5310              mov [_wSpeedRPM],A
+ 02C9                   .dbline 140
+ 02C9           ;                       
+ 02C9           ;                       // print out
+ 02C9           ;                       strcpy(str_buf, line1_head);
+ 02C9 5000              mov A,>_line1_head
+ 02CB 08                push A
+ 02CC 5000              mov A,<_line1_head
+ 02CE 08                push A
+ 02CF 5011              mov A,>L19
+ 02D1 08                push A
+ 02D2 5011              mov A,<L19
+ 02D4 08                push A
+ 02D5 7C0000            xcall _strcpy
+ 02D8                   .dbline 141
+ 02D8           ;                       itoa(wSpeedRPM, str_buf + strlen(line1_head), 10);
+ 02D8 5000              mov A,>_line1_head
+ 02DA 08                push A
+ 02DB 5000              mov A,<_line1_head
+ 02DD 08                push A
+ 02DE 7C0000            xcall _strlen
+ 02E1 38FA              add SP,-6
+ 02E3 5000              mov A,0
+ 02E5 08                push A
+ 02E6 500A              mov A,10
+ 02E8 08                push A
+ 02E9 060011            add [__r1],<L19
+ 02EC 0E0011            adc [__r0],>L19
+ 02EF 5100              mov A,[__r0]
+ 02F1 08                push A
+ 02F2 5100              mov A,[__r1]
+ 02F4 08                push A
+ 02F5 5110              mov A,[_wSpeedRPM]
+ 02F7 08                push A
+ 02F8 5111              mov A,[_wSpeedRPM+1]
+ 02FA 08                push A
+ 02FB 9D03              xcall _itoa
+ 02FD                   .dbline 142
+ 02FD           ;                       LCD_line_print(str_buf, 0);
+ 02FD 5000              mov A,0
+ 02FF 08                push A
+ 0300 5011              mov A,>L19
+ 0302 08                push A
+ 0303 5011              mov A,<L19
+ 0305 08                push A
+ 0306 9E06              xcall _LCD_line_print
+ 0308 38F7              add SP,-9
+ 030A                   .dbline 143
+ 030A           ;               }
+ 030A           L28:
+ 030A                   .dbline 144
+ 030A           ;       }
+ 030A           L22:
+ 030A                   .dbline 93
+ 030A 8EB4              xjmp L21
+ 030C           X6:
+ 030C                   .dbline -2
+ 030C           L18:
+ 030C 38FA              add SP,-6
+ 030E 20                pop X
+ 030F                   .dbline 0 ; func end
+ 030F 8FFF              jmp .
+ 0311                   .dbsym l tmp 2 L
+ 0311                   .dbsym l pw 1 c
+ 0311                   .dbsym l bSwitchState 0 c
+ 0311                   .dbend
+                        .area bss(ram, con, rel)
+ 0022                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\main.c
+ 0022           _wLastValue::
+ 0022                   .blkb 2
+ 0024                   .dbsym e wLastValue _wLastValue s
+ 0024           _wFirstValue::
+ 0024                   .blkb 2
+ 0026                   .dbsym e wFirstValue _wFirstValue s

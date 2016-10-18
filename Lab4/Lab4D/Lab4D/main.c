@@ -7,6 +7,11 @@
 #include <string.h>
 #include <stddef.h>
 
+// CONST keyword will let the string stored in Flash.
+// So it does not take SRAM.
+CONST char line1_head[] = "RPM: ";	
+CONST char line2_head[] = "PWM: ";
+
 void itoa(unsigned short input, char *str, int base);
 void LCD_line_print(char *str, unsigned char line);
 
@@ -57,8 +62,6 @@ void main(void)
 	unsigned char pw;
 	char bSwitchState;
 	long int tmp;
-	char line1_head[] = "RPM: ";
-	char line2_head[] = "PWM: ";
 	
 	// initialize interrupt
 	//INT_MSK0 |= 0x40;
@@ -89,6 +92,12 @@ void main(void)
 	bSwitchState = 0;
 	while (1)
 	{
+		
+		// print out
+		//tmp = TachTimer_wReadTimerSaveCV();
+		//strcpy(str_buf, line1_head);
+		//itoa((unsigned short)tmp, str_buf + strlen(line1_head), 10);
+		//LCD_line_print(str_buf, 0);
 		// FIXME: The sleep has a problem with the overall freq
 		//M8C_Sleep;
 		//INT_CLR0 = INT_CLR0 & ~0x40;

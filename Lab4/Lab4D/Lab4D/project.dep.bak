@@ -1,0 +1,32 @@
+# DO NOT DELETE
+./obj/boot.o : \
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8ssc.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\lib\GLOBAL~1.INC\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\memory.inc
+./obj/main.o :  ./lib/FanPWM.h ./lib/LCD_1.h ./lib/PSoCAPI.h\
+   ./lib/PSOCGP~1.H ./lib/TACHTI~1.H\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.h\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/_const.h\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/stddef.h\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/string.h
+./lib/obj/fanpwm.o :  ./lib/FanPWM.inc\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\memory.inc
+./lib/obj/fanpwmint.o :  ./lib/FanPWM.inc\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\memory.inc
+./lib/obj/lcd_1.o :  ./lib/LCD_1.inc\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\memory.inc
+./lib/obj/psocconfig.o :  ./lib/GLOBAL~1.INC\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\memory.inc
+./lib/obj/psocconfigtbl.o : \
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc
+./lib/obj/tachtimer.o :  ./lib/TACHTI~1.INC\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\memory.inc
+./lib/obj/tachtimerint.o :  ./lib/TACHTI~1.INC\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4D\Lab4D\memory.inc
