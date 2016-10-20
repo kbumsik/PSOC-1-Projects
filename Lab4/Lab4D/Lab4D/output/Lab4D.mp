@@ -1,6 +1,6 @@
 Project:      output/Lab4D
 Build Number: 0
-Date:         Tue Oct 18 05:34:00 2016
+Date:         Thu Oct 20 16:20:50 2016
 Compiler:     ICCM8C
 Version:      7.05.00
 
@@ -39,118 +39,118 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                     UserModules   0300   03B3 =    947. bytes (rel,con,rom,code)
+                     UserModules   0300   03B4 =    948. bytes (rel,con,rom,code)
 
        Addr  Global Symbol
       -----  --------------------------------
        0300  _TachTimer_ISR
-       0319  _TachTimer_EnableInt
-       0319  TachTimer_EnableInt
-       031D  TachTimer_DisableInt
-       031D  _TachTimer_DisableInt
-       0321  TachTimer_Start
-       0321  _TachTimer_Start
-       0325  _TachTimer_Stop
-       0325  TachTimer_Stop
-       0329  TachTimer_WritePeriod
-       0329  _TachTimer_WritePeriod
-       032F  TachTimer_WriteCompareValue
-       032F  _TachTimer_WriteCompareValue
-       0335  TachTimer_wReadCompareValue
-       0335  wTachTimer_ReadCompareValue
-       0335  _wTachTimer_ReadCompareValue
-       0335  _TachTimer_wReadCompareValue
-       033B  _wTachTimer_ReadCounter
-       033B  wTachTimer_ReadCounter
-       033B  wTachTimer_ReadTimerSaveCV
-       033B  TachTimer_wReadTimerSaveCV
-       033B  _wTachTimer_ReadTimerSaveCV
-       033B  _TachTimer_wReadTimerSaveCV
-       036D  wTachTimer_CaptureCounter
-       036D  wTachTimer_ReadTimer
-       036D  _wTachTimer_CaptureCounter
-       036D  _TachTimer_wReadTimer
-       036D  _wTachTimer_ReadTimer
-       036D  TachTimer_wReadTimer
-       0375  _LCD_1_PrCString
-       0375  LCD_1_PrCString
-       0387  LCD_1_HEX_STR
-       0397  LCD_1_PrHexByte
-       0397  _LCD_1_PrHexByte
-       03AA  LCD_1_PrHexInt
-       03AA  _LCD_1_PrHexInt
-       03B1  _LCD_1_PrString
-       03B1  LCD_1_PrString
-       03BB  LCD_1_WriteData
-       03BB  LCD_1_Write_Data
-       03BB  _LCD_1_Write_Data
-       03BB  _LCD_1_WriteData
-       03CF  LCD_1_Control
-       03CF  _LCD_1_Control
-       0476  _LCD_1_Init
-       0476  _LCD_1_Start
-       0476  LCD_1_Init
-       0476  LCD_1_Start
-       04E2  LCD_1_ROW_OFFSET
-       04E6  LCD_1_Position
-       04E6  _LCD_1_Position
-       04F2  LCD_1_Delay50uTimes
-       04F2  _LCD_1_Delay50uTimes
-       04F8  LCD_1_Delay50u_Table
-       0500  _LCD_1_Delay50u
-       0500  LCD_1_Delay50u
-       0514  LCD_1_DrawBG
-       053A  _LCD_1_DrawBG
-       0563  LCD_1_DrawVBG
-       0590  _LCD_1_DrawVBG
-       05C0  LCD_1_InitVBG
-       05C0  _LCD_1_InitVBG
-       05ED  LCD_1_BG_TYPE1
-       05F4  LCD_1_BG_TYPE2
-       05FB  LCD_1_InitBG
-       05FB  _LCD_1_InitBG
-       062B  _FanPWM_ISR
-       0671  FanPWM_EnableInt
-       0671  _FanPWM_EnableInt
-       0675  FanPWM_DisableInt
-       0675  _FanPWM_DisableInt
-       0679  _FanPWM_Start
-       0679  FanPWM_Start
-       067D  FanPWM_Stop
-       067D  _FanPWM_Stop
-       0681  FanPWM_WritePeriod
-       0681  _FanPWM_WritePeriod
-       0684  FanPWM_WritePulseWidth
-       0684  _FanPWM_WritePulseWidth
-       0687  _bFanPWM_ReadPulseWidth
-       0687  bFanPWM_ReadPulseWidth
-       0687  FanPWM_bReadPulseWidth
-       0687  _FanPWM_bReadPulseWidth
-       068A  FanPWM_bReadCounter
-       068A  _bFanPWM_ReadCounter
-       068A  bFanPWM_ReadCounter
-       068A  _FanPWM_bReadCounter
-       06B3  __UserModules_end
+       031E  _TachTimer_EnableInt
+       031E  TachTimer_EnableInt
+       0322  TachTimer_DisableInt
+       0322  _TachTimer_DisableInt
+       0326  TachTimer_Start
+       0326  _TachTimer_Start
+       032A  _TachTimer_Stop
+       032A  TachTimer_Stop
+       032E  TachTimer_WritePeriod
+       032E  _TachTimer_WritePeriod
+       0334  TachTimer_WriteCompareValue
+       0334  _TachTimer_WriteCompareValue
+       033A  TachTimer_wReadCompareValue
+       033A  wTachTimer_ReadCompareValue
+       033A  _wTachTimer_ReadCompareValue
+       033A  _TachTimer_wReadCompareValue
+       0340  _wTachTimer_ReadCounter
+       0340  wTachTimer_ReadCounter
+       0340  wTachTimer_ReadTimerSaveCV
+       0340  TachTimer_wReadTimerSaveCV
+       0340  _wTachTimer_ReadTimerSaveCV
+       0340  _TachTimer_wReadTimerSaveCV
+       0372  wTachTimer_CaptureCounter
+       0372  wTachTimer_ReadTimer
+       0372  _wTachTimer_CaptureCounter
+       0372  _TachTimer_wReadTimer
+       0372  _wTachTimer_ReadTimer
+       0372  TachTimer_wReadTimer
+       037A  _LCD_1_PrCString
+       037A  LCD_1_PrCString
+       038C  LCD_1_HEX_STR
+       039C  LCD_1_PrHexByte
+       039C  _LCD_1_PrHexByte
+       03AF  LCD_1_PrHexInt
+       03AF  _LCD_1_PrHexInt
+       03B6  _LCD_1_PrString
+       03B6  LCD_1_PrString
+       03C0  LCD_1_WriteData
+       03C0  LCD_1_Write_Data
+       03C0  _LCD_1_Write_Data
+       03C0  _LCD_1_WriteData
+       03D4  LCD_1_Control
+       03D4  _LCD_1_Control
+       047B  _LCD_1_Init
+       047B  _LCD_1_Start
+       047B  LCD_1_Init
+       047B  LCD_1_Start
+       04E7  LCD_1_ROW_OFFSET
+       04EB  LCD_1_Position
+       04EB  _LCD_1_Position
+       04F7  LCD_1_Delay50uTimes
+       04F7  _LCD_1_Delay50uTimes
+       04FD  LCD_1_Delay50u_Table
+       0505  _LCD_1_Delay50u
+       0505  LCD_1_Delay50u
+       0519  LCD_1_DrawBG
+       053F  _LCD_1_DrawBG
+       0568  LCD_1_DrawVBG
+       0595  _LCD_1_DrawVBG
+       05C5  LCD_1_InitVBG
+       05C5  _LCD_1_InitVBG
+       05F2  LCD_1_BG_TYPE1
+       05F9  LCD_1_BG_TYPE2
+       0600  LCD_1_InitBG
+       0600  _LCD_1_InitBG
+       0630  _FanPWM_ISR
+       0672  FanPWM_EnableInt
+       0672  _FanPWM_EnableInt
+       0676  FanPWM_DisableInt
+       0676  _FanPWM_DisableInt
+       067A  _FanPWM_Start
+       067A  FanPWM_Start
+       067E  FanPWM_Stop
+       067E  _FanPWM_Stop
+       0682  FanPWM_WritePeriod
+       0682  _FanPWM_WritePeriod
+       0685  FanPWM_WritePulseWidth
+       0685  _FanPWM_WritePulseWidth
+       0688  _bFanPWM_ReadPulseWidth
+       0688  bFanPWM_ReadPulseWidth
+       0688  FanPWM_bReadPulseWidth
+       0688  _FanPWM_bReadPulseWidth
+       068B  FanPWM_bReadCounter
+       068B  _bFanPWM_ReadCounter
+       068B  bFanPWM_ReadCounter
+       068B  _FanPWM_bReadCounter
+       06B4  __UserModules_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                            text   06B3   0565 =   1381. bytes (rel,con,rom,code)
+                            text   06B4   0569 =   1385. bytes (rel,con,rom,code)
 
        Addr  Global Symbol
       -----  --------------------------------
-       06B3  _itoa
-       06B3  __text_start
-       07C1  _LCD_line_print
-       0814  _main
-       0B6D  _memcpyLMM
-       0B7C  _memcpy
-       0B9B  _memsetLMM
-       0BA6  _memset
-       0BC9  _strcpyLMM
-       0BD8  _strcpy
-       0BF2  _strlenLMM
-       0BFD  _strlen
-       0C18  __text_end
+       06B4  _itoa
+       06B4  __text_start
+       07C2  _LCD_line_print
+       0815  _main
+       0B72  _memcpyLMM
+       0B81  _memcpy
+       0BA0  _memsetLMM
+       0BAB  _memset
+       0BCE  _strcpyLMM
+       0BDD  _strcpy
+       0BF7  _strlenLMM
+       0C02  _strlen
+       0C1D  __text_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------

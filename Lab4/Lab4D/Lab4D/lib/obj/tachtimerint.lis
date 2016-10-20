@@ -1601,35 +1601,43 @@
  0000              ;---------------------------------------------------
  0000              ; Insert your custom assembly code above this banner
  0000              ;---------------------------------------------------
- 0000 7600         inc [_cNumCycles];
- 0002 3C0000       cmp [_cNumCycles], 0
- 0005 B00B         jnz CaptureLastValue
- 0007 8001         jmp CaptureFirstValue
- 0009           CaptureFirstValue:
- 0009 7C0000       lcall  TachTimer_wReadTimerSaveCV
- 000C 5A00         mov   [_wFirstValue], X
- 000E 5301         mov   [_wFirstValue + 1], A
- 0010 7E           reti
- 0011           CaptureLastValue:
- 0011 7C0000       lcall  TachTimer_wReadTimerSaveCV
- 0014 5A00         mov   [_wLastValue], X
- 0016 5301         mov   [_wLastValue + 1], A
- 0018              ;---------------------------------------------------
- 0018              ; Insert a lcall to a C function below this banner
- 0018              ; and un-comment the lines between these banners
- 0018              ;---------------------------------------------------
- 0018              
- 0018              ;PRESERVE_CPU_CONTEXT
- 0018              ;lcall _My_C_Function
- 0018              ;RESTORE_CPU_CONTEXT
- 0018              
- 0018              ;---------------------------------------------------
- 0018              ; Insert a lcall to a C function above this banner
- 0018              ; and un-comment the lines between these banners
- 0018              ;---------------------------------------------------
- 0018              ;@PSoC_UserCode_END@ (Do not change this line.)
- 0018           
- 0018 7E           reti
- 0019           
- 0019           
- 0019           ; end of file TachTimerINT.asm
+ 0000              
+ 0000              ; Preserving A and X is VERY VERY Important!
+ 0000 08           push A
+ 0001 10           push X
+ 0002              
+ 0002 7600         inc [_cNumCycles];
+ 0004 3C0000       cmp [_cNumCycles], 0
+ 0007 B00C         jnz CaptureLastValue
+ 0009 8001         jmp CaptureFirstValue
+ 000B           CaptureFirstValue:
+ 000B 7C0000       lcall  TachTimer_wReadTimerSaveCV
+ 000E 5A00         mov   [_wFirstValue], X
+ 0010 5301         mov   [_wFirstValue + 1], A
+ 0012 8008         jmp End
+ 0014           CaptureLastValue:
+ 0014 7C0000       lcall  TachTimer_wReadTimerSaveCV
+ 0017 5A00         mov   [_wLastValue], X
+ 0019 5301         mov   [_wLastValue + 1], A
+ 001B           End:
+ 001B 20                pop X
+ 001C 18                pop A
+ 001D              ;---------------------------------------------------
+ 001D              ; Insert a lcall to a C function below this banner
+ 001D              ; and un-comment the lines between these banners
+ 001D              ;---------------------------------------------------
+ 001D              
+ 001D              ;PRESERVE_CPU_CONTEXT
+ 001D              ;lcall _My_C_Function
+ 001D              ;RESTORE_CPU_CONTEXT
+ 001D              
+ 001D              ;---------------------------------------------------
+ 001D              ; Insert a lcall to a C function above this banner
+ 001D              ; and un-comment the lines between these banners
+ 001D              ;---------------------------------------------------
+ 001D              ;@PSoC_UserCode_END@ (Do not change this line.)
+ 001D           
+ 001D 7E           reti
+ 001E           
+ 001E           
+ 001E           ; end of file TachTimerINT.asm

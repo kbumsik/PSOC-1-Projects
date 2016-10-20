@@ -1,0 +1,472 @@
+                        .module main.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile ./main.c
+ 0000                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab4\Lab4B\Lab4B\main.c
+ 0000                   .dbfunc e itoa _itoa fV
+ 0000           ;          digit -> X+4
+ 0000           ;              n -> X+2
+ 0000           ;              d -> X+0
+ 0000           ;           base -> X-9
+ 0000           ;            str -> X-7
+ 0000           ;          input -> X-5
+ 0000           _itoa::
+ 0000                   .dbline -1
+ 0000 10                push X
+ 0001 4F                mov X,SP
+ 0002 3808              add SP,8
+ 0004                   .dbline 12
+ 0004           ; //----------------------------------------------------------------------------
+ 0004           ; // C main line
+ 0004           ; //----------------------------------------------------------------------------
+ 0004           ; 
+ 0004           ; #include <m8c.h>        // part specific constants and macros
+ 0004           ; #include "PSoCAPI.h"    // PSoC API definitions for all User Modules
+ 0004           ; #include <string.h>
+ 0004           ; 
+ 0004           ; void itoa(int input, char *str, int base);
+ 0004           ; 
+ 0004           ; void itoa(int input, char *str, int base)
+ 0004           ; {
+ 0004                   .dbline 13
+ 0004           ;       int n = 0;
+ 0004 560300            mov [X+3],0
+ 0007 560200            mov [X+2],0
+ 000A                   .dbline 14
+ 000A           ;       unsigned int d = 1;
+ 000A 560101            mov [X+1],1
+ 000D 560000            mov [X+0],0
+ 0010 801A              xjmp L3
+ 0012           L2:
+ 0012                   .dbline 16
+ 0012           ;       while (input / d >= base)
+ 0012           ;       {
+ 0012                   .dbline 17
+ 0012           ;               d *= base;
+ 0012 52F7              mov A,[X-9]
+ 0014 08                push A
+ 0015 52F8              mov A,[X-8]
+ 0017 08                push A
+ 0018 5200              mov A,[X+0]
+ 001A 08                push A
+ 001B 5201              mov A,[X+1]
+ 001D 08                push A
+ 001E 7C0000            xcall __mul16
+ 0021 38FC              add SP,-4
+ 0023 5100              mov A,[__rX]
+ 0025 5401              mov [X+1],A
+ 0027 5100              mov A,[__rY]
+ 0029 5400              mov [X+0],A
+ 002B                   .dbline 18
+ 002B           ;       }
+ 002B           L3:
+ 002B                   .dbline 15
+ 002B 5200              mov A,[X+0]
+ 002D 08                push A
+ 002E 5201              mov A,[X+1]
+ 0030 08                push A
+ 0031 52FB              mov A,[X-5]
+ 0033 08                push A
+ 0034 52FC              mov A,[X-4]
+ 0036 08                push A
+ 0037 7C0000            xcall __divmodu_16X16_16
+ 003A 18                pop A
+ 003B 5300              mov [__r1],A
+ 003D 18                pop A
+ 003E 5300              mov [__r0],A
+ 0040 38FE              add SP,-2
+ 0042 5100              mov A,[__r1]
+ 0044 13F8              sub A,[X-8]
+ 0046 5100              mov A,[__r0]
+ 0048 1BF7              sbb A,[X-9]
+ 004A DFC7              jnc L2
+ 004C           X0:
+ 004C 80B3              xjmp L6
+ 004E           L5:
+ 004E                   .dbline 20
+ 004E           ;       while (d != 0)
+ 004E           ;       {
+ 004E                   .dbline 21
+ 004E           ;               int digit = input / d;
+ 004E 5200              mov A,[X+0]
+ 0050 08                push A
+ 0051 5201              mov A,[X+1]
+ 0053 08                push A
+ 0054 52FB              mov A,[X-5]
+ 0056 08                push A
+ 0057 52FC              mov A,[X-4]
+ 0059 08                push A
+ 005A 7C0000            xcall __divmodu_16X16_16
+ 005D 18                pop A
+ 005E 5300              mov [__r1],A
+ 0060 18                pop A
+ 0061 5300              mov [__r0],A
+ 0063 38FE              add SP,-2
+ 0065 5100              mov A,[__r1]
+ 0067 5405              mov [X+5],A
+ 0069 5100              mov A,[__r0]
+ 006B 5404              mov [X+4],A
+ 006D                   .dbline 22
+ 006D           ;               input %= d;
+ 006D 5200              mov A,[X+0]
+ 006F 08                push A
+ 0070 5201              mov A,[X+1]
+ 0072 08                push A
+ 0073 52FB              mov A,[X-5]
+ 0075 08                push A
+ 0076 52FC              mov A,[X-4]
+ 0078 08                push A
+ 0079 7C0000            xcall __divmodu_16X16_16
+ 007C 38FE              add SP,-2
+ 007E 18                pop A
+ 007F 5300              mov [__r1],A
+ 0081 18                pop A
+ 0082 5300              mov [__r0],A
+ 0084 5100              mov A,[__r1]
+ 0086 54FC              mov [X-4],A
+ 0088 5100              mov A,[__r0]
+ 008A 54FB              mov [X-5],A
+ 008C                   .dbline 23
+ 008C           ;               d /= base;
+ 008C 52F7              mov A,[X-9]
+ 008E 08                push A
+ 008F 52F8              mov A,[X-8]
+ 0091 08                push A
+ 0092 5200              mov A,[X+0]
+ 0094 08                push A
+ 0095 5201              mov A,[X+1]
+ 0097 08                push A
+ 0098 7C0000            xcall __divmodu_16X16_16
+ 009B 18                pop A
+ 009C 5401              mov [X+1],A
+ 009E 18                pop A
+ 009F 5400              mov [X+0],A
+ 00A1 38FE              add SP,-2
+ 00A3                   .dbline 24
+ 00A3           ;               if (n || digit > 0 || d == 0)
+ 00A3 3D0200            cmp [X+2],0
+ 00A6 B020              jnz L11
+ 00A8 3D0300            cmp [X+3],0
+ 00AB B01B              jnz L11
+ 00AD           X1:
+ 00AD 5000              mov A,0
+ 00AF 1305              sub A,[X+5]
+ 00B1 5204              mov A,[X+4]
+ 00B3 3180              xor A,-128
+ 00B5 5300              mov [__rX],A
+ 00B7 5080              mov A,(0 ^ 0x80)
+ 00B9 1A00              sbb A,[__rX]
+ 00BB C00B              jc L11
+ 00BD           X2:
+ 00BD 3D0000            cmp [X+0],0
+ 00C0 B03F              jnz L8
+ 00C2 3D0100            cmp [X+1],0
+ 00C5 B03A              jnz L8
+ 00C7           X3:
+ 00C7           L11:
+ 00C7                   .dbline 26
+ 00C7           ;               {
+ 00C7           ;                       *str++ = digit + ((digit < 10)? '0': 'a' - 10);
+ 00C7                   .dbline 26
+ 00C7 52FA              mov A,[X-6]
+ 00C9 5300              mov [__r1],A
+ 00CB 52F9              mov A,[X-7]
+ 00CD 5300              mov [__r0],A
+ 00CF 5100              mov A,[__r1]
+ 00D1 0101              add A,1
+ 00D3 54FA              mov [X-6],A
+ 00D5 5100              mov A,[__r0]
+ 00D7 0900              adc A,0
+ 00D9 54F9              mov [X-7],A
+ 00DB 5205              mov A,[X+5]
+ 00DD 110A              sub A,10
+ 00DF 5204              mov A,[X+4]
+ 00E1 3180              xor A,-128
+ 00E3 1980              sbb A,(0 ^ 0x80)
+ 00E5 D009              jnc L13
+ 00E7           X4:
+ 00E7 560730            mov [X+7],48
+ 00EA 560600            mov [X+6],0
+ 00ED 8007              xjmp L14
+ 00EF           L13:
+ 00EF 560757            mov [X+7],87
+ 00F2 560600            mov [X+6],0
+ 00F5           L14:
+ 00F5 5205              mov A,[X+5]
+ 00F7 0307              add A,[X+7]
+ 00F9 3F00              mvi [__r1],A
+ 00FB                   .dbline 27
+ 00FB           ;                       n++;
+ 00FB 7703              inc [X+3]
+ 00FD 0F0200            adc [X+2],0
+ 0100                   .dbline 28
+ 0100           ;               }
+ 0100           L8:
+ 0100                   .dbline 29
+ 0100           ;       }
+ 0100           L6:
+ 0100                   .dbline 19
+ 0100 3D0000            cmp [X+0],0
+ 0103 BF4A              jnz L5
+ 0105 3D0100            cmp [X+1],0
+ 0108 BF45              jnz L5
+ 010A           X5:
+ 010A                   .dbline 30
+ 010A           ;       *str = '\0';
+ 010A 52FA              mov A,[X-6]
+ 010C 5300              mov [__r1],A
+ 010E 5000              mov A,0
+ 0110 3F00              mvi [__r1],A
+ 0112                   .dbline -2
+ 0112           L1:
+ 0112 38F8              add SP,-8
+ 0114 20                pop X
+ 0115                   .dbline 0 ; func end
+ 0115 7F                ret
+ 0116                   .dbsym l digit 4 I
+ 0116                   .dbsym l n 2 I
+ 0116                   .dbsym l d 0 i
+ 0116                   .dbsym l base -9 I
+ 0116                   .dbsym l str -7 pc
+ 0116                   .dbsym l input -5 I
+ 0116                   .dbend
+ 0116                   .dbfunc e main _main fV
+ 0116           ;            str -> X+2
+ 0116           ;             pw -> X+1
+ 0116           ;   bSwitchState -> X+0
+ 0116           _main::
+ 0116                   .dbline -1
+ 0116 10                push X
+ 0117 4F                mov X,SP
+ 0118 3812              add SP,18
+ 011A                   .dbline 35
+ 011A           ; }
+ 011A           ; 
+ 011A           ; 
+ 011A           ; void main(void)
+ 011A           ; {
+ 011A                   .dbline 42
+ 011A           ;       // variable declaration
+ 011A           ;       char str[16];
+ 011A           ;       unsigned char pw;
+ 011A           ;       char bSwitchState;
+ 011A           ;       
+ 011A           ;       // initialize hardware
+ 011A           ;       INT_MSK0 |= 0x40;
+ 011A 43E040            or REG[0xe0],64
+ 011D                   .dbline 43
+ 011D           ;       FanPWM_Start();
+ 011D 10                push X
+ 011E 7C0000            xcall _FanPWM_Start
+ 0121                   .dbline 44
+ 0121           ;       TachOverridePWM_Start();
+ 0121 7C0000            xcall _TachOverridePWM_Start
+ 0124                   .dbline 45
+ 0124           ;       LCD_1_Start();
+ 0124 7C0000            xcall _LCD_1_Start
+ 0127                   .dbline 46
+ 0127           ;       LCD_1_Position(0,0);
+ 0127 5000              mov A,0
+ 0129 5700              mov X,0
+ 012B 7C0000            xcall _LCD_1_Position
+ 012E                   .dbline 47
+ 012E           ;       pw = FanPWM_bReadPulseWidth();
+ 012E 7C0000            xcall _FanPWM_bReadPulseWidth
+ 0131 20                pop X
+ 0132 5401              mov [X+1],A
+ 0134                   .dbline 48
+ 0134           ;       pw = 255;
+ 0134 5601FF            mov [X+1],-1
+ 0137                   .dbline 49
+ 0137           ;       FanPWM_WritePulseWidth(pw);
+ 0137 10                push X
+ 0138 5201              mov A,[X+1]
+ 013A 7C0000            xcall _FanPWM_WritePulseWidth
+ 013D 20                pop X
+ 013E                   .dbline 50
+ 013E           ;       itoa(pw, str, 10);
+ 013E 5000              mov A,0
+ 0140 08                push A
+ 0141 500A              mov A,10
+ 0143 08                push A
+ 0144 5A00              mov [__r1],X
+ 0146 060002            add [__r1],2
+ 0149 5100              mov A,[__r0]
+ 014B 08                push A
+ 014C 5100              mov A,[__r1]
+ 014E 08                push A
+ 014F 5201              mov A,[X+1]
+ 0151 5300              mov [__r1],A
+ 0153 5000              mov A,0
+ 0155 08                push A
+ 0156 5100              mov A,[__r1]
+ 0158 08                push A
+ 0159 9EA5              xcall _itoa
+ 015B 38FA              add SP,-6
+ 015D                   .dbline 51
+ 015D           ;       LCD_1_PrString(str);
+ 015D 5A00              mov [__r1],X
+ 015F 060002            add [__r1],2
+ 0162 10                push X
+ 0163 5100              mov A,[__r0]
+ 0165 08                push A
+ 0166 5100              mov A,[__r1]
+ 0168 5C                mov X,A
+ 0169 18                pop A
+ 016A 7C0000            xcall _LCD_1_PrString
+ 016D 20                pop X
+ 016E                   .dbline 56
+ 016E           ;       
+ 016E           ;       // M8C_Sleep;
+ 016E           ;       
+ 016E           ;       // infinite loop with debouncing.
+ 016E           ;       bSwitchState = 0;
+ 016E 560000            mov [X+0],0
+ 0171 809A              xjmp L17
+ 0173           L16:
+ 0173                   .dbline 58
+ 0173           ;       while (1)
+ 0173           ;       {
+ 0173                   .dbline 59
+ 0173           ;               INT_CLR0 = INT_CLR0 & ~0x40;
+ 0173 41DABF            and REG[0xda],-65
+ 0176                   .dbline 60
+ 0176           ;               bSwitchState <<= 1;
+ 0176 6600              asl [X+0]
+ 0178                   .dbline 61
+ 0178           ;               bSwitchState &= 0x0f;
+ 0178 27000F            and [X+0],15
+ 017B                   .dbline 62
+ 017B           ;               bSwitchState |= (PRT1DR & 0x01);
+ 017B 5D04              mov A,REG[0x4]
+ 017D 2101              and A,1
+ 017F 5300              mov [__r0],A
+ 0181 2D00              or [X+0],A
+ 0183                   .dbline 63
+ 0183           ;               if(bSwitchState == 0x07)
+ 0183 3D0007            cmp [X+0],7
+ 0186 B085              jnz L19
+ 0188                   .dbline 66
+ 0188           ;               {
+ 0188           ;                       // clear the LCD
+ 0188           ;                       memset(str, ' ', 16);
+ 0188                   .dbline 66
+ 0188 5000              mov A,0
+ 018A 08                push A
+ 018B 5010              mov A,16
+ 018D 08                push A
+ 018E 5000              mov A,0
+ 0190 08                push A
+ 0191 5020              mov A,32
+ 0193 08                push A
+ 0194 5A00              mov [__r1],X
+ 0196 060002            add [__r1],2
+ 0199 5100              mov A,[__r0]
+ 019B 08                push A
+ 019C 5100              mov A,[__r1]
+ 019E 08                push A
+ 019F 7C0000            xcall _memset
+ 01A2 38FA              add SP,-6
+ 01A4                   .dbline 67
+ 01A4           ;                       LCD_1_Position(0,0);
+ 01A4 10                push X
+ 01A5 5000              mov A,0
+ 01A7 5700              mov X,0
+ 01A9 7C0000            xcall _LCD_1_Position
+ 01AC 20                pop X
+ 01AD                   .dbline 68
+ 01AD           ;                       LCD_1_PrString(str);
+ 01AD 5A00              mov [__r1],X
+ 01AF 060002            add [__r1],2
+ 01B2 10                push X
+ 01B3 5100              mov A,[__r0]
+ 01B5 08                push A
+ 01B6 5100              mov A,[__r1]
+ 01B8 5C                mov X,A
+ 01B9 18                pop A
+ 01BA 7C0000            xcall _LCD_1_PrString
+ 01BD                   .dbline 71
+ 01BD           ;                       
+ 01BD           ;                       // increase the pulse width
+ 01BD           ;                       pw = FanPWM_bReadPulseWidth() - 1;
+ 01BD 7C0000            xcall _FanPWM_bReadPulseWidth
+ 01C0 20                pop X
+ 01C1 1101              sub A,1
+ 01C3 5401              mov [X+1],A
+ 01C5                   .dbline 72
+ 01C5           ;                       if (pw <= 0)
+ 01C5 5000              mov A,0
+ 01C7 3B01              cmp A,[X+1]
+ 01C9 C004              jc L21
+ 01CB           X7:
+ 01CB                   .dbline 74
+ 01CB           ;                       {
+ 01CB           ;                               pw = 255;
+ 01CB                   .dbline 74
+ 01CB 5601FF            mov [X+1],-1
+ 01CE                   .dbline 75
+ 01CE           ;                       }
+ 01CE           L21:
+ 01CE                   .dbline 76
+ 01CE           ;                       FanPWM_WritePulseWidth(pw);
+ 01CE 10                push X
+ 01CF 5201              mov A,[X+1]
+ 01D1 7C0000            xcall _FanPWM_WritePulseWidth
+ 01D4                   .dbline 79
+ 01D4           ;                       
+ 01D4           ;                       // print out
+ 01D4           ;                       LCD_1_Position(0,0);
+ 01D4 5000              mov A,0
+ 01D6 5700              mov X,0
+ 01D8 7C0000            xcall _LCD_1_Position
+ 01DB 20                pop X
+ 01DC                   .dbline 80
+ 01DC           ;                       itoa(pw, str, 10);
+ 01DC 5000              mov A,0
+ 01DE 08                push A
+ 01DF 500A              mov A,10
+ 01E1 08                push A
+ 01E2 5A00              mov [__r1],X
+ 01E4 060002            add [__r1],2
+ 01E7 5100              mov A,[__r0]
+ 01E9 08                push A
+ 01EA 5100              mov A,[__r1]
+ 01EC 08                push A
+ 01ED 5201              mov A,[X+1]
+ 01EF 5300              mov [__r1],A
+ 01F1 5000              mov A,0
+ 01F3 08                push A
+ 01F4 5100              mov A,[__r1]
+ 01F6 08                push A
+ 01F7 9E07              xcall _itoa
+ 01F9 38FA              add SP,-6
+ 01FB                   .dbline 81
+ 01FB           ;                       LCD_1_PrString(str);
+ 01FB 5A00              mov [__r1],X
+ 01FD 060002            add [__r1],2
+ 0200 10                push X
+ 0201 5100              mov A,[__r0]
+ 0203 08                push A
+ 0204 5100              mov A,[__r1]
+ 0206 5C                mov X,A
+ 0207 18                pop A
+ 0208 7C0000            xcall _LCD_1_PrString
+ 020B 20                pop X
+ 020C                   .dbline 82
+ 020C           ;               }
+ 020C           L19:
+ 020C                   .dbline 83
+ 020C           ;       }
+ 020C           L17:
+ 020C                   .dbline 57
+ 020C 8F66              xjmp L16
+ 020E           X6:
+ 020E                   .dbline -2
+ 020E           L15:
+ 020E 38EE              add SP,-18
+ 0210 20                pop X
+ 0211                   .dbline 0 ; func end
+ 0211 8FFF              jmp .
+ 0213                   .dbsym l str 2 A[16:16]c
+ 0213                   .dbsym l pw 1 c
+ 0213                   .dbsym l bSwitchState 0 c
+ 0213                   .dbend

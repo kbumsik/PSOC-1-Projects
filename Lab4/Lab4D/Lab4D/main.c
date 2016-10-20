@@ -19,6 +19,7 @@ void itoa(unsigned short input, char *str, int base)
 {
 	int n = 0;
 	unsigned int d = 1;
+	
 	while ((input / d) >= base)
 	{
 		d *= base;
@@ -102,7 +103,7 @@ void main(void)
 		//M8C_Sleep;
 		//INT_CLR0 = INT_CLR0 & ~0x40;
 		
-		// debouncing
+		// debouncing		
 		bSwitchState <<= 1;
 		bSwitchState &= 0x0f;
 		bSwitchState |= (PRT1DR & 0x01);
@@ -127,14 +128,20 @@ void main(void)
 		{
 			// clear it
 			bDataAvailable = 0;
-			// calculate the fan speed
 			
+			// calculate the fan speed
 			// and post it along with the value of cNumCyles, to the LCD
+			
+			// We need to Disable and enable interrupt here
+			// because wFirstValue and wLastValue are 2 byte lone
+			// so they are prone to curruption by ISR
+			M8C_DisableGInt;
 			tmp = 0;
 			tmp = 45*100000*cNumCycles;
 			tmp += (wFirstValue - wLastValue)/2;
 			tmp /= (wFirstValue - wLastValue);
 			wSpeedRPM = (unsigned short)tmp;
+			M8C_EnableGInt;
 			
 			// print out
 			strcpy(str_buf, line1_head);

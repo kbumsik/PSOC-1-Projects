@@ -1590,61 +1590,62 @@
  0000              ;---------------------------------------------------
  0000              ;   NOTE: interrupt service routines must preserve
  0000              ;   the values of the A and X CPU registers.
+ 0000           
  00B3           RDIxLT0: equ 0xb3			;LUT Register Address
  0000 7A01              dec [_wControlState + 1]        ;decrement wControlState
  0002 1E0000            sbb [_wControlState],0`
- 0005 B03F              jnz MoreThan255
+ 0005 B03B              jnz MoreThan255
  0007 3C0114            cmp [_wControlState + 1],20
  000A A012              jz State20
  000C 3C0113            cmp [_wControlState + 1],19
- 000F A014              jz State19
+ 000F A015              jz State19
  0011 3C0101            cmp [_wControlState + 1],1
- 0014 A019              jz State1
+ 0014 A018              jz State1
  0016 3C0100            cmp [_wControlState + 1],0
- 0019 A01E              jz State0
- 001B 8029              jmp Others
+ 0019 A01B              jz State0
+ 001B 8025              jmp Others
  001D           State20:					;Start of FanOverride
  001D 620440            mov reg[PRT1DR], 0x40   ;Set FanOverrideout high
  0020 43B30F            or reg[RDIxLT0], 0x0f;  ;Forece LUT open high
- 0023 7E                reti
- 0024           State19:
- 0024 5500FF            mov [_cNumCycles], -1
- 0027 62E200            mov reg[INT_VC], 0x00  ; TODO: Clear any pending interrupts for TachTimer
- 002A 7C0000            lcall TachTimer_EnableInt
- 002D 7E                reti
- 002E           State1:
- 002E 62E200            mov reg[INT_VC], 0x00 ; TODO: Clear any pending interrupts for TachTimer
- 0031 7C0000            lcall TachTimer_DisableInt
- 0034 550001            mov [_bDataAvailable], 1
- 0037 7E                reti
- 0038           State0:						; End of FanOverride
- 0038 620400            mov reg[PRT1DR], 0x00           ;Set FanOverrideOut low
- 003B 41B3F3            and reg[RDIxLT0], 0xf3;         ;Forece LUT back to normal
- 003E 550003            mov [_wControlState], 3         ;_wControlState = 1000
- 0041 5501E8            mov [_wControlState + 1], 232
- 0044 7E                reti
- 0045           MoreThan255:
- 0045           Others:
- 0045              ;---------------------------------------------------
- 0045              ; Insert your custom assembly code above this banner
- 0045              ;---------------------------------------------------
- 0045              
- 0045              ;---------------------------------------------------
- 0045              ; Insert a lcall to a C function below this banner
- 0045              ; and un-comment the lines between these banners
- 0045              ;---------------------------------------------------
- 0045              
- 0045              ;PRESERVE_CPU_CONTEXT
- 0045              ;lcall _My_C_Function
- 0045              ;RESTORE_CPU_CONTEXT
- 0045              
- 0045              ;---------------------------------------------------
- 0045              ; Insert a lcall to a C function above this banner
- 0045              ; and un-comment the lines between these banners
- 0045              ;---------------------------------------------------
- 0045              ;@PSoC_UserCode_END@ (Do not change this line.)
- 0045           
- 0045 7E           reti
- 0046           
- 0046           
- 0046           ; end of file FanPWMINT.asm
+ 0023 801D              jmp End
+ 0025           State19:
+ 0025 5500FF            mov [_cNumCycles], -1
+ 0028                   ;mov reg[INT_VC], 0x00  ; TODO: Clear any pending interrupts for TachTimer
+ 0028 7C0000            lcall TachTimer_EnableInt
+ 002B 8015              jmp End
+ 002D           State1:
+ 002D           	;mov reg[INT_VC], 0x00 ; TODO: Clear any pending interrupts for TachTimer
+ 002D 7C0000            lcall TachTimer_DisableInt
+ 0030 550001            mov [_bDataAvailable], 1
+ 0033 800D              jmp End
+ 0035           State0:						; End of FanOverride
+ 0035 620400            mov reg[PRT1DR], 0x00           ;Set FanOverrideOut low
+ 0038 41B3F3            and reg[RDIxLT0], 0xf3;         ;Forece LUT back to normal
+ 003B 550003            mov [_wControlState], 3         ;_wControlState = 1000
+ 003E 5501E8            mov [_wControlState + 1], 232
+ 0041           MoreThan255:
+ 0041           Others:
+ 0041           End:
+ 0041              ;---------------------------------------------------
+ 0041              ; Insert your custom assembly code above this banner
+ 0041              ;---------------------------------------------------
+ 0041              
+ 0041              ;---------------------------------------------------
+ 0041              ; Insert a lcall to a C function below this banner
+ 0041              ; and un-comment the lines between these banners
+ 0041              ;---------------------------------------------------
+ 0041              
+ 0041              ;PRESERVE_CPU_CONTEXT
+ 0041              ;lcall _My_C_Function
+ 0041              ;RESTORE_CPU_CONTEXT
+ 0041              
+ 0041              ;---------------------------------------------------
+ 0041              ; Insert a lcall to a C function above this banner
+ 0041              ; and un-comment the lines between these banners
+ 0041              ;---------------------------------------------------
+ 0041              ;@PSoC_UserCode_END@ (Do not change this line.)
+ 0041           
+ 0041 7E           reti
+ 0042           
+ 0042           
+ 0042           ; end of file FanPWMINT.asm

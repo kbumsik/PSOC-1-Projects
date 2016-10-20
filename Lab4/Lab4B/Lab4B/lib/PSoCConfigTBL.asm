@@ -61,9 +61,9 @@ LoadConfigTBL_lab4a_Bank0:
 LoadConfigTBL_lab4a_Bank1:
 ;  Instance name FanPWM, User Module PWM8
 ;       Instance name FanPWM, Block Name PWM8(DBB00)
-	db		20h, 31h		;FanPWM_FUNC_REG(DBB00FN)
+	db		20h, 71h		;FanPWM_FUNC_REG(DBB00FN)
 	db		21h, 11h		;FanPWM_INPUT_REG(DBB00IN)
-	db		22h, 74h		;FanPWM_OUTPUT_REG(DBB00OU)
+	db		22h, 44h		;FanPWM_OUTPUT_REG(DBB00OU)
 ;  Instance name LCD_1, User Module LCD
 ;  Instance name TachOverridePWM, User Module PWM16
 ;       Instance name TachOverridePWM, Block Name PWM16_LSB(DBB01)

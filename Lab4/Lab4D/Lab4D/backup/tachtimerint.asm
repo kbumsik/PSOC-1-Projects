@@ -71,6 +71,11 @@ _TachTimer_ISR:
    ;---------------------------------------------------
    ; Insert your custom assembly code above this banner
    ;---------------------------------------------------
+   
+   ; Preserving A and X is VERY VERY Important!
+   push A
+   push X
+   
    inc [_cNumCycles];
    cmp [_cNumCycles], 0
    jnz CaptureLastValue
@@ -79,11 +84,14 @@ CaptureFirstValue:
    lcall  TachTimer_wReadTimerSaveCV
    mov   [_wFirstValue], X
    mov   [_wFirstValue + 1], A
-   reti
+   jmp End
 CaptureLastValue:
    lcall  TachTimer_wReadTimerSaveCV
    mov   [_wLastValue], X
    mov   [_wLastValue + 1], A
+End:
+	pop X
+	pop A
    ;---------------------------------------------------
    ; Insert a lcall to a C function below this banner
    ; and un-comment the lines between these banners

@@ -67,6 +67,7 @@ _FanPWM_ISR:
    ;---------------------------------------------------
    ;   NOTE: interrupt service routines must preserve
    ;   the values of the A and X CPU registers.
+
 RDIxLT0: equ 0xb3			;LUT Register Address
 	dec [_wControlState + 1]	;decrement wControlState
 	sbb [_wControlState],0`
@@ -83,25 +84,25 @@ RDIxLT0: equ 0xb3			;LUT Register Address
 State20:					;Start of FanOverride
 	mov reg[PRT1DR], 0x40	;Set FanOverrideout high
 	or reg[RDIxLT0], 0x0f;	;Forece LUT open high
-	reti
+	jmp End
 State19:
 	mov [_cNumCycles], -1
-	mov reg[INT_VC], 0x00  ; TODO: Clear any pending interrupts for TachTimer
+	;mov reg[INT_VC], 0x00  ; TODO: Clear any pending interrupts for TachTimer
 	lcall TachTimer_EnableInt
-	reti
+	jmp End
 State1:
-	mov reg[INT_VC], 0x00 ; TODO: Clear any pending interrupts for TachTimer
+	;mov reg[INT_VC], 0x00 ; TODO: Clear any pending interrupts for TachTimer
 	lcall TachTimer_DisableInt
 	mov [_bDataAvailable], 1
-	reti
+	jmp End
 State0:						; End of FanOverride
 	mov reg[PRT1DR], 0x00		;Set FanOverrideOut low
 	and reg[RDIxLT0], 0xf3;		;Forece LUT back to normal
 	mov [_wControlState], 3		;_wControlState = 1000
 	mov [_wControlState + 1], 232
-	reti
 MoreThan255:
 Others:
+End:
    ;---------------------------------------------------
    ; Insert your custom assembly code above this banner
    ;---------------------------------------------------
