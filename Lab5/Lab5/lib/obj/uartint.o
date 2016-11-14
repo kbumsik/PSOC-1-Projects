@@ -1,0 +1,84 @@
+XH
+H 4 areas 8 global symbols
+M uartint.asm
+A text size 0 flags 0
+dbfile lib/uartint.asm
+dbfunc 0 ? 0 I
+dbfile C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc
+dbfunc 0 ? 0 I
+dbfile lib/uartint.asm
+dbfunc 0 ? 0 I
+dbfile memory.inc
+dbfunc 0 ? 0 I
+dbfile lib/uartint.asm
+dbfunc 0 ? 0 I
+dbfile ./lib/UART.inc
+dbfunc 0 ? 0 I
+A InterruptRAM size 2 flags 20
+S _UART_bRxCnt Def0001
+S UART_fStatus Def0000
+S _UART_fStatus Def0000
+S UART_bRxCnt Def0001
+A UART_RAM size 20 flags 20
+S UART_aRxBuffer Def0000
+S _UART_aRxBuffer Def0000
+A UserModules size 51 flags 0
+dbfile lib/uartint.asm
+dbfunc 0 ? 0 I
+dbline 65 0
+dbline 98 1
+dbline 99 2
+dbline 9F 3
+dbline A0 5
+dbline A1 7
+dbline A3 8
+dbline A4 A
+dbline A5 C
+dbline A6 D
+dbline A9 F
+dbline AC 10
+dbline AD 12
+dbline AF 14
+dbline B0 16
+dbline B1 19
+dbline B2 1B
+dbline B6 1D
+dbline B7 20
+dbline B8 23
+dbline BC 25
+dbline BF 27
+dbline C0 2A
+dbline C2 2C
+dbline C3 2E
+dbline C4 30
+dbline CA 33
+dbline CC 36
+dbline DA 38
+dbline DB 3A
+dbline E1 3C
+dbline E2 3F
+dbline E4 41
+dbline E6 44
+dbline E7 47
+dbline EC 49
+dbline EE 4B
+dbline EF 4C
+dbline F7 4E
+dbline F8 4F
+dbline FD 50
+S _UART_RX_ISR Def0001
+S _UART_TX_ISR Def0000
+T 00 00 7E 08 10 58 00 01 5D 2F 08 21 08 B0 04 18
+R 00 00 00 03 01 06 00 01
+T 00 0D 80 40 18 21 E0 A0 12 2C 00 00 49 2E 00 21
+R 00 00 00 03 01 0A 00 01
+T 00 1A 20 A0 32 41 2F FE 43 2F 01 80 2A 5D 2E 47
+R 00 00 00 03
+T 00 28 00 00 01 B0 23 39 0D B0 09 2E 00 00 01 56
+R 00 00 00 03 01 02 00 01 01 0C 00 01
+T 00 34 00 00 00 80 17 39 20 C0 13 3C 00 01 1F C0
+R 00 00 00 03 01 02 00 02 01 0C 00 01
+T 00 40 09 56 00 00 00 2E 00 00 10 80 06 54 00 00
+R 00 00 00 03 01 04 00 02 01 08 00 01 01 0E 00 02
+T 00 4B 75 5A 00 01 20 18 7E
+R 00 00 00 03 01 04 00 01

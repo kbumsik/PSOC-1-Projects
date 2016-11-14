@@ -53,8 +53,6 @@ void main(void)
 	bSwitchState = 0;
 	while (1)
 	{
-		M8C_Sleep;
-		INT_CLR0 = INT_CLR0 & ~0x40;
 		bSwitchState <<= 1;
 		bSwitchState &= 0x0f;
 		bSwitchState |= (PRT1DR & 0x01);

@@ -1,0 +1,30 @@
+Starting MAKE...
+creating project.mk 
+
+lib/lcd_1.asm
+
+lib/psocconfig.asm
+
+lib/psocconfigtbl.asm
+
+lib/pwm8_1.asm
+
+lib/pwm8_1int.asm
+
+lib/pwm8_2.asm
+
+lib/pwm8_2int.asm
+
+./boot.asm
+
+Linking..
+
+  ROM 4% full. 539 out of 16384 bytes used (does not include absolute areas).
+
+  RAM 1% full. 1 bytes used (does not include stack usage).
+
+Built with ICCM8C STD V7.05.00
+
+ 
+Lab3C - 0 error(s) 0 warning(s) 17:00:11
+

@@ -1,0 +1,192 @@
+XH
+H 2 areas 1 global symbols
+M psocconfigtbl.asm
+A text size 0 flags 0
+dbfile lib/psocconfigtbl.asm
+dbfunc 0 ? 0 I
+dbfile C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc
+dbfunc 0 ? 0 I
+A psoc_config size 161 flags 0
+dbfile lib/psocconfigtbl.asm
+dbfunc 0 ? 0 I
+dbline 2 0
+dbline 17 2
+dbline 18 5
+dbline 19 8
+dbline 1A B
+dbline 1B E
+dbline 1C 11
+dbline 1D 14
+dbline 1E 17
+dbline 1F 1A
+dbline 20 1D
+dbline 21 20
+dbline 22 23
+dbline 23 26
+dbline 24 29
+dbline 25 2C
+dbline 26 2F
+dbline 27 32
+dbline 28 35
+dbline 29 38
+dbline 2A 3B
+dbline 2B 3E
+dbline 2E 41
+dbline 2F 44
+dbline 30 47
+dbline 32 4A
+dbline 33 4D
+dbline 34 50
+dbline 2 53
+dbline 37 55
+dbline 38 58
+dbline 39 5B
+dbline 3A 5E
+dbline 3B 61
+dbline 3C 64
+dbline 3D 67
+dbline 3E 6A
+dbline 3F 6D
+dbline 40 70
+dbline 41 73
+dbline 42 76
+dbline 43 79
+dbline 44 7C
+dbline 45 7F
+dbline 46 82
+dbline 47 85
+dbline 4A 88
+dbline 4B 8B
+dbline 4C 8E
+dbline 4E 91
+dbline 4F 94
+dbline 50 97
+dbline 2 9A
+dbline 2 9C
+dbline 54 9E
+dbline 2 A1
+dbline 56 A3
+dbline 57 A6
+dbline 2 A9
+dbline 59 AB
+dbline 5A AE
+dbline 2 B1
+dbline 5C B3
+dbline 5D B6
+dbline 2 B9
+dbline 5F BB
+dbline 60 BE
+dbline 2 C1
+dbline 62 C3
+dbline 63 C6
+dbline 2 C9
+dbline 65 CB
+dbline 66 CE
+dbline 2 D1
+dbline 68 D3
+dbline 69 D6
+dbline 2 D9
+dbline 6B DB
+dbline 6C DE
+dbline 2 E1
+dbline 6E E3
+dbline 6F E6
+dbline 2 E9
+dbline 71 EB
+dbline 72 EE
+dbline 2 F1
+dbline 74 F3
+dbline 75 F6
+dbline 2 F9
+dbline 77 FB
+dbline 78 FE
+dbline 2 101
+dbline 7A 103
+dbline 7B 106
+dbline 2 109
+dbline 7D 10B
+dbline 7E 10E
+dbline 2 111
+dbline 80 113
+dbline 81 116
+dbline 2 119
+dbline 83 11B
+dbline 84 11E
+dbline 2 121
+dbline 86 123
+dbline 87 126
+dbline 2 129
+dbline 89 12B
+dbline 8A 12E
+dbline 2 131
+dbline 8C 133
+dbline 8D 136
+dbline 2 139
+dbline 8F 13B
+dbline 90 13E
+dbline 2 141
+dbline 92 143
+dbline 93 146
+dbline 2 149
+dbline 95 14B
+dbline 96 14E
+dbline 2 151
+dbline 98 153
+dbline 99 156
+dbline 2 159
+dbline 9B 15B
+dbline 2 15E
+dbline 9D 160
+S LoadConfigTBL_example_uart_28pin Def0000
+T 00 00 70 EF 62 60 28 62 66 00 62 63 05 62 65 00
+R 00 00 00 01
+T 00 0E 62 E6 00 62 E7 00 62 D6 00 62 B0 04 62 B1
+R 00 00 00 01
+T 00 1C 00 62 B2 00 62 B3 33 62 B4 33 62 B5 00 62
+R 00 00 00 01
+T 00 2A B6 20 62 B8 55 62 B9 00 62 BA 10 62 BB 33
+R 00 00 00 01
+T 00 38 62 BC 33 62 BD 00 62 BE 00 62 2F 00 62 2D
+R 00 00 00 01
+T 00 46 00 62 2E 00 62 2B 00 62 29 00 62 2A 00 71
+R 00 00 00 01
+T 00 54 10 62 61 00 62 69 00 62 60 00 62 62 00 62
+R 00 00 00 01
+T 00 62 67 33 62 68 33 62 63 00 62 66 00 62 D1 00
+R 00 00 00 01
+T 00 70 62 D3 00 62 D0 00 62 D2 00 62 E1 00 62 E2
+R 00 00 00 01
+T 00 7E 00 62 DF 9B 62 DE 00 62 DD 00 62 2C 05 62
+R 00 00 00 01
+T 00 8C 2D D1 62 2E 40 62 28 0D 62 29 01 62 2A 47
+R 00 00 00 01
+T 00 9A 70 EF 70 EF 62 00 00 71 10 62 00 00 62 01
+R 00 00 00 01
+T 00 A8 FF 70 EF 62 03 FF 62 02 00 71 10 62 02 00
+R 00 00 00 01
+T 00 B6 62 03 00 70 EF 62 01 00 62 04 00 71 10 62
+R 00 00 00 01
+T 00 C4 04 01 62 05 FF 70 EF 62 07 FE 62 06 00 71
+R 00 00 00 01
+T 00 D2 10 62 06 00 62 07 00 70 EF 62 05 00 62 08
+R 00 00 00 01
+T 00 E0 00 71 10 62 08 80 62 09 7F 70 EF 62 0B 5F
+R 00 00 00 01
+T 00 EE 62 0A A0 71 10 62 0A 00 62 0B 00 70 EF 62
+R 00 00 00 01
+T 00 FC 09 00 62 0C 00 71 10 62 0C 00 62 0D 00 70
+R 00 00 00 01
+T 01 0A EF 62 0F 00 62 0E 00 71 10 62 0E 00 62 0F
+R 00 00 00 01
+T 01 18 00 70 EF 62 0D 00 62 10 00 71 10 62 10 00
+R 00 00 00 01
+T 01 26 62 11 00 70 EF 62 13 00 62 12 00 71 10 62
+R 00 00 00 01
+T 01 34 12 00 62 13 00 70 EF 62 11 00 62 14 00 71
+R 00 00 00 01
+T 01 42 10 62 14 00 62 15 00 70 EF 62 17 00 62 16
+R 00 00 00 01
+T 01 50 00 71 10 62 16 00 62 17 00 70 EF 62 15 00
+R 00 00 00 01
+T 01 5E 70 EF 7F
+R 00 00 00 01

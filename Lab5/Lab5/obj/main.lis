@@ -1,0 +1,718 @@
+                        .module main.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile ./main.c
+ 0000                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab5\Lab5\main.c
+ 0000                   .dbfunc e itoa _itoa fV
+ 0000           ;          digit -> X+4
+ 0000           ;              n -> X+2
+ 0000           ;              d -> X+0
+ 0000           ;           base -> X-9
+ 0000           ;            str -> X-7
+ 0000           ;          input -> X-5
+ 0000           _itoa::
+ 0000                   .dbline -1
+ 0000 10                push X
+ 0001 4F                mov X,SP
+ 0002 3808              add SP,8
+ 0004                   .dbline 209
+ 0004           ; //--------------------------------------------------------------------------
+ 0004           ; //
+ 0004           ; // Copyright 2008, Cypress Semiconductor Corporation.
+ 0004           ; //
+ 0004           ; // This software is owned by Cypress Semiconductor Corporation (Cypress)
+ 0004           ; // and is protected by and subject to worldwide patent protection (United
+ 0004           ; // States and foreign), United States copyright laws and international
+ 0004           ; // treaty provisions. Cypress hereby grants to licensee a personal,
+ 0004           ; // non-exclusive, non-transferable license to copy, use, modify, create
+ 0004           ; // derivative works of, and compile the Cypress Source Code and derivative
+ 0004           ; // works for the sole purpose of creating custom software in support of
+ 0004           ; // licensee product to be used only in conjunction with a Cypress integrated
+ 0004           ; // circuit as specified in the applicable agreement. Any reproduction,
+ 0004           ; // modification, translation, compilation, or representation of this
+ 0004           ; // software except as specified above is prohibited without the express
+ 0004           ; // written permission of Cypress.
+ 0004           ; //
+ 0004           ; // Disclaimer: CYPRESS MAKES NO WARRANTY OF ANY KIND,EXPRESS OR IMPLIED,
+ 0004           ; // WITH REGARD TO THIS MATERIAL, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ 0004           ; // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ 0004           ; // Cypress reserves the right to make changes without further notice to the
+ 0004           ; // materials described herein. Cypress does not assume any liability arising
+ 0004           ; // out of the application or use of any product or circuit described herein.
+ 0004           ; // Cypress does not authorize its products for use as critical components in
+ 0004           ; // life-support systems where a malfunction or failure may reasonably be
+ 0004           ; // expected to result in significant injury to the user. The inclusion of
+ 0004           ; // Cypress' product in a life-support systems application implies that the
+ 0004           ; // manufacturer assumes all risk of such use and in doing so indemnifies
+ 0004           ; // Cypress against all charges.
+ 0004           ; //
+ 0004           ; // Use may be limited by and subject to the applicable Cypress software
+ 0004           ; // license agreement.
+ 0004           ; ////-------------------------------------------------------------------------
+ 0004           ; //****************************************************************************
+ 0004           ; //*****************************************************************************
+ 0004           ; //  FILENAME: main.c
+ 0004           ; //   Version: 1.0, Updated on 2 August 2010
+ 0004           ; //
+ 0004           ; //  DESCRIPTION: Main file of the Example_UART Project.
+ 0004           ; //
+ 0004           ; //-----------------------------------------------------------------------------
+ 0004           ; //  Copyright (c) Cypress MicroSystems 2000-2003. All Rights Reserved.
+ 0004           ; //*****************************************************************************
+ 0004           ; //*****************************************************************************
+ 0004           ; ////***************************************************************************************
+ 0004           ; // 
+ 0004           ; //    The project can be tested using Windows HyperTerminal application.
+ 0004           ; // 
+ 0004           ; //    CY3210-PSoCEVAL1 Board Project
+ 0004           ; //
+ 0004           ; //Project Objective
+ 0004           ; //    To demonstrate the operation of the 8-Bit UART user module of PSoC device.  
+ 0004           ; //
+ 0004           ; //Overview
+ 0004           ; //    A command and some parameters (separated by spaces) are transmitted by a Personal 
+ 0004           ; //    Computer using Windows Hyper Terminal, through a Serial Port.  The data is received 
+ 0004           ; //    and decoded by PSoC and the command and parameters are echoed back to the PC (line by line).
+ 0004           ; //
+ 0004           ; //
+ 0004           ; //    The following changes were made to the default settings in the Device Editor:
+ 0004           ; // 
+ 0004           ; //    Select User Modules
+ 0004           ; //        o Select an UART_1 from the Digital Comm category.
+ 0004           ; //        o In this example, these UM is renamed as UART 
+ 0004           ; //    Place User Modules
+ 0004           ; //        1. Place the on blocks DCB02 and DCB03.
+ 0004           ; //
+ 0004           ; //    Set the global resources and UM parameters in the Device Editor as shown under 
+ 0004           ; //    "Project Settings" ahead.
+ 0004           ; //
+ 0004           ; //    Upon program execution all hardware settings from the device configuration are loaded 
+ 0004           ; //    into the device and main.c is executed.
+ 0004           ; //
+ 0004           ; //    The 24 MHz system clock is divided by 156 (VC3) to produce a 153.8 KHz clock, which 
+ 0004           ; //    is provided to UART user module.  The transfer rate would be 1/8 times the clock, 
+ 0004           ; //    ie., 19200 bps.  Parity is set to none in the initial configuration for the block 
+ 0004           ; //    and may also be set using the UART APIs.  
+ 0004           ; //
+ 0004           ; //    After setting up the HyperTerminal as explained below in section "Setting up 
+ 0004           ; //    HyperTerminal in Windows" , click on the 'Call' icon in the HyperTerminal and reset 
+ 0004           ; //    the PSoC.
+ 0004           ; //
+ 0004           ; //    In the HyperTerminal window, the following message will be displayed.
+ 0004           ; //
+ 0004           ; //    --------------------------------------------------------------------------------
+ 0004           ; //        Welcome to PSoC UART test program. V1.0
+ 0004           ; //        Enter a command and some parameters (delimited by space) and press <ENTER>
+ 0004           ; //           Eg:    foobar aa bbb cc      (MAX : 32 chars
+ 0004           ; //
+ 0004           ; //    --------------------------------------------------------------------------------
+ 0004           ; //
+ 0004           ; //    Based on the commands typed on the HyperTerminal, PSoC will decode the  command 
+ 0004           ; //    and parameters accordingly, ie., if command is typed as follows 
+ 0004           ; //    
+ 0004           ; //            Testing 1 22 333 4444 55555
+ 0004           ; //
+ 0004           ; //    The PSoC will respond with 
+ 0004           ; //    --------------------------------------------------------------------------------
+ 0004           ; //        Found valid command
+ 0004           ; //        Command =>Testing<
+ 0004           ; //        Paramaters:
+ 0004           ; //         <1>
+ 0004           ; //         <22>
+ 0004           ; //         <333>
+ 0004           ; //         <4444>
+ 0004           ; //         <55555>
+ 0004           ; //    --------------------------------------------------------------------------------
+ 0004           ; //
+ 0004           ; //    Further information on user modules is supplied in the specific user module data sheet 
+ 0004           ; //    included with PSoC Designer.
+ 0004           ; //
+ 0004           ; //Clock Routing
+ 0004           ; //    None
+ 0004           ; //    
+ 0004           ; //
+ 0004           ; //Project Settings
+ 0004           ; //
+ 0004           ; //    Global Resources 
+ 0004           ; //        CPU_Clock      = SysClk/2          CPU clock set to 12 MHz
+ 0004           ; //        VC3 Source      = SysClk/1          Set System Clock as the source for VC3
+ 0004           ; //        VC3 Divider = 156               Divide 24 Mhz system clock by 156, so that 
+ 0004           ; //                                             effective baud rate would be 19.2 kbps.
+ 0004           ; //
+ 0004           ; //User Module Parameters
+ 0004           ; //    UART            
+ 0004           ; //        Clock                = VC3               Input is 153.8 KHz clock.(ie., 8 times 
+ 0004           ; //                                             baud rate-19200).
+ 0004           ; //        RX Input         = Row_0_Input_1     Routed from pin P2[5] through GlobalInEven_5.
+ 0004           ; //        TX Output        = Row_0_Output_3    Routed to pin P2[7] through GlobalOutEven_7.
+ 0004           ; //        TX InterruptMode= TXRegEmpty             Not used.
+ 0004           ; //              Clock Sync             = Sync to SysClock      Clock is synchronized with the source clock(System Clock).
+ 0004           ; //        RxCmdBuffer  = Enable                Enable the Command buffer, so that the command 
+ 0004           ; //                                              received is stored in a ram buffer.
+ 0004           ; //        RxBufferSize         = 32                Bytes      Length of buffer is 32 characters 
+ 0004           ; //                                              (including parameters).
+ 0004           ; //        CommandTerminator= 13                    Carriage return (13) is the command terminator.
+ 0004           ; //        Param_Delimiter = 32                     Space (32) is the parameter delimiter.
+ 0004           ; //        IgnoreCharsBelow= 32                     Ignore control characters which has 
+ 0004           ; //                                             ascii value below 32.
+ 0004           ; //              Enable_Backspace= Disable                      Not used.
+ 0004           ; //        Rx Output       = None                               Not used.
+ 0004           ; //             Rx Clock Out     = None               Not used.
+ 0004           ; //             Tx Clock Out     = None               Not used.
+ 0004           ; //        InvertRX Input  = Normal             Do not invert Rx Input.
+ 0004           ; //
+ 0004           ; //
+ 0004           ; //    Note : For further information on the above parameters of UART,  
+ 0004           ; //            see "High Level API section" of UART module datasheet.
+ 0004           ; //
+ 0004           ; //Hardware Connections
+ 0004           ; //
+ 0004           ; //This example project runs on the CY3210-PSoCEVAL1 board or compatible hardware. The 
+ 0004           ; //serial data is transmitted through pin P2[7] and received through the pin P2[5].  
+ 0004           ; //Input
+ 0004           ; //    Pin         Select                  Drive
+ 0004           ; //    -----------------------------------------
+ 0004           ; //    P2[5]   GlobalInEven_5      High Z
+ 0004           ; //                    
+ 0004           ; //Output
+ 0004           ; //
+ 0004           ; //    Pin         Select                  Drive
+ 0004           ; //    -----------------------------------------
+ 0004           ; //    P2[7]   GlobalOutEven_7     Strong
+ 0004           ; //
+ 0004           ; //How to use the Prototype Board
+ 0004           ; //    
+ 0004           ; //    CY3210-PSoCEVAL1
+ 0004           ; //        � Connect a jumper wire between P2[5] and Rx of J13.
+ 0004           ; //        � Connect a jumper wire between P2[7] and Tx of J13.
+ 0004           ; //
+ 0004           ; //How to use Hyperterminal of Windows
+ 0004           ; //    � Connect a 9 pin Male to Female (one to one RS232) Serial cable from PC's  serial port to EVAL board serial port.
+ 0004           ; //
+ 0004           ; //    � Setting up HyperTerminal in Windows.
+ 0004           ; //
+ 0004           ; //    Click Start -> All Programs -> Accessories -> Communication -> HyperTerminal
+ 0004           ; //
+ 0004           ; //            - Enter a Name and select OK.
+ 0004           ; //    
+ 0004           ; //            - In ConnectTo option
+ 0004           ; //        
+ 0004           ; //        - Select the 'Connect using' as COM1/COM2 in which the serial cable is connected 
+ 0004           ; //          and Click OK
+ 0004           ; //
+ 0004           ; //            - In the COM2 properties
+ 0004           ; //                    - Bits per second       = 19200
+ 0004           ; //                    - Data bits                 = 8
+ 0004           ; //                    - Parity                        = None
+ 0004           ; //                    - Stop Bits                 = 1
+ 0004           ; //                    - Flow Control          = None
+ 0004           ; //
+ 0004           ; //                click OK
+ 0004           ; //
+ 0004           ; //        - Further, click on File-Properties-Settings-Ascii Setup and
+ 0004           ; //           Enable "Echo typed characters locally" (The HyperTerminal should
+ 0004           ; //           in Disconnected mode while setting this option) 
+ 0004           ; //
+ 0004           ; //   Note: The Hyper Terminal should be in Connected mode before Running PSoC.
+ 0004           ; //--------------------------------------------------------------------------------------------------------------
+ 0004           ; 
+ 0004           ; #include <m8c.h>        // part specific constants and macros
+ 0004           ; #include "PSoCAPI.h"    // PSoC API definitions for all User Modules
+ 0004           ; #include <string.h>
+ 0004           ; #include <stddef.h>
+ 0004           ; void itoa(unsigned short input, char *str, int base);
+ 0004           ; void LCD_line_print(char *str, unsigned char line);
+ 0004           ; 
+ 0004           ; void itoa(unsigned short input, char *str, int base)
+ 0004           ; {
+ 0004                   .dbline 210
+ 0004           ;       int n = 0;
+ 0004 560300            mov [X+3],0
+ 0007 560200            mov [X+2],0
+ 000A                   .dbline 211
+ 000A           ;       unsigned int d = 1;
+ 000A 560101            mov [X+1],1
+ 000D 560000            mov [X+0],0
+ 0010 801A              xjmp L3
+ 0012           L2:
+ 0012                   .dbline 214
+ 0012           ;       
+ 0012           ;       while ((input / d) >= base)
+ 0012           ;       {
+ 0012                   .dbline 215
+ 0012           ;               d *= base;
+ 0012 52F7              mov A,[X-9]
+ 0014 08                push A
+ 0015 52F8              mov A,[X-8]
+ 0017 08                push A
+ 0018 5200              mov A,[X+0]
+ 001A 08                push A
+ 001B 5201              mov A,[X+1]
+ 001D 08                push A
+ 001E 7C0000            xcall __mul16
+ 0021 38FC              add SP,-4
+ 0023 5100              mov A,[__rX]
+ 0025 5401              mov [X+1],A
+ 0027 5100              mov A,[__rY]
+ 0029 5400              mov [X+0],A
+ 002B                   .dbline 216
+ 002B           ;       }
+ 002B           L3:
+ 002B                   .dbline 213
+ 002B 5200              mov A,[X+0]
+ 002D 08                push A
+ 002E 5201              mov A,[X+1]
+ 0030 08                push A
+ 0031 52FB              mov A,[X-5]
+ 0033 08                push A
+ 0034 52FC              mov A,[X-4]
+ 0036 08                push A
+ 0037 7C0000            xcall __divmodu_16X16_16
+ 003A 18                pop A
+ 003B 5300              mov [__r1],A
+ 003D 18                pop A
+ 003E 5300              mov [__r0],A
+ 0040 38FE              add SP,-2
+ 0042 5100              mov A,[__r1]
+ 0044 13F8              sub A,[X-8]
+ 0046 5100              mov A,[__r0]
+ 0048 1BF7              sbb A,[X-9]
+ 004A DFC7              jnc L2
+ 004C           X0:
+ 004C 80AB              xjmp L6
+ 004E           L5:
+ 004E                   .dbline 218
+ 004E           ;       while (d != 0)
+ 004E           ;       {
+ 004E                   .dbline 219
+ 004E           ;               int digit = input / d;
+ 004E 5200              mov A,[X+0]
+ 0050 08                push A
+ 0051 5201              mov A,[X+1]
+ 0053 08                push A
+ 0054 52FB              mov A,[X-5]
+ 0056 08                push A
+ 0057 52FC              mov A,[X-4]
+ 0059 08                push A
+ 005A 7C0000            xcall __divmodu_16X16_16
+ 005D 18                pop A
+ 005E 5300              mov [__r1],A
+ 0060 18                pop A
+ 0061 5300              mov [__r0],A
+ 0063 38FE              add SP,-2
+ 0065 5100              mov A,[__r1]
+ 0067 5405              mov [X+5],A
+ 0069 5100              mov A,[__r0]
+ 006B 5404              mov [X+4],A
+ 006D                   .dbline 220
+ 006D           ;               input %= d;
+ 006D 5200              mov A,[X+0]
+ 006F 08                push A
+ 0070 5201              mov A,[X+1]
+ 0072 08                push A
+ 0073 52FB              mov A,[X-5]
+ 0075 08                push A
+ 0076 52FC              mov A,[X-4]
+ 0078 08                push A
+ 0079 7C0000            xcall __divmodu_16X16_16
+ 007C 38FE              add SP,-2
+ 007E 18                pop A
+ 007F 54FC              mov [X-4],A
+ 0081 18                pop A
+ 0082 54FB              mov [X-5],A
+ 0084                   .dbline 221
+ 0084           ;               d /= base;
+ 0084 52F7              mov A,[X-9]
+ 0086 08                push A
+ 0087 52F8              mov A,[X-8]
+ 0089 08                push A
+ 008A 5200              mov A,[X+0]
+ 008C 08                push A
+ 008D 5201              mov A,[X+1]
+ 008F 08                push A
+ 0090 7C0000            xcall __divmodu_16X16_16
+ 0093 18                pop A
+ 0094 5401              mov [X+1],A
+ 0096 18                pop A
+ 0097 5400              mov [X+0],A
+ 0099 38FE              add SP,-2
+ 009B                   .dbline 222
+ 009B           ;               if (n || digit > 0 || d == 0)
+ 009B 3D0200            cmp [X+2],0
+ 009E B020              jnz L11
+ 00A0 3D0300            cmp [X+3],0
+ 00A3 B01B              jnz L11
+ 00A5           X1:
+ 00A5 5000              mov A,0
+ 00A7 1305              sub A,[X+5]
+ 00A9 5204              mov A,[X+4]
+ 00AB 3180              xor A,-128
+ 00AD 5300              mov [__rX],A
+ 00AF 5080              mov A,(0 ^ 0x80)
+ 00B1 1A00              sbb A,[__rX]
+ 00B3 C00B              jc L11
+ 00B5           X2:
+ 00B5 3D0000            cmp [X+0],0
+ 00B8 B03F              jnz L8
+ 00BA 3D0100            cmp [X+1],0
+ 00BD B03A              jnz L8
+ 00BF           X3:
+ 00BF           L11:
+ 00BF                   .dbline 224
+ 00BF           ;               {
+ 00BF           ;                       *str++ = digit + ((digit < 10)? '0': 'a' - 10);
+ 00BF                   .dbline 224
+ 00BF 52FA              mov A,[X-6]
+ 00C1 5300              mov [__r1],A
+ 00C3 52F9              mov A,[X-7]
+ 00C5 5300              mov [__r0],A
+ 00C7 5100              mov A,[__r1]
+ 00C9 0101              add A,1
+ 00CB 54FA              mov [X-6],A
+ 00CD 5100              mov A,[__r0]
+ 00CF 0900              adc A,0
+ 00D1 54F9              mov [X-7],A
+ 00D3 5205              mov A,[X+5]
+ 00D5 110A              sub A,10
+ 00D7 5204              mov A,[X+4]
+ 00D9 3180              xor A,-128
+ 00DB 1980              sbb A,(0 ^ 0x80)
+ 00DD D009              jnc L13
+ 00DF           X4:
+ 00DF 560730            mov [X+7],48
+ 00E2 560600            mov [X+6],0
+ 00E5 8007              xjmp L14
+ 00E7           L13:
+ 00E7 560757            mov [X+7],87
+ 00EA 560600            mov [X+6],0
+ 00ED           L14:
+ 00ED 5205              mov A,[X+5]
+ 00EF 0307              add A,[X+7]
+ 00F1 3F00              mvi [__r1],A
+ 00F3                   .dbline 225
+ 00F3           ;                       n++;
+ 00F3 7703              inc [X+3]
+ 00F5 0F0200            adc [X+2],0
+ 00F8                   .dbline 226
+ 00F8           ;               }
+ 00F8           L8:
+ 00F8                   .dbline 227
+ 00F8           ;       }
+ 00F8           L6:
+ 00F8                   .dbline 217
+ 00F8 3D0000            cmp [X+0],0
+ 00FB BF52              jnz L5
+ 00FD 3D0100            cmp [X+1],0
+ 0100 BF4D              jnz L5
+ 0102           X5:
+ 0102                   .dbline 228
+ 0102           ;       *++str = '\r';
+ 0102 52FA              mov A,[X-6]
+ 0104 0101              add A,1
+ 0106 5300              mov [__r1],A
+ 0108 52F9              mov A,[X-7]
+ 010A 0900              adc A,0
+ 010C 5300              mov [__r0],A
+ 010E 5100              mov A,[__r1]
+ 0110 54FA              mov [X-6],A
+ 0112 5100              mov A,[__r0]
+ 0114 54F9              mov [X-7],A
+ 0116 500D              mov A,13
+ 0118 3F00              mvi [__r1],A
+ 011A                   .dbline 229
+ 011A           ;       *++str = '\n';
+ 011A 52FA              mov A,[X-6]
+ 011C 0101              add A,1
+ 011E 5300              mov [__r1],A
+ 0120 52F9              mov A,[X-7]
+ 0122 0900              adc A,0
+ 0124 5300              mov [__r0],A
+ 0126 5100              mov A,[__r1]
+ 0128 54FA              mov [X-6],A
+ 012A 5100              mov A,[__r0]
+ 012C 54F9              mov [X-7],A
+ 012E 500A              mov A,10
+ 0130 3F00              mvi [__r1],A
+ 0132                   .dbline 230
+ 0132           ;       *str = '\0';
+ 0132 52FA              mov A,[X-6]
+ 0134 5300              mov [__r1],A
+ 0136 5000              mov A,0
+ 0138 3F00              mvi [__r1],A
+ 013A                   .dbline -2
+ 013A           L1:
+ 013A 38F8              add SP,-8
+ 013C 20                pop X
+ 013D                   .dbline 0 ; func end
+ 013D 7F                ret
+ 013E                   .dbsym l digit 4 I
+ 013E                   .dbsym l n 2 I
+ 013E                   .dbsym l d 0 i
+ 013E                   .dbsym l base -9 I
+ 013E                   .dbsym l str -7 pc
+ 013E                   .dbsym l input -5 s
+ 013E                   .dbend
+                        .area bss(ram, con, rel)
+ 0000                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab5\Lab5\main.c
+ 0000           L16:
+ 0000                   .blkb 17
+                        .area text(rom, con, rel)
+ 013E                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab5\Lab5\main.c
+ 013E                   .dbfunc e LCD_line_print _LCD_line_print fV
+ 013E                   .dbsym s buffer L16 A[17:17]c
+ 013E           ;           line -> X-6
+ 013E           ;            str -> X-5
+ 013E           _LCD_line_print::
+ 013E                   .dbline -1
+ 013E 10                push X
+ 013F 4F                mov X,SP
+ 0140                   .dbline 234
+ 0140           ; }
+ 0140           ; 
+ 0140           ; void LCD_line_print(char *str, unsigned char line)
+ 0140           ; {
+ 0140                   .dbline 236
+ 0140           ;       static char buffer[17];
+ 0140           ;       memset(buffer, ' ', 16);
+ 0140 5000              mov A,0
+ 0142 08                push A
+ 0143 5010              mov A,16
+ 0145 08                push A
+ 0146 5000              mov A,0
+ 0148 08                push A
+ 0149 5020              mov A,32
+ 014B 08                push A
+ 014C 5000              mov A,>L16
+ 014E 08                push A
+ 014F 5000              mov A,<L16
+ 0151 08                push A
+ 0152 7C0000            xcall _memset
+ 0155 38FA              add SP,-6
+ 0157                   .dbline 237
+ 0157           ;       memcpy(buffer, str, strlen(str));
+ 0157 52FB              mov A,[X-5]
+ 0159 08                push A
+ 015A 52FC              mov A,[X-4]
+ 015C 08                push A
+ 015D 7C0000            xcall _strlen
+ 0160 5100              mov A,[__r0]
+ 0162 08                push A
+ 0163 5100              mov A,[__r1]
+ 0165 08                push A
+ 0166 52FB              mov A,[X-5]
+ 0168 08                push A
+ 0169 52FC              mov A,[X-4]
+ 016B 08                push A
+ 016C 5000              mov A,>L16
+ 016E 08                push A
+ 016F 5000              mov A,<L16
+ 0171 08                push A
+ 0172 7C0000            xcall _memcpy
+ 0175 38F8              add SP,-8
+ 0177                   .dbline 238
+ 0177           ;       buffer[17] = '\0';
+ 0177 551100            mov [L16+17],0
+ 017A                   .dbline -2
+ 017A           L15:
+ 017A 20                pop X
+ 017B                   .dbline 0 ; func end
+ 017B 7F                ret
+ 017C                   .dbsym l line -6 c
+ 017C                   .dbsym l str -5 pc
+ 017C                   .dbend
+                        .area bss(ram, con, rel)
+ 0011                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab5\Lab5\main.c
+ 0011           L19:
+ 0011                   .blkb 30
+                        .area text(rom, con, rel)
+ 017C                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab5\Lab5\main.c
+ 017C                   .dbfunc e main _main fV
+ 017C                   .dbsym s str_buf L19 A[30:30]c
+ 017C           ;         strPtr -> X+3
+ 017C           ;        pressed -> X+1
+ 017C           ;   bSwitchState -> X+0
+ 017C           _main::
+ 017C                   .dbline -1
+ 017C 10                push X
+ 017D 4F                mov X,SP
+ 017E 3805              add SP,5
+ 0180                   .dbline 248
+ 0180           ;       //LCD_1_Position(line, 0);
+ 0180           ;       //LCD_1_PrString(buffer);
+ 0180           ; }
+ 0180           ; 
+ 0180           ; 
+ 0180           ; 
+ 0180           ; void welcomeScreen(void);     //Declaration of the function that prints Welcome String on Hyperterminal
+ 0180           ; 
+ 0180           ; void main(void)
+ 0180           ; {
+ 0180                   .dbline 254
+ 0180           ;     // Parameter pointer
+ 0180           ;     char *strPtr; 
+ 0180           ;       // variable declaration
+ 0180           ;       static char str_buf[30];
+ 0180           ;       char bSwitchState;
+ 0180           ;       unsigned int pressed = 0;
+ 0180 560200            mov [X+2],0
+ 0183 560100            mov [X+1],0
+ 0186                   .dbline 265
+ 0186           ;     
+ 0186           ;     // Initialize receiver/cmd buffer
+ 0186           ;     // UART_CmdReset(); 
+ 0186           ;       
+ 0186           ;        //Turn on interrupts
+ 0186           ;     //M8C_EnableGInt ;
+ 0186           ;     
+ 0186           ;     //Enable RX interrupts
+ 0186           ;     //UART_IntCntl(UART_ENABLE_RX_INT);       
+ 0186           ;     //set parity as zero and start the UART 
+ 0186           ;     UART_Start(UART_PARITY_NONE);            
+ 0186 10                push X
+ 0187 5000              mov A,0
+ 0189 7C0000            xcall _UART_Start
+ 018C                   .dbline 269
+ 018C           ; 
+ 018C           ;    
+ 018C           ;     //Clear the screen in Hyper terminal window
+ 018C           ;     UART_PutChar(12); 
+ 018C 500C              mov A,12
+ 018E 7C0000            xcall _UART_PutChar
+ 0191 20                pop X
+ 0192                   .dbline 272
+ 0192           ;     
+ 0192           ;       // Print welcome screen
+ 0192           ;       welcomeScreen();
+ 0192 9043              xcall _welcomeScreen
+ 0194                   .dbline 281
+ 0194           ;     
+ 0194           ;     
+ 0194           ;       
+ 0194           ;       // init LCD module
+ 0194           ;       //LCD_1_Start();
+ 0194           ;       
+ 0194           ;       
+ 0194           ;       // infinite loop with debouncing.
+ 0194           ;       bSwitchState = 0;
+ 0194 560000            mov [X+0],0
+ 0197 8038              xjmp L21
+ 0199           L20:
+ 0199                   .dbline 283
+ 0199           ;       while (1)
+ 0199           ;       {
+ 0199                   .dbline 294
+ 0199           ;               // print out
+ 0199           ;               //tmp = TachTimer_wReadTimerSaveCV();
+ 0199           ;               //strcpy(str_buf, line1_head);
+ 0199           ;               //itoa((unsigned short)tmp, str_buf + strlen(line1_head), 10);
+ 0199           ;               //LCD_line_print(str_buf, 0);
+ 0199           ;               // FIXME: The sleep has a problem with the overall freq
+ 0199           ;               //M8C_Sleep;
+ 0199           ;               //INT_CLR0 = INT_CLR0 & ~0x40;
+ 0199           ;               
+ 0199           ;               // debouncing           
+ 0199           ;               bSwitchState <<= 1;
+ 0199 6600              asl [X+0]
+ 019B                   .dbline 295
+ 019B           ;               bSwitchState &= 0x0f;
+ 019B 27000F            and [X+0],15
+ 019E                   .dbline 296
+ 019E           ;               bSwitchState |= (PRT1DR & 0x01);
+ 019E 5D04              mov A,REG[0x4]
+ 01A0 2101              and A,1
+ 01A2 2D00              or [X+0],A
+ 01A4                   .dbline 297
+ 01A4           ;               if(bSwitchState == 0x07)
+ 01A4 3D0007            cmp [X+0],7
+ 01A7 B028              jnz L23
+ 01A9                   .dbline 300
+ 01A9           ;               {                       
+ 01A9           ;                       // increase
+ 01A9           ;                       ++pressed;
+ 01A9                   .dbline 300
+ 01A9 7702              inc [X+2]
+ 01AB 0F0100            adc [X+1],0
+ 01AE                   .dbline 301
+ 01AE           ;                       itoa(pressed, str_buf, 10);
+ 01AE 5000              mov A,0
+ 01B0 08                push A
+ 01B1 500A              mov A,10
+ 01B3 08                push A
+ 01B4 5011              mov A,>L19
+ 01B6 08                push A
+ 01B7 5011              mov A,<L19
+ 01B9 08                push A
+ 01BA 5201              mov A,[X+1]
+ 01BC 08                push A
+ 01BD 5202              mov A,[X+2]
+ 01BF 08                push A
+ 01C0 9E3E              xcall _itoa
+ 01C2 38FA              add SP,-6
+ 01C4                   .dbline 302
+ 01C4           ;                       UART_PutString(str_buf);
+ 01C4 10                push X
+ 01C5 5011              mov A,>L19
+ 01C7 08                push A
+ 01C8 5011              mov A,<L19
+ 01CA 5C                mov X,A
+ 01CB 18                pop A
+ 01CC 7C0000            xcall _UART_PutString
+ 01CF 20                pop X
+ 01D0                   .dbline 303
+ 01D0           ;               }
+ 01D0           L23:
+ 01D0                   .dbline 304
+ 01D0           ;       }  
+ 01D0           L21:
+ 01D0                   .dbline 282
+ 01D0 8FC8              xjmp L20
+ 01D2           X6:
+ 01D2                   .dbline -2
+ 01D2           L18:
+ 01D2 38FB              add SP,-5
+ 01D4 20                pop X
+ 01D5                   .dbline 0 ; func end
+ 01D5 8FFF              jmp .
+ 01D7                   .dbsym l strPtr 3 pc
+ 01D7                   .dbsym l pressed 1 i
+ 01D7                   .dbsym l bSwitchState 0 c
+ 01D7                   .dbend
+ 01D7                   .dbfunc e welcomeScreen _welcomeScreen fV
+ 01D7           _welcomeScreen::
+ 01D7                   .dbline -1
+ 01D7                   .dbline 309
+ 01D7           ; }
+ 01D7           ; 
+ 01D7           ; // Function to print the welcome screen
+ 01D7           ; void welcomeScreen(void)
+ 01D7           ; {
+ 01D7                   .dbline 310
+ 01D7           ;     UART_CPutString("This is our wonderful ESE366 Project\n\r");
+ 01D7 10                push X
+ 01D8 5020              mov A,>L26
+ 01DA 08                push A
+ 01DB 5020              mov A,<L26
+ 01DD 5C                mov X,A
+ 01DE 18                pop A
+ 01DF 7C0000            xcall _UART_CPutString
+ 01E2                   .dbline 311
+ 01E2           ;     UART_CPutString("Let's blow up the Prof. mind!\n\r");
+ 01E2 5000              mov A,>L27
+ 01E4 08                push A
+ 01E5 5000              mov A,<L27
+ 01E7 5C                mov X,A
+ 01E8 18                pop A
+ 01E9 7C0000            xcall _UART_CPutString
+ 01EC 20                pop X
+ 01ED                   .dbline -2
+ 01ED           L25:
+ 01ED                   .dbline 0 ; func end
+ 01ED 7F                ret
+ 01EE                   .dbend
+                        .area lit(rom, con, rel, lit)
+ 0000           L27:
+ 0000 4C6574277320626C6F77207570207468  .byte 'L,'e,'t,39,'s,32,'b,'l,'o,'w,32,'u,'p,32,'t,'h
+ 0010 652050726F662E206D696E64210A0D00  .byte 'e,32,'P,'r,'o,'f,46,32,'m,'i,'n,'d,33,10,13,0
+ 0020           L26:
+ 0020 54686973206973206F757220776F6E64  .byte 'T,'h,'i,'s,32,'i,'s,32,'o,'u,'r,32,'w,'o,'n,'d
+ 0030 657266756C204553453336362050726F  .byte 'e,'r,'f,'u,'l,32,'E,'S,'E,51,54,54,32,'P,'r,'o
+ 0040 6A6563740A0D00    .byte 'j,'e,'c,'t,10,13,0
