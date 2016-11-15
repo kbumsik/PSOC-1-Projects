@@ -181,6 +181,7 @@ ENDIF
 
     org   64h                      ;Sleep Timer Interrupt Vector
     `@INTERRUPT_25`
+	ljmp _SleepTimerISR
     reti
     ;---------------------------------------------------
     ; Insert your custom code above this banner
