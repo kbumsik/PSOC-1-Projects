@@ -1,0 +1,30 @@
+Starting MAKE...
+creating project.mk 
+
+lib/lcd_1.asm
+
+lib/psocconfig.asm
+
+lib/psocconfigtbl.asm
+
+lib/scdac.asm
+
+lib/scgain.asm
+
+!W C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab7\Lab7D\Lab7D\main.c(98):[warning] overflow in converting constant expression from `int' to `unsigned int'
+
+!W C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab7\Lab7D\Lab7D\main.c(98):[warning] overflow in converting constant expression from `unsigned int' to `unsigned char'
+
+./boot.asm
+
+Linking..
+
+  ROM 16% full. 2459 out of 16384 bytes used (does not include absolute areas).
+
+  RAM 12% full. 30 bytes used (does not include stack usage).
+
+Built with ICCM8C STD V7.05.00
+
+ 
+Lab7D - 0 error(s) 2 warning(s) 02:55:11
+
