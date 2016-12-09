@@ -26,9 +26,9 @@
 										//				0 = 3.3V
 #define WATCHDOG_ENABLE        0x0     //Watchdog Enable 1 = Enable
 
-#define CLOCK_DIV_VC1          0xb     // VC1 clock divider 
+#define CLOCK_DIV_VC1          0x5     // VC1 clock divider 
 #define CLOCK_DIV_VC1_MASK     0xf0    // VC1 clock divider mask
-#define CLOCK_DIV_VC1_JUST     0xb0    // jVC1 clock divider ustified
+#define CLOCK_DIV_VC1_JUST     0x50    // jVC1 clock divider ustified
 #define CLOCK_DIV_VC2          0x3     // VC2 clock divider 
 #define CLOCK_DIV_VC2_MASK     0xf     // VC2 clock divider mask
 #define CLOCK_DIV_VC2_JUST     0x3     // VC2 clock divider justified

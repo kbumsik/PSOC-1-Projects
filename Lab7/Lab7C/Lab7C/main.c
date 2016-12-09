@@ -9,49 +9,32 @@
 void itoa(unsigned short input, char *str, int base);
 void LCD_line_print(char *str, unsigned char line);
 
+#define DAC_MAX (62) //max dac value
 
-
+unsigned char bDACValue = 0, f; //dac value, index
 BOOL buttonPressed = FALSE; //holds if button pressed
 int buttonCount = 0, valat = 0; //buttoncount and place in dacs
-BYTE dacs[] = {128, 191, 0, 38, 137}; //scdac array
+
 void main(void)
 {
-	unsigned char i1, i2, i3, out[17]; //inputs and output array
-	unsigned char *ooptr; //initialize output pointer
-	unsigned char testout[5];
+	unsigned char out[17]; //inputs and output array
 	
 	LCD_1_Start(); //start lcd module	
-	
+	DAC6_Start(DAC6_HIGHPOWER); //start dac6 high power
 	INT_MSK0 |= 0x40; //enable sleep interrupt
 	M8C_EnableGInt; //enable global interrupt
 	
 	while (1) {
 		if (buttonPressed) { //waits until isr updates buttonPressed
-			SCDAC_cr0 = dacs[valat]; //increment SCDAC control register
+			if(bDACValue == DAC_MAX)
+				bDACValue = 0;
+			else bDACValue++;
+			DAC6_WriteStall(bDACValue);//increment SCDAC control register
 			buttonPressed = FALSE; //clear buttonpress
-			if (valat < 4)
-				valat++;
-			else valat = 0;
+			for(f = 0xFF; f != 0; f--); //stall while writing dac val
 		}
-		//lcd out masks for bit 7 of cr, then bits 4-0, then bit 5
-		i1 = (SCDAC_cr0 & 0x80) >> 7; // FCAP
-		i2 = SCDAC_cr0 & 0x1F; // ACAP
-		i3 = (SCDAC_cr0 & 0x20) >> 5; // ASign
-		itoa(i1, out, 10); //i1 to base 10 in out
-		ooptr = out; //point to out
-		while (*ooptr != '\0') //look for last char of output array
-			ooptr++; //go to next element of array
-		*ooptr++ = ' '; //add space to next element of output array
-		itoa(i2, ooptr, 10);//i2 to base 10 appended to out
-		while (*ooptr != '\0') //look for last char of output array
-			ooptr++; //go to next element of array
-		*ooptr++ = ' '; //add space to next element of output array
-		itoa(i3, ooptr, 10); //i3 to base 10 appended to out
-		
+		itoa(DAC6_CR0, out, 10); //cr0's lower 5 bits to base 10 in out
 		LCD_line_print(out, 0); //print output array to LCD
-		
-		itoa(SCDAC_cr0, testout, 10); 
-		LCD_line_print(testout,1);
 	}
 }
 

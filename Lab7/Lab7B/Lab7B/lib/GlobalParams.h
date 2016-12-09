@@ -3,47 +3,48 @@
 ******************************************************************************/
 /******************************************************************************
 *	This file contains defines to support oscillator register initialization
-*		for CY8C27443B
+*		for CY8C29466
 ******************************************************************************/
 
-#define CPU_CLOCK              0x0     //CPU clock value
+#define CPU_CLOCK              0x2     //CPU clock value
 #define CPU_CLOCK_MASK         0x7     //CPU clock mask
-#define CPU_CLOCK_JUST         0x0     //CPU clock value justified
+#define CPU_CLOCK_JUST         0x2     //CPU clock value justified
 #define SELECT_32K             0x0     //32K select value
 #define SELECT_32K_MASK        0x80    //32K select mask
 #define SELECT_32K_JUST        0x0     //32K select value justified
 #define PLL_MODE               0x0     //PLL mode value
 #define PLL_MODE_MASK          0x40    //PLL mode mask
 #define PLL_MODE_JUST          0x0     //PLL mode value justified
-#define SLEEP_TIMER            0x0     //Sleep Timer value
+#define SLEEP_TIMER            0x1     //Sleep Timer value
 #define SLEEP_TIMER_MASK       0x18    //Sleep Timer mask
-#define SLEEP_TIMER_JUST       0x0     //Sleep Timer value justified
+#define SLEEP_TIMER_JUST       0x8     //Sleep Timer value justified
 #define SWITCH_MODE_PUMP       0x1     //Switch Mode Pump value
 #define SWITCH_MODE_PUMP_MASK  0x80    //Switch Mode Pump mask
 #define SWITCH_MODE_PUMP_JUST  0x80    //Switch Mode Pump value justified
 #define TRIP_VOLTAGE           0x7     //Trip Voltage
-#define SUPPLY_VOLTAGE         0x1     //Supply Voltage 1 = 5.0V
-										//				0 = 3.3V
+#define POWER_SETTING          0x10    //Power Setting [ Vcc / SysClk freq ] 0x10 = 5.0V / 24MHz
+										//				0x08 = 3.3V / 24MHz
+										//				0x09 = 3.3V / 12MHz
 #define WATCHDOG_ENABLE        0x0     //Watchdog Enable 1 = Enable
 
-#define CLOCK_DIV_VC1          0xf     // VC1 clock divider 
+#define CLOCK_DIV_VC1          0x5     // VC1 clock divider 
 #define CLOCK_DIV_VC1_MASK     0xf0    // VC1 clock divider mask
-#define CLOCK_DIV_VC1_JUST     0xf0    // jVC1 clock divider ustified
-#define CLOCK_DIV_VC2          0xf     // VC2 clock divider 
+#define CLOCK_DIV_VC1_JUST     0x50    // jVC1 clock divider ustified
+#define CLOCK_DIV_VC2          0x3     // VC2 clock divider 
 #define CLOCK_DIV_VC2_MASK     0xf     // VC2 clock divider mask
-#define CLOCK_DIV_VC2_JUST     0xf     // VC2 clock divider justified
-#define CLOCK_INPUT_VC3        0x2     // VC3 clock source
+#define CLOCK_DIV_VC2_JUST     0x3     // VC2 clock divider justified
+#define CLOCK_INPUT_VC3        0x0     // VC3 clock source
 #define CLOCK_INPUT_VC3_MASK   0x3     // VC3 clock source mask
-#define CLOCK_INPUT_VC3_JUST   0x2     // VC3 clock source justified
-#define CLOCK_DIV_VC3          0xff    // VC3 clock divider
+#define CLOCK_INPUT_VC3_JUST   0x0     // VC3 clock source justified
+#define CLOCK_DIV_VC3          0x19    // VC3 clock divider
 #define CLOCK_DIV_VC3_MASK     0xff    // VC3 clock divider mask
-#define CLOCK_DIV_VC3_JUST     0xff    // VC3 clock divider justified
+#define CLOCK_DIV_VC3_JUST     0x19    // VC3 clock divider justified
 #define ANALOG_BUFFER_PWR      0x0     // Analog buffer power level
 #define ANALOG_BUFFER_PWR_MASK 0x1     // Analog buffer power level mask
 #define ANALOG_BUFFER_PWR_JUST 0x0     // Analog buffer power level justified
-#define ANALOG_POWER           0x5     // Analog power control
+#define ANALOG_POWER           0x7     // Analog power control
 #define ANALOG_POWER_MASK      0x7     // Analog power control mask
-#define ANALOG_POWER_JUST      0x5     // Analog power control justified
+#define ANALOG_POWER_JUST      0x7     // Analog power control justified
 #define OP_AMP_BIAS            0x0     // Op amp bias level
 #define OP_AMP_BIAS_MASK       0x40    // Op amp bias level mask
 #define OP_AMP_BIAS_JUST       0x0     // Op amp bias level justified
@@ -56,9 +57,9 @@
 #define SYSCLK_SOURCE          0x0     // SysClk Source setting
 #define SYSCLK_SOURCE_MASK     0x4     // SysClk Source setting mask
 #define SYSCLK_SOURCE_JUST     0x0     // SysClk Source setting justified
-#define SYSCLK_2_DISABLE       0x0     // SysClk*2 Disable setting
+#define SYSCLK_2_DISABLE       0x1     // SysClk*2 Disable setting
 #define SYSCLK_2_DISABLE_MASK  0x1     // SysClk*2 Disable setting mask
-#define SYSCLK_2_DISABLE_JUST  0x0     // SysClk*2 Disable setting justified
+#define SYSCLK_2_DISABLE_JUST  0x1     // SysClk*2 Disable setting justified
 //
 // register initial values
 //
@@ -105,3 +106,17 @@
 #define PORT_5_INTENABLE       0x0     //Port 5 interrupt enable register (PRT5IE)
 #define PORT_5_INTCTRL_0       0x0     //Port 5 interrupt control 0 register (PRT5IC0)
 #define PORT_5_INTCTRL_1       0x0     //Port 5 interrupt control 1 register (PRT5IC1)
+#define PORT_6_GLOBAL_SELECT   0x0     //Port 6 global select register (PRT6GS)
+#define PORT_6_DRIVE_0         0x0     //Port 6 drive mode 0 register (PRT6DM0)
+#define PORT_6_DRIVE_1         0x0     //Port 6 drive mode 1 register (PRT6DM1)
+#define PORT_6_DRIVE_2         0x0     //Port 6 drive mode 2 register (PRT6DM2)
+#define PORT_6_INTENABLE       0x0     //Port 6 interrupt enable register (PRT6IE)
+#define PORT_6_INTCTRL_0       0x0     //Port 6 interrupt control 0 register (PRT6IC0)
+#define PORT_6_INTCTRL_1       0x0     //Port 6 interrupt control 1 register (PRT6IC1)
+#define PORT_7_GLOBAL_SELECT   0x0     //Port 7 global select register (PRT7GS)
+#define PORT_7_DRIVE_0         0x0     //Port 7 drive mode 0 register (PRT7DM0)
+#define PORT_7_DRIVE_1         0x0     //Port 7 drive mode 1 register (PRT7DM1)
+#define PORT_7_DRIVE_2         0x0     //Port 7 drive mode 2 register (PRT7DM2)
+#define PORT_7_INTENABLE       0x0     //Port 7 interrupt enable register (PRT7IE)
+#define PORT_7_INTCTRL_0       0x0     //Port 7 interrupt control 0 register (PRT7IC0)
+#define PORT_7_INTCTRL_1       0x0     //Port 7 interrupt control 1 register (PRT7IC1)

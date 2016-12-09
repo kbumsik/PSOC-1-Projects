@@ -22,8 +22,8 @@ include "GlobalParams.inc"
 
 export LoadConfigInit
 export _LoadConfigInit
-export LoadConfig_lab7b
-export _LoadConfig_lab7b
+export LoadConfig_lab7c
+export _LoadConfig_lab7c
 export Port_2_Data_SHADE
 export _Port_2_Data_SHADE
 export Port_2_DriveMode_0_SHADE
@@ -66,17 +66,17 @@ _LoadConfigInit:
 	mov		[Port_2_DriveMode_0_SHADE], 7fh
 	mov		[Port_2_DriveMode_1_SHADE], 80h
 
-	lcall	LoadConfig_lab7b
-	lcall	LoadConfigTBL_lab7b_Ordered
+	lcall	LoadConfig_lab7c
+	lcall	LoadConfigTBL_lab7c_Ordered
 
 
     RAM_EPILOGUE RAM_USE_CLASS_4
     ret
 
 ;---------------------------------------------------------------------------
-; Load Configuration lab7b
+; Load Configuration lab7c
 ;
-;    Load configuration registers for lab7b.
+;    Load configuration registers for lab7c.
 ;    IO Bank 0 registers a loaded first,then those in IO Bank 1.
 ;
 ;       INPUTS: None.
@@ -92,8 +92,8 @@ _LoadConfigInit:
 ;               Page Pointer Registers Modified: 
 ;               CUR_PP
 ;
-_LoadConfig_lab7b:
- LoadConfig_lab7b:
+_LoadConfig_lab7c:
+ LoadConfig_lab7c:
     RAM_PROLOGUE RAM_USE_CLASS_4
 
 	push	x
@@ -101,15 +101,15 @@ _LoadConfig_lab7b:
     mov     a, 0                    ; Specify bank 0
     asr     a                       ; Store in carry flag
                                     ; Load bank 0 table:
-    mov     A, >LoadConfigTBL_lab7b_Bank0
-    mov     X, <LoadConfigTBL_lab7b_Bank0
+    mov     A, >LoadConfigTBL_lab7c_Bank0
+    mov     X, <LoadConfigTBL_lab7c_Bank0
     lcall   LoadConfig              ; Load the bank 0 values
 
     mov     a, 1                    ; Specify bank 1
     asr     a                       ; Store in carry flag
                                     ; Load bank 1 table:
-    mov     A, >LoadConfigTBL_lab7b_Bank1
-    mov     X, <LoadConfigTBL_lab7b_Bank1
+    mov     A, >LoadConfigTBL_lab7c_Bank1
+    mov     X, <LoadConfigTBL_lab7c_Bank1
     lcall   LoadConfig              ; Load the bank 1 values
 
     M8C_SetBank0                    ; Force return to bank 0

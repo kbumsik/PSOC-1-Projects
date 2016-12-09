@@ -23,18 +23,18 @@ LoadConfigTBL_lab7b_Bank0:
 ;  Instance name LCD_1, User Module LCD
 ;  Instance name SCDAC, User Module SCBLOCK
 ;       Instance name SCDAC, Block Name SCBLK(ASC10)
-	db		80h, 9fh		;SCDAC_cr0(ASC10CR0)
+	db		80h, 94h		;SCDAC_cr0(ASC10CR0)
 	db		81h, 40h		;SCDAC_cr1(ASC10CR1)
 	db		82h, a0h		;SCDAC_cr2(ASC10CR2)
 	db		83h, 33h		;SCDAC_cr3(ASC10CR3)
 ;  Global Register values Bank 0
 	db		60h, 28h		; AnalogColumnInputSelect register (AMX_IN)
 	db		66h, 00h		; AnalogComparatorControl1 register (CMP_CR1)
-	db		63h, 05h		; AnalogReferenceControl register (ARF_CR)
+	db		63h, 07h		; AnalogReferenceControl register (ARF_CR)
 	db		65h, 00h		; AnalogSyncControl register (ASY_CR)
 	db		e6h, 00h		; DecimatorControl_0 register (DEC_CR0)
 	db		e7h, 00h		; DecimatorControl_1 register (DEC_CR1)
-	db		d6h, 00h		; I2CConfig register (I2CCFG)
+	db		d6h, 00h		; I2CConfig register (I2C_CFG)
 	db		b0h, 00h		; Row_0_InputMux register (RDI0RI)
 	db		b1h, 00h		; Row_0_InputSync register (RDI0SYN)
 	db		b2h, 00h		; Row_0_LogicInputAMux register (RDI0IS)
@@ -49,6 +49,24 @@ LoadConfigTBL_lab7b_Bank0:
 	db		bch, 33h		; Row_1_LogicSelect_1 register (RDI1LT1)
 	db		bdh, 00h		; Row_1_OutputDrive_0 register (RDI1SRO0)
 	db		beh, 00h		; Row_1_OutputDrive_1 register (RDI1SRO1)
+	db		c0h, 00h		; Row_2_InputMux register (RDI2RI)
+	db		c1h, 00h		; Row_2_InputSync register (RDI2SYN)
+	db		c2h, 20h		; Row_2_LogicInputAMux register (RDI2IS)
+	db		c3h, 33h		; Row_2_LogicSelect_0 register (RDI2LT0)
+	db		c4h, 33h		; Row_2_LogicSelect_1 register (RDI3LT1)
+	db		c5h, 00h		; Row_2_OutputDrive_0 register (RDI2SRO0)
+	db		c6h, 00h		; Row_2_OutputDrive_1 register (RDI2SRO1)
+	db		c8h, 55h		; Row_3_InputMux register (RDI3RI)
+	db		c9h, 00h		; Row_3_InputSync register (RDI3SYN)
+	db		cah, 30h		; Row_3_LogicInputAMux register (RDI3IS)
+	db		cbh, 33h		; Row_3_LogicSelect_0 register (RDI3LT0)
+	db		cch, 33h		; Row_3_LogicSelect_1 register (RDI3LT1)
+	db		cdh, 00h		; Row_3_OutputDrive_0 register (RDI3SRO0)
+	db		ceh, 00h		; Row_3_OutputDrive_1 register (RDI3SRO1)
+	db		6ch, 00h		; TMP_DR0 register (TMP_DR0)
+	db		6dh, 00h		; TMP_DR1 register (TMP_DR1)
+	db		6eh, 00h		; TMP_DR2 register (TMP_DR2)
+	db		6fh, 00h		; TMP_DR3 register (TMP_DR3)
 	db		ffh
 LoadConfigTBL_lab7b_Bank1:
 ;  Instance name LCD_1, User Module LCD
@@ -67,11 +85,12 @@ LoadConfigTBL_lab7b_Bank1:
 	db		d3h, 00h		; GlobalDigitalInterconnect_Drive_Even_Output register (GDI_E_OU)
 	db		d0h, 00h		; GlobalDigitalInterconnect_Drive_Odd_Input register (GDI_O_IN)
 	db		d2h, 00h		; GlobalDigitalInterconnect_Drive_Odd_Output register (GDI_O_OU)
-	db		e1h, ffh		; OscillatorControl_1 register (OSC_CR1)
-	db		e2h, 00h		; OscillatorControl_2 register (OSC_CR2)
-	db		dfh, ffh		; OscillatorControl_3 register (OSC_CR3)
-	db		deh, 02h		; OscillatorControl_4 register (OSC_CR4)
+	db		e1h, 53h		; OscillatorControl_1 register (OSC_CR1)
+	db		e2h, 01h		; OscillatorControl_2 register (OSC_CR2)
+	db		dfh, 19h		; OscillatorControl_3 register (OSC_CR3)
+	db		deh, 00h		; OscillatorControl_4 register (OSC_CR4)
 	db		ddh, 00h		; OscillatorGlobalBusEnableControl register (OSC_GO_EN)
+	db		e7h, 00h		; Type2Decimator_Control register (DEC_CR2)
 	db		ffh
 AREA psoc_config(rom, rel)
 LoadConfigTBL_lab7b_Ordered:
@@ -149,6 +168,30 @@ LoadConfigTBL_lab7b_Ordered:
 	mov	reg[17h], 00h		; Port_5_IntCtrl_1 register (PRT5IC1)
 	M8C_SetBank0
 	mov	reg[15h], 00h		; Port_5_IntEn register (PRT5IE)
+	mov	reg[18h], 00h		; Port_6_Data register (PRT6DR)
+	M8C_SetBank1
+	mov	reg[18h], 00h		; Port_6_DriveMode_0 register (PRT6DM0)
+	mov	reg[19h], 00h		; Port_6_DriveMode_1 register (PRT6DM1)
+	M8C_SetBank0
+	mov	reg[1bh], 00h		; Port_6_DriveMode_2 register (PRT6DM2)
+	mov	reg[1ah], 00h		; Port_6_GlobalSelect register (PRT6GS)
+	M8C_SetBank1
+	mov	reg[1ah], 00h		; Port_6_IntCtrl_0 register (PRT6IC0)
+	mov	reg[1bh], 00h		; Port_6_IntCtrl_1 register (PRT6IC1)
+	M8C_SetBank0
+	mov	reg[19h], 00h		; Port_6_IntEn register (PRT6IE)
+	mov	reg[1ch], 00h		; Port_7_Data register (PRT7DR)
+	M8C_SetBank1
+	mov	reg[1ch], 00h		; Port_7_DriveMode_0 register (PRT7DM0)
+	mov	reg[1dh], 00h		; Port_7_DriveMode_1 register (PRT7DM1)
+	M8C_SetBank0
+	mov	reg[1fh], 00h		; Port_7_DriveMode_2 register (PRT7DM2)
+	mov	reg[1eh], 00h		; Port_7_GlobalSelect register (PRT7GS)
+	M8C_SetBank1
+	mov	reg[1eh], 00h		; Port_7_IntCtrl_0 register (PRT7IC0)
+	mov	reg[1fh], 00h		; Port_7_IntCtrl_1 register (PRT7IC1)
+	M8C_SetBank0
+	mov	reg[1dh], 00h		; Port_7_IntEn register (PRT7IE)
 	M8C_SetBank0
 	ret
 

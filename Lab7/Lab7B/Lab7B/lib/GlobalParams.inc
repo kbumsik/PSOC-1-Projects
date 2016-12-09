@@ -7,7 +7,7 @@
 ;  DESCRIPTION:
 ;  Constants describing many of the global parameter settings.
 ;  This file contains equates to support oscillator register initialization
-;  for the CY8C27443B
+;  for the CY8C29466
 ;
 ;  Copyright (c) Cypress Semiconductor 2015. All Rights Reserved.
 ;
@@ -19,18 +19,18 @@
 ;=============================================================================
 ;
 
-CPU_CLOCK:				equ	0h	;CPU clock value
-CPU_CLOCK_MASK:			equ	7h	;CPU clock mask
-CPU_CLOCK_JUST:			equ	0h	;CPU clock value justified
-SELECT_32K:				equ	0h	;32K select value
-SELECT_32K_MASK:		equ	80h	;32K select mask
-SELECT_32K_JUST:		equ	0h	;32K select value justified
-PLL_MODE:				equ	0h	;PLL mode value
-PLL_MODE_MASK:			equ	40h	;PLL mode mask
-PLL_MODE_JUST:			equ	0h	;PLL mode value justified
-SLEEP_TIMER:			equ	0h	;Sleep Timer value
-SLEEP_TIMER_MASK:		equ	18h	;Sleep Timer mask
-SLEEP_TIMER_JUST:		equ	0h	;Sleep Timer value justified
+CPU_CLOCK:				equ	2h		;CPU clock value
+CPU_CLOCK_MASK:			equ	7h		;CPU clock mask
+CPU_CLOCK_JUST:			equ	2h		;CPU clock value justified
+SELECT_32K:				equ	0h		;32K select value
+SELECT_32K_MASK:		equ	80h		;32K select mask
+SELECT_32K_JUST:		equ	0h		;32K select value justified
+PLL_MODE:				equ	0h		;PLL mode value
+PLL_MODE_MASK:			equ	40h		;PLL mode mask
+PLL_MODE_JUST:			equ	0h		;PLL mode value justified
+SLEEP_TIMER:			equ	1h		;Sleep Timer value
+SLEEP_TIMER_MASK:		equ	18h		;Sleep Timer mask
+SLEEP_TIMER_JUST:		equ	8h		;Sleep Timer value justified
 SWITCH_MODE_PUMP:		equ	1h		;Switch Mode Pump setting
 SWITCH_MODE_PUMP_MASK:	equ	80h		;Switch Mode Pump mask
 SWITCH_MODE_PUMP_JUST:	equ	80h	;Switch Mode Pump justified
@@ -40,8 +40,8 @@ LVD_TBEN_JUST:          equ 0  ; Low Voltage Throttle-back enable justified
 TRIP_VOLTAGE:			equ	7h   ;Trip Voltage value
 TRIP_VOLTAGE_MASK:      equ 7h  ;Trip Voltage mask
 TRIP_VOLTAGE_JUST:      equ 7h  ;Trip Voltage justified
-SUPPLY_VOLTAGE:			equ	1h	;Supply Voltage 1 = 5.0V, 0 = 3.3V
 
+POWER_SETTING:			equ	10h
 POWER_SET_5V0:          equ 10h  ; MASK for 5.0V operation, fast and slow 
 POWER_SET_5V0_24MHZ:    equ 10h  ; Power Setting value for 5.0V fast      
 POWER_SET_5V0_6MHZ:     equ 11h  ; Power Setting value for 5.0V slow      
@@ -53,27 +53,27 @@ POWER_SET_2V7_12MHZ:    equ 04h	 ; MASK for 2.7V, 12MHZ operation
 POWER_SET_2V7_6MHZ:     equ 02h	 ; MASK for 2.7V,  6MHZ operation
 POWER_SET_SLOW_IMO:     equ 01h  ; MASK for slow Internal Main Oscillator (IMO) 
 
-COMM_RX_PRESENT:		equ	0	;1 = TRUE
+COMM_RX_PRESENT:		equ	0		;1 = TRUE
 WATCHDOG_ENABLE:		equ 0	;Watchdog Enable 1 = Enable
 
-CLOCK_DIV_VC1:			equ	fh	;VC1 clock divider
+CLOCK_DIV_VC1:			equ	5h	;VC1 clock divider
 CLOCK_DIV_VC1_MASK:		equ	f0h	;VC1 clock divider mask
-CLOCK_DIV_VC1_JUST:		equ	f0h	;VC1 clock divider justified
-CLOCK_DIV_VC2:			equ	fh	;VC2 clock divider
+CLOCK_DIV_VC1_JUST:		equ	50h	;VC1 clock divider justified
+CLOCK_DIV_VC2:			equ	3h	;VC2 clock divider
 CLOCK_DIV_VC2_MASK:		equ	fh	;VC2 clock divider mask
-CLOCK_DIV_VC2_JUST:		equ	fh	;VC2 clock divider justified
-CLOCK_INPUT_VC3:		equ	2h	;VC3 clock source
+CLOCK_DIV_VC2_JUST:		equ	3h	;VC2 clock divider justified
+CLOCK_INPUT_VC3:		equ	0h	;VC3 clock source
 CLOCK_INPUT_VC3_MASK:	equ	3h	;VC3 clock source mask
-CLOCK_INPUT_VC3_JUST:	equ	2h	;VC3 clock source justified
-CLOCK_DIV_VC3:			equ	ffh	;VC3 clock divider
+CLOCK_INPUT_VC3_JUST:	equ	0h	;VC3 clock source justified
+CLOCK_DIV_VC3:			equ	19h	;VC3 clock divider
 CLOCK_DIV_VC3_MASK:		equ	ffh	;VC3 clock divider mask
-CLOCK_DIV_VC3_JUST:		equ	ffh	;VC3 clock divider justified
+CLOCK_DIV_VC3_JUST:		equ	19h	;VC3 clock divider justified
 ANALOG_BUFFER_PWR:		equ	0h	;Analog buffer power level
 ANALOG_BUFFER_PWR_MASK:	equ	1h	;Analog buffer power level mask
 ANALOG_BUFFER_PWR_JUST:	equ	0h	;Analog buffer power level justified
-ANALOG_POWER:			equ	5h	;Analog power control
+ANALOG_POWER:			equ	7h	;Analog power control
 ANALOG_POWER_MASK:		equ	7h	;Analog power control mask
-ANALOG_POWER_JUST:		equ	5h	;Analog power control justified
+ANALOG_POWER_JUST:		equ	7h	;Analog power control justified
 OP_AMP_BIAS:			equ	0h	;Op amp bias level
 OP_AMP_BIAS_MASK:		equ	40h	;Op amp bias level mask
 OP_AMP_BIAS_JUST:		equ	0h	;Op amp bias level justified
@@ -86,9 +86,9 @@ AGND_BYPASS_JUST:			equ	0h	;AGndBypass setting justified
 SYSCLK_SOURCE:				equ	0h	;SysClk Source setting
 SYSCLK_SOURCE_MASK:			equ	4h ;SysClk Source setting mask
 SYSCLK_SOURCE_JUST:			equ	0h ;SysClk Source setting justified
-SYSCLK_2_DISABLE:				equ	0h	;SysClk*2 Disable setting
+SYSCLK_2_DISABLE:				equ	1h	;SysClk*2 Disable setting
 SYSCLK_2_DISABLE_MASK:			equ	1h	;SysClk*2 Disable setting mask
-SYSCLK_2_DISABLE_JUST:			equ	0h	;SysClk*2 Disable setting justified
+SYSCLK_2_DISABLE_JUST:			equ	1h	;SysClk*2 Disable setting justified
 ;
 ; register initial values
 ;
@@ -135,5 +135,19 @@ PORT_5_DRIVE_2:			equ 0h	;Port 5 drive mode 2 register (PRT5DM2)
 PORT_5_INTENABLE:		equ 0h	;Port 5 interrupt enable register (PRT5IE)
 PORT_5_INTCTRL_0:		equ 0h	;Port 5 interrupt control 0 register (PRT5IC0)
 PORT_5_INTCTRL_1:		equ 0h	;Port 5 interrupt control 1 register (PRT5IC1)
+PORT_6_GLOBAL_SELECT:	equ 0h	;Port 6 global select register (PRT6GS)
+PORT_6_DRIVE_0:			equ 0h	;Port 6 drive mode 0 register (PRT6DM0)
+PORT_6_DRIVE_1:			equ 0h	;Port 6 drive mode 1 register (PRT6DM1)
+PORT_6_DRIVE_2:			equ 0h	;Port 6 drive mode 2 register (PRT6DM2)
+PORT_6_INTENABLE:		equ 0h	;Port 6 interrupt enable register (PRT6IE)
+PORT_6_INTCTRL_0:		equ 0h	;Port 6 interrupt control 0 register (PRT6IC0)
+PORT_6_INTCTRL_1:		equ 0h	;Port 6 interrupt control 1 register (PRT6IC1)
+PORT_7_GLOBAL_SELECT:	equ 0h	;Port 7 global select register (PRT7GS)
+PORT_7_DRIVE_0:			equ 0h	;Port 7 drive mode 0 register (PRT7DM0)
+PORT_7_DRIVE_1:			equ 0h	;Port 7 drive mode 1 register (PRT7DM1)
+PORT_7_DRIVE_2:			equ 0h	;Port 7 drive mode 2 register (PRT7DM2)
+PORT_7_INTENABLE:		equ 0h	;Port 7 interrupt enable register (PRT7IE)
+PORT_7_INTCTRL_0:		equ 0h	;Port 7 interrupt control 0 register (PRT7IC0)
+PORT_7_INTCTRL_1:		equ 0h	;Port 7 interrupt control 1 register (PRT7IC1)
 
 ; end of file GlobalParams.inc

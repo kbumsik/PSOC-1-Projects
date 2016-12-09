@@ -75,7 +75,7 @@ LoadConfigTBL_lab7d_Bank1:
 	db		d3h, 00h		; GlobalDigitalInterconnect_Drive_Even_Output register (GDI_E_OU)
 	db		d0h, 00h		; GlobalDigitalInterconnect_Drive_Odd_Input register (GDI_O_IN)
 	db		d2h, 00h		; GlobalDigitalInterconnect_Drive_Odd_Output register (GDI_O_OU)
-	db		e1h, b3h		; OscillatorControl_1 register (OSC_CR1)
+	db		e1h, 53h		; OscillatorControl_1 register (OSC_CR1)
 	db		e2h, 01h		; OscillatorControl_2 register (OSC_CR2)
 	db		dfh, 4fh		; OscillatorControl_3 register (OSC_CR3)
 	db		deh, 01h		; OscillatorControl_4 register (OSC_CR4)

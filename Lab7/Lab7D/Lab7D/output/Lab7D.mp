@@ -1,6 +1,6 @@
 Project:      output/Lab7D
 Build Number: 0
-Date:         Tue Dec 06 02:55:11 2016
+Date:         Fri Dec 09 18:19:10 2016
 Compiler:     ICCM8C
 Version:      7.05.00
 
@@ -40,81 +40,69 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                     UserModules   03FC   02DE =    734. bytes (rel,con,rom,code)
+                     UserModules   03FC   02B6 =    694. bytes (rel,con,rom,code)
 
        Addr  Global Symbol
       -----  --------------------------------
-       03FC  _SCGain_SetPower
-       03FC  _SCGain_Start
-       03FC  SCGain_Start
-       03FC  SCGain_SetPower
-       040C  _SCGain_Stop
-       040C  SCGain_Stop
-       0410  SCDAC_Start
-       0410  SCDAC_SetPower
-       0410  _SCDAC_Start
-       0410  _SCDAC_SetPower
-       0420  _SCDAC_Stop
-       0420  SCDAC_Stop
-       0424  _LCD_1_PrCString
-       0424  LCD_1_PrCString
-       0436  LCD_1_HEX_STR
-       0446  _LCD_1_PrHexByte
-       0446  LCD_1_PrHexByte
-       0459  LCD_1_PrHexInt
-       0459  _LCD_1_PrHexInt
-       0460  LCD_1_PrString
-       0460  _LCD_1_PrString
-       046A  LCD_1_WriteData
-       046A  _LCD_1_Write_Data
-       046A  LCD_1_Write_Data
-       046A  _LCD_1_WriteData
-       047E  LCD_1_Control
-       047E  _LCD_1_Control
-       0525  LCD_1_Start
-       0525  LCD_1_Init
-       0525  _LCD_1_Init
-       0525  _LCD_1_Start
-       0591  LCD_1_ROW_OFFSET
-       0595  LCD_1_Position
-       0595  _LCD_1_Position
-       05A1  LCD_1_Delay50uTimes
-       05A1  _LCD_1_Delay50uTimes
-       05A7  LCD_1_Delay50u_Table
-       05AF  LCD_1_Delay50u
-       05AF  _LCD_1_Delay50u
-       05C3  LCD_1_DrawBG
-       05E9  _LCD_1_DrawBG
-       0612  LCD_1_DrawVBG
-       063F  _LCD_1_DrawVBG
-       066F  LCD_1_InitVBG
-       066F  _LCD_1_InitVBG
-       069C  LCD_1_BG_TYPE1
-       06A3  LCD_1_BG_TYPE2
-       06AA  LCD_1_InitBG
-       06AA  _LCD_1_InitBG
-       06DA  __UserModules_end
+       03FC  _LCD_1_PrCString
+       03FC  LCD_1_PrCString
+       040E  LCD_1_HEX_STR
+       041E  _LCD_1_PrHexByte
+       041E  LCD_1_PrHexByte
+       0431  LCD_1_PrHexInt
+       0431  _LCD_1_PrHexInt
+       0438  LCD_1_PrString
+       0438  _LCD_1_PrString
+       0442  LCD_1_WriteData
+       0442  _LCD_1_Write_Data
+       0442  _LCD_1_WriteData
+       0442  LCD_1_Write_Data
+       0456  LCD_1_Control
+       0456  _LCD_1_Control
+       04FD  LCD_1_Start
+       04FD  _LCD_1_Init
+       04FD  _LCD_1_Start
+       04FD  LCD_1_Init
+       0569  LCD_1_ROW_OFFSET
+       056D  LCD_1_Position
+       056D  _LCD_1_Position
+       0579  LCD_1_Delay50uTimes
+       0579  _LCD_1_Delay50uTimes
+       057F  LCD_1_Delay50u_Table
+       0587  _LCD_1_Delay50u
+       0587  LCD_1_Delay50u
+       059B  LCD_1_DrawBG
+       05C1  _LCD_1_DrawBG
+       05EA  LCD_1_DrawVBG
+       0617  _LCD_1_DrawVBG
+       0647  _LCD_1_InitVBG
+       0647  LCD_1_InitVBG
+       0674  LCD_1_BG_TYPE1
+       067B  LCD_1_BG_TYPE2
+       0682  _LCD_1_InitBG
+       0682  LCD_1_InitBG
+       06B2  __UserModules_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                            text   06DA   0411 =   1041. bytes (rel,con,rom,code)
+                            text   06B2   0405 =   1029. bytes (rel,con,rom,code)
 
        Addr  Global Symbol
       -----  --------------------------------
-       06DA  _main
-       06DA  __text_start
-       0842  _VC3_Interrupt
-       0873  _itoa
-       0981  _LCD_line_print
-       0A3C  _memcpyLMM
-       0A4B  _memcpy
-       0A6A  _memsetLMM
-       0A75  _memset
-       0A98  _cstrcpyLMM
-       0AA3  _cstrcpy
-       0AC5  _strlenLMM
-       0AD0  _strlen
-       0AEB  __text_end
+       06B2  _main
+       06B2  __text_start
+       080E  _VC3_Interrupt
+       083F  _itoa
+       094D  _LCD_line_print
+       0A08  _memcpyLMM
+       0A17  _memcpy
+       0A36  _memsetLMM
+       0A41  _memset
+       0A64  _cstrcpyLMM
+       0A6F  _cstrcpy
+       0A91  _strlenLMM
+       0A9C  _strlen
+       0AB7  __text_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
@@ -183,9 +171,9 @@ Files Linked      [ module(s) ]
 
 ./obj/boot.o	[ boot.asm ]
 obj/main.o	[ main.c ]
-<library>	[ scgain.asm, scdac.asm, psocconfigtbl.asm, psocconfig.asm, lcd_1.asm, rZ.asm, rY.asm, rX.asm, r3.asm ]
-[ r2.asm, r1.asm, r0.asm, divmodu_16x16_16_util.asm, i_div16_block_util.asm, mul16_util.asm, memcpy.s ]
-[ memset.s, cstrcpy.s, strlen.s ]
+<library>	[ psocconfigtbl.asm, psocconfig.asm, lcd_1.asm, rZ.asm, rY.asm, rX.asm, r3.asm, r2.asm, r1.asm, r0.asm ]
+[ divmodu_16x16_16_util.asm, i_div16_block_util.asm, mul16_util.asm, memcpy.s, memset.s, cstrcpy.s ]
+[ strlen.s ]
 
 Area Definitions
 
