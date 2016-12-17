@@ -1,0 +1,991 @@
+                        .module main.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile ./main.c
+                        .area lit(rom, con, rel, lit)
+ 0000           L5:
+ 0000 00                .byte 0
+ 0001 0006              .word PL_start_timer
+ 0003 01                .byte 1
+ 0004 02                .byte 2
+ 0005 0004              .word PL_do_nothing
+ 0007 00                .byte 0
+ 0008           L6:
+ 0008 00                .byte 0
+ 0009 0002              .word PL_pause_timer
+ 000B 02                .byte 2
+ 000C 02                .byte 2
+ 000D 0004              .word PL_do_nothing
+ 000F 01                .byte 1
+ 0010           L7:
+ 0010 00                .byte 0
+ 0011 0006              .word PL_start_timer
+ 0013 01                .byte 1
+ 0014 01                .byte 1
+ 0015 0000              .word PL_reset_timer
+ 0017 00                .byte 0
+ 0018 02                .byte 2
+ 0019 0004              .word PL_do_nothing
+ 001B 02                .byte 2
+                        .area data(ram, con, rel)
+ 0000                   .dbfile ./main.c
+ 0000           L8:
+ 0000                   .blkw 1
+                        .area idata(rom,lit)
+ 0000 0000              .word L5
+                        .area data(ram, con, rel)
+ 0002                   .dbfile ./main.c
+ 0002                   .blkw 1
+                        .area idata(rom,lit)
+ 0002 0008              .word L6
+                        .area data(ram, con, rel)
+ 0004                   .dbfile ./main.c
+ 0004                   .blkw 1
+                        .area idata(rom,lit)
+ 0004 0010              .word L7
+                        .area data(ram, con, rel)
+ 0006                   .dbfile ./main.c
+ 0006           L9:
+ 0006                   .blkb 1
+                        .area idata(rom,lit)
+ 0006 00                .byte 0
+                        .area data(ram, con, rel)
+ 0007                   .dbfile ./main.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile ./main.c
+ 0000                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\main.c
+ 0000                   .dbfunc e stopwatch_fsm _stopwatch_fsm fV
+ 0000                   .dbsym s cs L9 c
+ 0000                   .dbstruct 0 4 .3
+ 0000                   .dbfield 0 event_val c
+ 0000                   .dbfield 1 task pfV
+ 0000                   .dbfield 3 next_state c
+ 0000                   .dbend
+ 0000                   .dbsym s fsm_table L8 A[6:3]pkS[.3]
+ 0000                   .dbsym s paused_transitions L7 A[12:3]kS[.3]
+ 0000                   .dbsym s running_transitions L6 A[8:2]kS[.3]
+ 0000                   .dbsym s stopped_transitions L5 A[8:2]kS[.3]
+ 0000           ;              i -> X+0
+ 0000           ;    event_input -> X-4
+ 0000           _stopwatch_fsm::
+ 0000                   .dbline -1
+ 0000 10                push X
+ 0001 4F                mov X,SP
+ 0002 3802              add SP,2
+ 0004                   .dbline 47
+ 0004           ; //----------------------------------------------------------------------------
+ 0004           ; // C main line
+ 0004           ; //----------------------------------------------------------------------------
+ 0004           ; 
+ 0004           ; #include <m8c.h>        // part specific constants and macros
+ 0004           ; #include "PSoCAPI.h"    // PSoC API definitions for all User Modules
+ 0004           ; #include <string.h>
+ 0004           ; #include <stddef.h>
+ 0004           ; 
+ 0004           ; // Output-related functions
+ 0004           ; void itoa(unsigned short input, char *str, int base);
+ 0004           ; void LCD_line_print(char *str, unsigned char line);
+ 0004           ; #define LCD_LINE_1 0
+ 0004           ; #define LCD_LINE_2 1
+ 0004           ; 
+ 0004           ; // FSM/timer-related functions
+ 0004           ; void do_nothing(void);
+ 0004           ; void start_timer(void);
+ 0004           ; void pause_timer(void);
+ 0004           ; void reset_timer(void);
+ 0004           ; 
+ 0004           ; // Timer global variable
+ 0004           ; unsigned short time;
+ 0004           ; 
+ 0004           ; /*******************************************************************************
+ 0004           ;  * State machine definitions
+ 0004           ;  ******************************************************************************/
+ 0004           ; 
+ 0004           ; // event enum
+ 0004           ; typedef enum {
+ 0004           ;       short_pressed, long_pressed, eol
+ 0004           ; } event;
+ 0004           ; 
+ 0004           ; // state enum
+ 0004           ; typedef enum {
+ 0004           ;       stopped, running, paused
+ 0004           ; } state;
+ 0004           ; 
+ 0004           ; // transition and table
+ 0004           ; typedef struct {
+ 0004           ;       event event_val;
+ 0004           ;       void (*task) (void);
+ 0004           ;       state next_state;
+ 0004           ; } transition;
+ 0004           ; 
+ 0004           ; // fsm function
+ 0004           ; void stopwatch_fsm(event event_input){
+ 0004                   .dbline 75
+ 0004           ;       static const transition stopped_transitions[] = {
+ 0004           ;       //      Event                   Task            Next_state
+ 0004           ;               {short_pressed, start_timer, running},
+ 0004           ;               {eol,                   do_nothing,     stopped}
+ 0004           ;       };
+ 0004           ;       static const transition running_transitions[] = {
+ 0004           ;       //      Event                   Task            Next_state
+ 0004           ;               {short_pressed, pause_timer, paused},
+ 0004           ;               {eol,                   do_nothing,     running}
+ 0004           ;       };
+ 0004           ;       static const transition paused_transitions[] = {
+ 0004           ;       //      Event                   Task            Next_state
+ 0004           ;               {short_pressed, start_timer, running},
+ 0004           ;               {long_pressed,  reset_timer, stopped},
+ 0004           ;               {eol,                   do_nothing,     paused}
+ 0004           ;       };
+ 0004           ;       // FSM table. Since it is const, it will be stored in FLASH
+ 0004           ;       static const transition *fsm_table[3] = {
+ 0004           ;               stopped_transitions,
+ 0004           ;               running_transitions,
+ 0004           ;               paused_transitions
+ 0004           ;       };
+ 0004           ;       // stopwatch current state
+ 0004           ;       static state cs = stopped;
+ 0004           ; 
+ 0004           ;       // search for signal
+ 0004           ;       int i;
+ 0004           ;       for (i = 0; (fsm_table[cs][i].event_val != event_input)
+ 0004 560100            mov [X+1],0
+ 0007 560000            mov [X+0],0
+ 000A 8006              xjmp L13
+ 000C           L10:
+ 000C                   .dbline 76
+ 000C           ;               && (fsm_table[cs][i].event_val != eol); i++){
+ 000C                   .dbline 77
+ 000C           ;       };
+ 000C           L11:
+ 000C                   .dbline 76
+ 000C 7701              inc [X+1]
+ 000E 0F0000            adc [X+0],0
+ 0011           L13:
+ 0011                   .dbline 75
+ 0011 5F0006            mov [__r1],[L9]
+ 0014 6500              asl [__r1]
+ 0016 060000            add [__r1],<L8
+ 0019 3E00              mvi A,[__r1]
+ 001B 5300              mov [__r0],A
+ 001D 3E00              mvi A,[__r1]
+ 001F 5300              mov [__r1],A
+ 0021 5201              mov A,[X+1]
+ 0023 5300              mov [__r3],A
+ 0025 5200              mov A,[X+0]
+ 0027 5300              mov [__r2],A
+ 0029 6500              asl [__r3]
+ 002B 6B00              rlc [__r2]
+ 002D 6500              asl [__r3]
+ 002F 6B00              rlc [__r2]
+ 0031 5100              mov A,[__r3]
+ 0033 0200              add A,[__r1]
+ 0035 5300              mov [__r1],A
+ 0037 5100              mov A,[__r2]
+ 0039 0A00              adc A,[__r0]
+ 003B 10                push X
+ 003C 5800              mov X,[__r1]
+ 003E 28                romx
+ 003F 20                pop X
+ 0040 5300              mov [__r1],A
+ 0042 550000            mov [__r0],0
+ 0045 52FC              mov A,[X-4]
+ 0047 5300              mov [__r3],A
+ 0049 550000            mov [__r2],0
+ 004C 5000              mov A,0
+ 004E 3A00              cmp A,[__r2]
+ 0050 B007              jnz X0
+ 0052 5100              mov A,[__r1]
+ 0054 3A00              cmp A,[__r3]
+ 0056 A00B              jz L14
+ 0058           X0:
+ 0058 3C0000            cmp [__r0],0
+ 005B BFB0              jnz L10
+ 005D 3C0002            cmp [__r1],2
+ 0060 BFAB              jnz L10
+ 0062           X1:
+ 0062           L14:
+ 0062                   .dbline 77
+ 0062                   .dbline 79
+ 0062           ;       // call task function and than change state
+ 0062           ;       fsm_table[cs][i].task();
+ 0062 5F0006            mov [__r1],[L9]
+ 0065 6500              asl [__r1]
+ 0067 060000            add [__r1],<L8
+ 006A 3E00              mvi A,[__r1]
+ 006C 5300              mov [__r0],A
+ 006E 3E00              mvi A,[__r1]
+ 0070 5300              mov [__r1],A
+ 0072 5201              mov A,[X+1]
+ 0074 5300              mov [__r3],A
+ 0076 5200              mov A,[X+0]
+ 0078 5300              mov [__r2],A
+ 007A 6500              asl [__r3]
+ 007C 6B00              rlc [__r2]
+ 007E 6500              asl [__r3]
+ 0080 6B00              rlc [__r2]
+ 0082 5100              mov A,[__r3]
+ 0084 0200              add A,[__r1]
+ 0086 5300              mov [__r1],A
+ 0088 5100              mov A,[__r2]
+ 008A 0A00              adc A,[__r0]
+ 008C 5300              mov [__r0],A
+ 008E 060001            add [__r1],1
+ 0091 0E0000            adc [__r0],0
+ 0094 5100              mov A,[__r0]
+ 0096 10                push X
+ 0097 5800              mov X,[__r1]
+ 0099 08                push A
+ 009A 28                romx
+ 009B 5300              mov [__r0],A
+ 009D 18                pop A
+ 009E 75                inc X
+ 009F 0900              adc A,0
+ 00A1 28                romx
+ 00A2 5C                mov X,A
+ 00A3 5100              mov A,[__r0]
+ 00A5 7C0000            xcall __plcall
+ 00A8 20                pop X
+ 00A9                   .dbline 80
+ 00A9           ;       cs = fsm_table[cs][i].next_state;
+ 00A9 5F0006            mov [__r1],[L9]
+ 00AC 6500              asl [__r1]
+ 00AE 060000            add [__r1],<L8
+ 00B1 3E00              mvi A,[__r1]
+ 00B3 5300              mov [__r0],A
+ 00B5 3E00              mvi A,[__r1]
+ 00B7 5300              mov [__r1],A
+ 00B9 5201              mov A,[X+1]
+ 00BB 5300              mov [__r3],A
+ 00BD 5200              mov A,[X+0]
+ 00BF 5300              mov [__r2],A
+ 00C1 6500              asl [__r3]
+ 00C3 6B00              rlc [__r2]
+ 00C5 6500              asl [__r3]
+ 00C7 6B00              rlc [__r2]
+ 00C9 5100              mov A,[__r3]
+ 00CB 0200              add A,[__r1]
+ 00CD 5300              mov [__r1],A
+ 00CF 5100              mov A,[__r2]
+ 00D1 0A00              adc A,[__r0]
+ 00D3 5300              mov [__r0],A
+ 00D5 060003            add [__r1],3
+ 00D8 0E0000            adc [__r0],0
+ 00DB 5100              mov A,[__r0]
+ 00DD 10                push X
+ 00DE 5800              mov X,[__r1]
+ 00E0 28                romx
+ 00E1 20                pop X
+ 00E2 5306              mov [L9],A
+ 00E4                   .dbline 81
+ 00E4           ;       return;
+ 00E4                   .dbline -2
+ 00E4           L4:
+ 00E4 38FE              add SP,-2
+ 00E6 20                pop X
+ 00E7                   .dbline 0 ; func end
+ 00E7 7F                ret
+ 00E8                   .dbsym l i 0 I
+ 00E8                   .dbsym l event_input -4 c
+ 00E8                   .dbend
+ 00E8                   .dbfunc e main _main fV
+ 00E8           ;    PressedTime -> X+18
+ 00E8           ;        str_buf -> X+1
+ 00E8           ;   bSwitchState -> X+0
+ 00E8           _main::
+ 00E8                   .dbline -1
+ 00E8 10                push X
+ 00E9 4F                mov X,SP
+ 00EA 3813              add SP,19
+ 00EC                   .dbline 88
+ 00EC           ; }
+ 00EC           ; 
+ 00EC           ; 
+ 00EC           ; /*******************************************************************************
+ 00EC           ;  * Main function
+ 00EC           ;  ******************************************************************************/
+ 00EC           ; void main(void){
+ 00EC                   .dbline 90
+ 00EC           ;       char str_buf[17];
+ 00EC           ;       unsigned char bSwitchState = 0;
+ 00EC 560000            mov [X+0],0
+ 00EF                   .dbline 91
+ 00EF           ;       unsigned char PressedTime = 0;
+ 00EF 561200            mov [X+18],0
+ 00F2                   .dbline 94
+ 00F2           ;       
+ 00F2           ;       // initialize interrupt
+ 00F2           ;       M8C_EnableGInt;
+ 00F2 7101                      or  F, 01h
+ 00F4           
+ 00F4                   .dbline 95
+ 00F4           ;       StopTimer_EnableInt();
+ 00F4 10                push X
+ 00F5 7C0000            xcall _StopTimer_EnableInt
+ 00F8                   .dbline 98
+ 00F8           ;       
+ 00F8           ;       // init LCD module
+ 00F8           ;       LCD_Start();
+ 00F8 7C0000            xcall _LCD_Start
+ 00FB 20                pop X
+ 00FC                   .dbline 101
+ 00FC           ;       
+ 00FC           ;       // start PWM and LCD
+ 00FC           ;       cstrcpy(str_buf, "Hello?");
+ 00FC 5040              mov A,>L16
+ 00FE 08                push A
+ 00FF 5040              mov A,<L16
+ 0101 08                push A
+ 0102 5A00              mov [__r1],X
+ 0104 060001            add [__r1],1
+ 0107 5100              mov A,[__r0]
+ 0109 08                push A
+ 010A 5100              mov A,[__r1]
+ 010C 08                push A
+ 010D 7C0000            xcall _cstrcpy
+ 0110                   .dbline 102
+ 0110           ;       LCD_line_print(str_buf, LCD_LINE_2);
+ 0110 5001              mov A,1
+ 0112 08                push A
+ 0113 5A00              mov [__r1],X
+ 0115 060001            add [__r1],1
+ 0118 5100              mov A,[__r0]
+ 011A 08                push A
+ 011B 5100              mov A,[__r1]
+ 011D 08                push A
+ 011E 91F9              xcall _LCD_line_print
+ 0120 38F9              add SP,-7
+ 0122                   .dbline 105
+ 0122           ;       
+ 0122           ;       // infinite loop with debouncing.
+ 0122           ;       reset_timer();
+ 0122 9255              xcall _reset_timer
+ 0124 80DF              xjmp L18
+ 0126           L17:
+ 0126                   .dbline 106
+ 0126           ;       while (1){
+ 0126                   .dbline 108
+ 0126           ;               // debouncing           
+ 0126           ;               bSwitchState <<= 1;
+ 0126 6600              asl [X+0]
+ 0128                   .dbline 109
+ 0128           ;               bSwitchState &= 0x0f;
+ 0128 27000F            and [X+0],15
+ 012B                   .dbline 110
+ 012B           ;               bSwitchState |= (PRT1DR & 0x01);
+ 012B 5D04              mov A,REG[0x4]
+ 012D 2101              and A,1
+ 012F 2D00              or [X+0],A
+ 0131                   .dbline 111
+ 0131           ;               if(bSwitchState == 0x0f){       // press detected 0x07
+ 0131 3D000F            cmp [X+0],15
+ 0134 B040              jnz L20
+ 0136                   .dbline 112
+ 0136           ;                       if (PressedTime < 200){
+ 0136                   .dbline 112
+ 0136 3D12C8            cmp [X+18],-56
+ 0139 D005              jnc L22
+ 013B           X3:
+ 013B                   .dbline 113
+ 013B           ;                               PressedTime++;  // Time button being pressed counted
+ 013B                   .dbline 113
+ 013B 7712              inc [X+18]
+ 013D                   .dbline 114
+ 013D           ;                       }else if (PressedTime == 200){
+ 013D 809B              xjmp L21
+ 013F           L22:
+ 013F                   .dbline 114
+ 013F 3D12C8            cmp [X+18],-56
+ 0142 B096              jnz L21
+ 0144                   .dbline 116
+ 0144           ;                               // Long pressed Event
+ 0144           ;                               PressedTime++; // to prevent Repeated event
+ 0144                   .dbline 116
+ 0144 7712              inc [X+18]
+ 0146                   .dbline 117
+ 0146           ;                               stopwatch_fsm(long_pressed);
+ 0146 5001              mov A,1
+ 0148 08                push A
+ 0149 9EB5              xcall _stopwatch_fsm
+ 014B 38FF              add SP,-1
+ 014D                   .dbline 119
+ 014D           ;                       
+ 014D           ;                               cstrcpy(str_buf, "Long Pressed");
+ 014D 5033              mov A,>L26
+ 014F 08                push A
+ 0150 5033              mov A,<L26
+ 0152 08                push A
+ 0153 5A00              mov [__r1],X
+ 0155 060001            add [__r1],1
+ 0158 5100              mov A,[__r0]
+ 015A 08                push A
+ 015B 5100              mov A,[__r1]
+ 015D 08                push A
+ 015E 7C0000            xcall _cstrcpy
+ 0161                   .dbline 120
+ 0161           ;                               LCD_line_print(str_buf, LCD_LINE_2);
+ 0161 5001              mov A,1
+ 0163 08                push A
+ 0164 5A00              mov [__r1],X
+ 0166 060001            add [__r1],1
+ 0169 5100              mov A,[__r0]
+ 016B 08                push A
+ 016C 5100              mov A,[__r1]
+ 016E 08                push A
+ 016F 91A8              xcall _LCD_line_print
+ 0171 38F9              add SP,-7
+ 0173                   .dbline 121
+ 0173           ;                       }else {
+ 0173                   .dbline 121
+ 0173                   .dbline 123
+ 0173           ;                               // to prevent Repeated event after long pressed event
+ 0173           ;                       }
+ 0173                   .dbline 124
+ 0173           ;               }else {
+ 0173 8065              xjmp L21
+ 0175           L20:
+ 0175                   .dbline 124
+ 0175                   .dbline 125
+ 0175           ;                       if (PressedTime == 0){
+ 0175 3D1200            cmp [X+18],0
+ 0178 B003              jnz L27
+ 017A                   .dbline 127
+ 017A           ;                               // Not pressed. No Event
+ 017A           ;                       }else if (PressedTime >= 200){
+ 017A                   .dbline 127
+ 017A 805B              xjmp L28
+ 017C           L27:
+ 017C                   .dbline 127
+ 017C 3D12C8            cmp [X+18],-56
+ 017F C029              jc L29
+ 0181           X4:
+ 0181                   .dbline 129
+ 0181           ;                               // Release after Long pressed Event
+ 0181           ;                               cstrcpy(str_buf, "Released");
+ 0181                   .dbline 129
+ 0181 502A              mov A,>L31
+ 0183 08                push A
+ 0184 502A              mov A,<L31
+ 0186 08                push A
+ 0187 5A00              mov [__r1],X
+ 0189 060001            add [__r1],1
+ 018C 5100              mov A,[__r0]
+ 018E 08                push A
+ 018F 5100              mov A,[__r1]
+ 0191 08                push A
+ 0192 7C0000            xcall _cstrcpy
+ 0195                   .dbline 130
+ 0195           ;                               LCD_line_print(str_buf, LCD_LINE_2);
+ 0195 5001              mov A,1
+ 0197 08                push A
+ 0198 5A00              mov [__r1],X
+ 019A 060001            add [__r1],1
+ 019D 5100              mov A,[__r0]
+ 019F 08                push A
+ 01A0 5100              mov A,[__r1]
+ 01A2 08                push A
+ 01A3 9174              xcall _LCD_line_print
+ 01A5 38F9              add SP,-7
+ 01A7                   .dbline 131
+ 01A7           ;                       }else {
+ 01A7 802E              xjmp L30
+ 01A9           L29:
+ 01A9                   .dbline 131
+ 01A9                   .dbline 133
+ 01A9           ;                               // Short Pressed Event
+ 01A9           ;                               stopwatch_fsm(short_pressed);
+ 01A9 5000              mov A,0
+ 01AB 08                push A
+ 01AC 9E52              xcall _stopwatch_fsm
+ 01AE 38FF              add SP,-1
+ 01B0                   .dbline 135
+ 01B0           ;                       
+ 01B0           ;                               cstrcpy(str_buf, "Short Pressed");
+ 01B0 501C              mov A,>L32
+ 01B2 08                push A
+ 01B3 501C              mov A,<L32
+ 01B5 08                push A
+ 01B6 5A00              mov [__r1],X
+ 01B8 060001            add [__r1],1
+ 01BB 5100              mov A,[__r0]
+ 01BD 08                push A
+ 01BE 5100              mov A,[__r1]
+ 01C0 08                push A
+ 01C1 7C0000            xcall _cstrcpy
+ 01C4                   .dbline 136
+ 01C4           ;                               LCD_line_print(str_buf, LCD_LINE_2);
+ 01C4 5001              mov A,1
+ 01C6 08                push A
+ 01C7 5A00              mov [__r1],X
+ 01C9 060001            add [__r1],1
+ 01CC 5100              mov A,[__r0]
+ 01CE 08                push A
+ 01CF 5100              mov A,[__r1]
+ 01D1 08                push A
+ 01D2 9145              xcall _LCD_line_print
+ 01D4 38F9              add SP,-7
+ 01D6                   .dbline 137
+ 01D6           ;                       }
+ 01D6           L30:
+ 01D6           L28:
+ 01D6                   .dbline 138
+ 01D6           ;                       PressedTime = 0;
+ 01D6 561200            mov [X+18],0
+ 01D9                   .dbline 139
+ 01D9           ;               }
+ 01D9           L21:
+ 01D9                   .dbline 142
+ 01D9           ;               
+ 01D9           ;               // main loop
+ 01D9           ;               itoa(time, str_buf, 10);
+ 01D9 5000              mov A,0
+ 01DB 08                push A
+ 01DC 500A              mov A,10
+ 01DE 08                push A
+ 01DF 5A00              mov [__r1],X
+ 01E1 060001            add [__r1],1
+ 01E4 5100              mov A,[__r0]
+ 01E6 08                push A
+ 01E7 5100              mov A,[__r1]
+ 01E9 08                push A
+ 01EA 5111              mov A,[_time]
+ 01EC 08                push A
+ 01ED 5112              mov A,[_time+1]
+ 01EF 08                push A
+ 01F0 9019              xcall _itoa
+ 01F2                   .dbline 143
+ 01F2           ;               LCD_line_print(str_buf, LCD_LINE_1);    
+ 01F2 5000              mov A,0
+ 01F4 08                push A
+ 01F5 5A00              mov [__r1],X
+ 01F7 060001            add [__r1],1
+ 01FA 5100              mov A,[__r0]
+ 01FC 08                push A
+ 01FD 5100              mov A,[__r1]
+ 01FF 08                push A
+ 0200 9117              xcall _LCD_line_print
+ 0202 38F7              add SP,-9
+ 0204                   .dbline 144
+ 0204           ;       }
+ 0204           L18:
+ 0204                   .dbline 106
+ 0204 8F21              xjmp L17
+ 0206           X2:
+ 0206                   .dbline -2
+ 0206           L15:
+ 0206 38ED              add SP,-19
+ 0208 20                pop X
+ 0209                   .dbline 0 ; func end
+ 0209 8FFF              jmp .
+ 020B                   .dbsym l PressedTime 18 c
+ 020B                   .dbsym l str_buf 1 A[17:17]c
+ 020B                   .dbsym l bSwitchState 0 c
+ 020B                   .dbend
+ 020B                   .dbfunc e itoa _itoa fV
+ 020B           ;          digit -> X+4
+ 020B           ;              n -> X+2
+ 020B           ;              d -> X+0
+ 020B           ;           base -> X-9
+ 020B           ;            str -> X-7
+ 020B           ;          input -> X-5
+ 020B           _itoa::
+ 020B                   .dbline -1
+ 020B 10                push X
+ 020C 4F                mov X,SP
+ 020D 3808              add SP,8
+ 020F                   .dbline 151
+ 020F           ; }
+ 020F           ; 
+ 020F           ; 
+ 020F           ; /*******************************************************************************
+ 020F           ;  * Output-related functions
+ 020F           ;  ******************************************************************************/
+ 020F           ; void itoa(unsigned short input, char *str, int base){
+ 020F                   .dbline 152
+ 020F           ;       int n = 0;
+ 020F 560300            mov [X+3],0
+ 0212 560200            mov [X+2],0
+ 0215                   .dbline 153
+ 0215           ;       unsigned int d = 1;
+ 0215 560101            mov [X+1],1
+ 0218 560000            mov [X+0],0
+ 021B 801A              xjmp L35
+ 021D           L34:
+ 021D                   .dbline 155
+ 021D           ;       
+ 021D           ;       while ((input / d) >= base){
+ 021D                   .dbline 156
+ 021D           ;               d *= base;
+ 021D 52F7              mov A,[X-9]
+ 021F 08                push A
+ 0220 52F8              mov A,[X-8]
+ 0222 08                push A
+ 0223 5200              mov A,[X+0]
+ 0225 08                push A
+ 0226 5201              mov A,[X+1]
+ 0228 08                push A
+ 0229 7C0000            xcall __mul16
+ 022C 38FC              add SP,-4
+ 022E 5100              mov A,[__rX]
+ 0230 5401              mov [X+1],A
+ 0232 5100              mov A,[__rY]
+ 0234 5400              mov [X+0],A
+ 0236                   .dbline 157
+ 0236           ;       }
+ 0236           L35:
+ 0236                   .dbline 155
+ 0236 5200              mov A,[X+0]
+ 0238 08                push A
+ 0239 5201              mov A,[X+1]
+ 023B 08                push A
+ 023C 52FB              mov A,[X-5]
+ 023E 08                push A
+ 023F 52FC              mov A,[X-4]
+ 0241 08                push A
+ 0242 7C0000            xcall __divmodu_16X16_16
+ 0245 18                pop A
+ 0246 5300              mov [__r1],A
+ 0248 18                pop A
+ 0249 5300              mov [__r0],A
+ 024B 38FE              add SP,-2
+ 024D 5100              mov A,[__r1]
+ 024F 13F8              sub A,[X-8]
+ 0251 5100              mov A,[__r0]
+ 0253 1BF7              sbb A,[X-9]
+ 0255 DFC7              jnc L34
+ 0257           X5:
+ 0257 80AB              xjmp L38
+ 0259           L37:
+ 0259                   .dbline 158
+ 0259           ;       while (d != 0){
+ 0259                   .dbline 159
+ 0259           ;               int digit = input / d;
+ 0259 5200              mov A,[X+0]
+ 025B 08                push A
+ 025C 5201              mov A,[X+1]
+ 025E 08                push A
+ 025F 52FB              mov A,[X-5]
+ 0261 08                push A
+ 0262 52FC              mov A,[X-4]
+ 0264 08                push A
+ 0265 7C0000            xcall __divmodu_16X16_16
+ 0268 18                pop A
+ 0269 5300              mov [__r1],A
+ 026B 18                pop A
+ 026C 5300              mov [__r0],A
+ 026E 38FE              add SP,-2
+ 0270 5100              mov A,[__r1]
+ 0272 5405              mov [X+5],A
+ 0274 5100              mov A,[__r0]
+ 0276 5404              mov [X+4],A
+ 0278                   .dbline 160
+ 0278           ;               input %= d;
+ 0278 5200              mov A,[X+0]
+ 027A 08                push A
+ 027B 5201              mov A,[X+1]
+ 027D 08                push A
+ 027E 52FB              mov A,[X-5]
+ 0280 08                push A
+ 0281 52FC              mov A,[X-4]
+ 0283 08                push A
+ 0284 7C0000            xcall __divmodu_16X16_16
+ 0287 38FE              add SP,-2
+ 0289 18                pop A
+ 028A 54FC              mov [X-4],A
+ 028C 18                pop A
+ 028D 54FB              mov [X-5],A
+ 028F                   .dbline 161
+ 028F           ;               d /= base;
+ 028F 52F7              mov A,[X-9]
+ 0291 08                push A
+ 0292 52F8              mov A,[X-8]
+ 0294 08                push A
+ 0295 5200              mov A,[X+0]
+ 0297 08                push A
+ 0298 5201              mov A,[X+1]
+ 029A 08                push A
+ 029B 7C0000            xcall __divmodu_16X16_16
+ 029E 18                pop A
+ 029F 5401              mov [X+1],A
+ 02A1 18                pop A
+ 02A2 5400              mov [X+0],A
+ 02A4 38FE              add SP,-2
+ 02A6                   .dbline 162
+ 02A6           ;               if (n || digit > 0 || d == 0){
+ 02A6 3D0200            cmp [X+2],0
+ 02A9 B020              jnz L43
+ 02AB 3D0300            cmp [X+3],0
+ 02AE B01B              jnz L43
+ 02B0           X6:
+ 02B0 5000              mov A,0
+ 02B2 1305              sub A,[X+5]
+ 02B4 5204              mov A,[X+4]
+ 02B6 3180              xor A,-128
+ 02B8 5300              mov [__rX],A
+ 02BA 5080              mov A,(0 ^ 0x80)
+ 02BC 1A00              sbb A,[__rX]
+ 02BE C00B              jc L43
+ 02C0           X7:
+ 02C0 3D0000            cmp [X+0],0
+ 02C3 B03F              jnz L40
+ 02C5 3D0100            cmp [X+1],0
+ 02C8 B03A              jnz L40
+ 02CA           X8:
+ 02CA           L43:
+ 02CA                   .dbline 163
+ 02CA           ;                       *str++ = digit + ((digit < 10)? '0': 'a' - 10);
+ 02CA                   .dbline 163
+ 02CA 52FA              mov A,[X-6]
+ 02CC 5300              mov [__r1],A
+ 02CE 52F9              mov A,[X-7]
+ 02D0 5300              mov [__r0],A
+ 02D2 5100              mov A,[__r1]
+ 02D4 0101              add A,1
+ 02D6 54FA              mov [X-6],A
+ 02D8 5100              mov A,[__r0]
+ 02DA 0900              adc A,0
+ 02DC 54F9              mov [X-7],A
+ 02DE 5205              mov A,[X+5]
+ 02E0 110A              sub A,10
+ 02E2 5204              mov A,[X+4]
+ 02E4 3180              xor A,-128
+ 02E6 1980              sbb A,(0 ^ 0x80)
+ 02E8 D009              jnc L45
+ 02EA           X9:
+ 02EA 560730            mov [X+7],48
+ 02ED 560600            mov [X+6],0
+ 02F0 8007              xjmp L46
+ 02F2           L45:
+ 02F2 560757            mov [X+7],87
+ 02F5 560600            mov [X+6],0
+ 02F8           L46:
+ 02F8 5205              mov A,[X+5]
+ 02FA 0307              add A,[X+7]
+ 02FC 3F00              mvi [__r1],A
+ 02FE                   .dbline 164
+ 02FE           ;                       n++;
+ 02FE 7703              inc [X+3]
+ 0300 0F0200            adc [X+2],0
+ 0303                   .dbline 165
+ 0303           ;               }
+ 0303           L40:
+ 0303                   .dbline 166
+ 0303           ;       }
+ 0303           L38:
+ 0303                   .dbline 158
+ 0303 3D0000            cmp [X+0],0
+ 0306 BF52              jnz L37
+ 0308 3D0100            cmp [X+1],0
+ 030B BF4D              jnz L37
+ 030D           X10:
+ 030D                   .dbline 167
+ 030D           ;       *str = '\0';
+ 030D 52FA              mov A,[X-6]
+ 030F 5300              mov [__r1],A
+ 0311 5000              mov A,0
+ 0313 3F00              mvi [__r1],A
+ 0315                   .dbline -2
+ 0315           L33:
+ 0315 38F8              add SP,-8
+ 0317 20                pop X
+ 0318                   .dbline 0 ; func end
+ 0318 7F                ret
+ 0319                   .dbsym l digit 4 I
+ 0319                   .dbsym l n 2 I
+ 0319                   .dbsym l d 0 i
+ 0319                   .dbsym l base -9 I
+ 0319                   .dbsym l str -7 pc
+ 0319                   .dbsym l input -5 s
+ 0319                   .dbend
+                        .area bss(ram, con, rel)
+ 0000                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\main.c
+ 0000           L48:
+ 0000                   .blkb 17
+                        .area text(rom, con, rel)
+ 0319                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\main.c
+ 0319                   .dbfunc e LCD_line_print _LCD_line_print fV
+ 0319                   .dbsym s buffer L48 A[17:17]c
+ 0319           ;           line -> X-6
+ 0319           ;            str -> X-5
+ 0319           _LCD_line_print::
+ 0319                   .dbline -1
+ 0319 10                push X
+ 031A 4F                mov X,SP
+ 031B                   .dbline 170
+ 031B           ; }
+ 031B           ; 
+ 031B           ; void LCD_line_print(char *str, unsigned char line){
+ 031B                   .dbline 172
+ 031B           ;       static char buffer[17];
+ 031B           ;       memset(buffer, ' ', 16);
+ 031B 5000              mov A,0
+ 031D 08                push A
+ 031E 5010              mov A,16
+ 0320 08                push A
+ 0321 5000              mov A,0
+ 0323 08                push A
+ 0324 5020              mov A,32
+ 0326 08                push A
+ 0327 5000              mov A,>L48
+ 0329 08                push A
+ 032A 5000              mov A,<L48
+ 032C 08                push A
+ 032D 7C0000            xcall _memset
+ 0330 38FA              add SP,-6
+ 0332                   .dbline 173
+ 0332           ;       memcpy(buffer, str, strlen(str));
+ 0332 52FB              mov A,[X-5]
+ 0334 08                push A
+ 0335 52FC              mov A,[X-4]
+ 0337 08                push A
+ 0338 7C0000            xcall _strlen
+ 033B 5100              mov A,[__r0]
+ 033D 08                push A
+ 033E 5100              mov A,[__r1]
+ 0340 08                push A
+ 0341 52FB              mov A,[X-5]
+ 0343 08                push A
+ 0344 52FC              mov A,[X-4]
+ 0346 08                push A
+ 0347 5000              mov A,>L48
+ 0349 08                push A
+ 034A 5000              mov A,<L48
+ 034C 08                push A
+ 034D 7C0000            xcall _memcpy
+ 0350 38F8              add SP,-8
+ 0352                   .dbline 174
+ 0352           ;       buffer[17] = '\0';
+ 0352 551100            mov [L48+17],0
+ 0355                   .dbline 175
+ 0355           ;       LCD_Position(line, 0);
+ 0355 10                push X
+ 0356 5000              mov A,0
+ 0358 08                push A
+ 0359 52FA              mov A,[X-6]
+ 035B 20                pop X
+ 035C 7C0000            xcall _LCD_Position
+ 035F                   .dbline 176
+ 035F           ;       LCD_PrString(buffer);
+ 035F 5000              mov A,>L48
+ 0361 08                push A
+ 0362 5000              mov A,<L48
+ 0364 5C                mov X,A
+ 0365 18                pop A
+ 0366 7C0000            xcall _LCD_PrString
+ 0369 20                pop X
+ 036A                   .dbline -2
+ 036A           L47:
+ 036A 20                pop X
+ 036B                   .dbline 0 ; func end
+ 036B 7F                ret
+ 036C                   .dbsym l line -6 c
+ 036C                   .dbsym l str -5 pc
+ 036C                   .dbend
+ 036C                   .dbfunc e do_nothing _do_nothing fV
+ 036C           _do_nothing::
+ 036C                   .dbline -1
+ 036C                   .dbline 183
+ 036C           ; }
+ 036C           ; 
+ 036C           ; 
+ 036C           ; /*******************************************************************************
+ 036C           ;  * FSM/Timer related functions
+ 036C           ;  ******************************************************************************/
+ 036C           ; void do_nothing(void){
+ 036C                   .dbline 184
+ 036C           ;       return;
+ 036C                   .dbline -2
+ 036C           L50:
+ 036C                   .dbline 0 ; func end
+ 036C 7F                ret
+ 036D                   .dbend
+ 036D                   .dbfunc e start_timer _start_timer fV
+ 036D           _start_timer::
+ 036D                   .dbline -1
+ 036D                   .dbline 186
+ 036D           ; }
+ 036D           ; void start_timer(void){
+ 036D                   .dbline 187
+ 036D           ;       StopTimer_Start();
+ 036D 10                push X
+ 036E 7C0000            xcall _StopTimer_Start
+ 0371 20                pop X
+ 0372                   .dbline -2
+ 0372           L51:
+ 0372                   .dbline 0 ; func end
+ 0372 7F                ret
+ 0373                   .dbend
+ 0373                   .dbfunc e pause_timer _pause_timer fV
+ 0373           _pause_timer::
+ 0373                   .dbline -1
+ 0373                   .dbline 190
+ 0373           ; }
+ 0373           ; 
+ 0373           ; void pause_timer(void){
+ 0373                   .dbline 191
+ 0373           ;       StopTimer_Stop();
+ 0373 10                push X
+ 0374 7C0000            xcall _StopTimer_Stop
+ 0377 20                pop X
+ 0378                   .dbline -2
+ 0378           L52:
+ 0378                   .dbline 0 ; func end
+ 0378 7F                ret
+ 0379                   .dbend
+ 0379                   .dbfunc e reset_timer _reset_timer fV
+ 0379           _reset_timer::
+ 0379                   .dbline -1
+ 0379                   .dbline 194
+ 0379           ; }
+ 0379           ; 
+ 0379           ; void reset_timer(void){
+ 0379                   .dbline 195
+ 0379           ;       time = 0;
+ 0379 551200            mov [_time+1],0
+ 037C 551100            mov [_time],0
+ 037F                   .dbline -2
+ 037F           L53:
+ 037F                   .dbline 0 ; func end
+ 037F 7F                ret
+ 0380                   .dbend
+ 0380                   .dbfunc e StopTimer_ISR _StopTimer_ISR fV
+ 0380           _StopTimer_ISR::
+ 0380                   .dbline -1
+ 0380 08                push A
+ 0381                   .dbline 203
+ 0381           ; }
+ 0381           ; 
+ 0381           ; 
+ 0381           ; /*******************************************************************************
+ 0381           ;  * ISRs
+ 0381           ;  ******************************************************************************/
+ 0381           ; #pragma interrupt_handler StopTimer_ISR
+ 0381           ; void StopTimer_ISR(void){
+ 0381                   .dbline 204
+ 0381           ;       time += 1;
+ 0381 7612              inc [_time+1]
+ 0383 0E1100            adc [_time],0
+ 0386                   .dbline -2
+ 0386           L54:
+ 0386 18                pop A
+ 0387                   .dbline 0 ; func end
+ 0387 7E                reti
+ 0388                   .dbend
+                        .area bss(ram, con, rel)
+ 0011                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\main.c
+ 0011           _time::
+ 0011                   .blkb 2
+ 0013                   .dbsym e time _time s
+                        .area lit(rom, con, rel, lit)
+ 001C           L32:
+ 001C 53686F7274205072657373656400      .byte 'S,'h,'o,'r,'t,32,'P,'r,'e,'s,'s,'e,'d,0
+ 002A           L31:
+ 002A 52656C656173656400        .byte 'R,'e,'l,'e,'a,'s,'e,'d,0
+ 0033           L26:
+ 0033 4C6F6E67205072657373656400        .byte 'L,'o,'n,'g,32,'P,'r,'e,'s,'s,'e,'d,0
+ 0040           L16:
+ 0040 48656C6C6F3F00    .byte 'H,'e,'l,'l,'o,63,0
+                        .area func_lit(rom, con, rel, proclab)
+ 0000 0379      PL_reset_timer: .word _reset_timer
+ 0002 0373      PL_pause_timer: .word _pause_timer
+ 0004 036C      PL_do_nothing:  .word _do_nothing
+ 0006 036D      PL_start_timer: .word _start_timer

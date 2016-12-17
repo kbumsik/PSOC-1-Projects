@@ -1,0 +1,132 @@
+XH
+H 3 areas 14 global symbols
+M lpf2_1.asm
+A text size 0 flags 0
+dbfile lib/lpf2_1.asm
+dbfunc 0 ? 0 I
+dbfile LPF2_1.inc
+dbfunc 0 ? 0 I
+dbfile C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc
+dbfunc 0 ? 0 I
+dbfile ./lib/LPF2_1.inc
+dbfunc 0 ? 0 I
+dbfile lib/lpf2_1.asm
+dbfunc 0 ? 0 I
+dbfile memory.inc
+dbfunc 0 ? 0 I
+dbfile lib/lpf2_1.asm
+dbfunc 0 ? 0 I
+dbfile C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc
+dbfunc 0 ? 0 I
+A bss size 0 flags 20
+A UserModules size 79 flags 0
+dbfile lib/lpf2_1.asm
+dbfunc 0 ? 0 I
+dbline 66 0
+dbline 67 2
+dbline 69 3
+dbline 74 4
+dbline 75 6
+dbline 76 8
+dbline 77 A
+dbline 79 C
+dbline 7A E
+dbline 7B 10
+dbline 7C 12
+dbline 7D 14
+dbline 7F 15
+dbline 96 16
+dbline 97 18
+dbline 98 19
+dbline 99 1A
+dbline 9A 1C
+dbline 9B 1E
+dbline 9C 20
+dbline 9D 22
+dbline 9F 23
+dbline A4 24
+dbline A5 26
+dbline A6 27
+dbline A7 28
+dbline A8 2A
+dbline A9 2C
+dbline AA 2E
+dbline AB 30
+dbline AD 31
+dbline B2 32
+dbline B3 34
+dbline B4 35
+dbline B5 36
+dbline B6 38
+dbline B7 3A
+dbline B8 3C
+dbline B9 3E
+dbline BB 3F
+dbline C0 40
+dbline C1 42
+dbline C2 43
+dbline C3 44
+dbline C4 46
+dbline C5 48
+dbline C6 4A
+dbline C7 4C
+dbline C9 4D
+dbline E2 4E
+dbline E3 50
+dbline E5 52
+dbline E7 55
+dbline E9 56
+dbline EB 59
+dbline F1 5A
+dbline F2 5C
+dbline F4 5E
+dbline F6 61
+dbline F8 62
+dbline FA 65
+dbline 111 66
+dbline 112 68
+dbline 114 6A
+dbline 116 6D
+dbline 118 6E
+dbline 11A 71
+dbline 130 72
+dbline 131 75
+dbline 133 78
+S _LPF2_1_SetC1 Def0016
+S _LPF2_1_SetC2 Def0024
+S _LPF2_1_SetC3 Def0032
+S _LPF2_1_SetC4 Def0040
+S _LPF2_1_Stop Def0072
+S LPF2_1_Start Def0000
+S _LPF2_1_SetCA Def004E
+S _LPF2_1_SetCB Def005A
+S LPF2_1_SetPower Def0000
+S _LPF2_1_Start Def0000
+S LPF2_1_SetPolarity Def0066
+S _LPF2_1_SetPower Def0000
+S LPF2_1_SetC1 Def0016
+S LPF2_1_SetC2 Def0024
+S LPF2_1_SetC3 Def0032
+S LPF2_1_SetC4 Def0040
+S LPF2_1_Stop Def0072
+S LPF2_1_SetCA Def004E
+S LPF2_1_SetCB Def005A
+S _LPF2_1_SetPolarity Def0066
+T 00 00 21 03 4F 08 5D 83 21 FC 2B 00 60 83 5D 87
+R 00 00 00 02
+T 00 0E 21 FC 2B 00 60 87 18 7F 21 1F 4F 08 5D 80
+R 00 00 00 02
+T 00 1C 21 E0 2B 00 60 80 18 7F 21 1F 4F 08 5D 81
+R 00 00 00 02
+T 00 2A 21 E0 2B 00 60 81 18 7F 21 1F 4F 08 5D 84
+R 00 00 00 02
+T 00 38 21 E0 2B 00 60 84 18 7F 21 1F 4F 08 5D 86
+R 00 00 00 02
+T 00 46 21 E0 2B 00 60 86 18 7F 39 01 A0 05 41 80
+R 00 00 00 02
+T 00 54 7F 7F 43 80 80 7F 39 01 A0 05 41 84 7F 7F
+R 00 00 00 02
+T 00 62 43 84 80 7F 39 01 A0 05 43 80 20 7F 41 80
+R 00 00 00 02
+T 00 70 DF 7F 41 83 FC 41 87 FC 7F
+R 00 00 00 02

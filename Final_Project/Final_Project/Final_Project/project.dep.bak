@@ -1,0 +1,53 @@
+# DO NOT DELETE
+./obj/boot.o : \
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8ssc.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\lib\GLOBAL~1.INC\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\memory.inc
+./obj/main.o :  ./lib/DUALAD~1.H ./lib/LCD.h ./lib/LPF2_1.h\
+   ./lib/LPF2_2.h ./lib/PGA_1.h ./lib/PGA_2.h ./lib/PGA_3.h\
+   ./lib/PGA_4.h ./lib/PSoCAPI.h ./lib/PSOCGP~1.H ./lib/STOPTI~1.H\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/M8C.h\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8C.h\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.h\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/_const.h\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/stddef.h\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/string.h
+./lib/obj/dualadc_1.o :  ./lib/DUALAD~1.INC\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\memory.inc
+./lib/obj/dualadc_1int.o :  ./lib/DUALAD~1.INC\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\memory.inc
+./lib/obj/lcd.o :  ./lib/LCD.inc\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\memory.inc
+./lib/obj/lpf2_1.o :  ./lib/LPF2_1.inc\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\memory.inc
+./lib/obj/lpf2_2.o :  ./lib/LPF2_2.inc\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\memory.inc
+./lib/obj/pga_1.o :  ./lib/PGA_1.inc\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\memory.inc
+./lib/obj/pga_2.o :  ./lib/PGA_2.inc\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\memory.inc
+./lib/obj/pga_3.o :  ./lib/PGA_3.inc\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\memory.inc
+./lib/obj/pga_4.o :  ./lib/PGA_4.inc\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\memory.inc
+./lib/obj/psocconfig.o :  ./lib/GLOBAL~1.INC\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\memory.inc
+./lib/obj/psocconfigtbl.o : \
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc
+./lib/obj/stoptimer.o :  ./lib/STOPTI~1.INC\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\memory.inc
+./lib/obj/stoptimerint.o :  ./lib/STOPTI~1.INC\
+   C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc\
+   C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\FINAL_~1\FINAL_~1\FINAL_~1\memory.inc
