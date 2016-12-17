@@ -11,20 +11,20 @@ lib/scdac.asm
 
 lib/scgain.asm
 
-!W C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab7\Lab7D\Lab7D\main.c(98):[warning] overflow in converting constant expression from `int' to `unsigned int'
+!W C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab7\Lab7D\Lab7D\main.c(102):[warning] overflow in converting constant expression from `int' to `unsigned int'
 
-!W C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab7\Lab7D\Lab7D\main.c(98):[warning] overflow in converting constant expression from `unsigned int' to `unsigned char'
+!W C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab7\Lab7D\Lab7D\main.c(102):[warning] overflow in converting constant expression from `unsigned int' to `unsigned char'
 
 ./boot.asm
 
 Linking..
 
-  ROM 15% full. 2407 out of 16384 bytes used (does not include absolute areas).
+  ROM 16% full. 2465 out of 16384 bytes used (does not include absolute areas).
 
   RAM 12% full. 30 bytes used (does not include stack usage).
 
 Built with ICCM8C STD V7.05.00
 
  
-Lab7D - 0 error(s) 2 warning(s) 18:19:11
+Lab7D - 0 error(s) 2 warning(s) 05:36:32
 

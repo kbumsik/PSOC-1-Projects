@@ -51,10 +51,10 @@ void main (void){
 	LCD_line_print(line_1, 0);
 	
     // add code to start the analog modules SCDAC and SCGain
-    // if required (look at module datasheet) 
-	//SCDAC_Start(SCDAC_LOWPOWER);
-	//SCGain_Start(SCGain_LOWPOWER);
-    
+    // if required (look at module datasheet)
+	SCDAC_Start(SCDAC_HIGHPOWER);
+	SCGain_Start(SCGain_HIGHPOWER);
+	
     // add code to enable VC3 interrupt and global interrupts
 	M8C_EnableIntMask(INT_MSK0, INT_MSK0_VC3);
 	M8C_EnableGInt; //enable global interrupt

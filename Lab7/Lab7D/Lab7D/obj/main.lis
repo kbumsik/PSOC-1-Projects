@@ -244,596 +244,612 @@
  0027 08                push A
  0028 5100              mov A,[__r1]
  002A 08                push A
- 002B 926E              xcall _LCD_line_print
+ 002B 9280              xcall _LCD_line_print
  002D 38F9              add SP,-7
- 002F                   .dbline 59
+ 002F                   .dbline 55
  002F           ;       
  002F           ;     // add code to start the analog modules SCDAC and SCGain
- 002F           ;     // if required (look at module datasheet) 
- 002F           ;       //SCDAC_Start(SCDAC_LOWPOWER);
- 002F           ;       //SCGain_Start(SCGain_LOWPOWER);
- 002F           ;     
- 002F           ;     // add code to enable VC3 interrupt and global interrupts
- 002F           ;       M8C_EnableIntMask(INT_MSK0, INT_MSK0_VC3);
- 002F 43E080            or REG[0xe0],-128
- 0032                   .dbline 60
- 0032           ;       M8C_EnableGInt; //enable global interrupt
- 0032 7101                      or  F, 01h
- 0034           
- 0034                   .dbline 63
- 0034           ; 
- 0034           ;     // write gain value
- 0034           ;     SCGain_cr0 = Gain; 
- 0034 5102              mov A,[_Gain]
- 0036 6090              mov REG[0x90],A
- 0038 811C              xjmp L4
- 003A           L3:
- 003A                   .dbline 65
+ 002F           ;     // if required (look at module datasheet)
+ 002F           ;       SCDAC_Start(SCDAC_HIGHPOWER);
+ 002F 10                push X
+ 0030 5003              mov A,3
+ 0032 7C0000            xcall _SCDAC_Start
+ 0035                   .dbline 56
+ 0035           ;       SCGain_Start(SCGain_HIGHPOWER);
+ 0035 5003              mov A,3
+ 0037 7C0000            xcall _SCGain_Start
+ 003A                   .dbline 59
  003A           ;       
- 003A           ;     while (1) {               
- 003A                   .dbline 67
- 003A           ;               // put Phase value
- 003A           ;               ptr = line_1;
- 003A 5A00              mov [__r0],X
- 003C 060002            add [__r0],2
- 003F 5100              mov A,[__r0]
- 0041 5401              mov [X+1],A
- 0043                   .dbline 68
- 0043           ;               cstrcpy(ptr, "Phase:");
- 0043 500D              mov A,>L6
- 0045 08                push A
- 0046 500D              mov A,<L6
- 0048 08                push A
- 0049 5200              mov A,[X+0]
- 004B 08                push A
- 004C 5201              mov A,[X+1]
- 004E 08                push A
- 004F 7C0000            xcall _cstrcpy
- 0052 38FC              add SP,-4
- 0054                   .dbline 69
- 0054           ;               ptr += strlen(ptr);
- 0054 5200              mov A,[X+0]
- 0056 08                push A
- 0057 5201              mov A,[X+1]
- 0059 08                push A
- 005A 7C0000            xcall _strlen
- 005D 5100              mov A,[__r1]
- 005F 0301              add A,[X+1]
- 0061 5401              mov [X+1],A
- 0063 5100              mov A,[__r0]
- 0065 0B00              adc A,[X+0]
- 0067 5400              mov [X+0],A
- 0069                   .dbline 70
- 0069           ;               itoa(Phase, ptr, 10);
- 0069 5000              mov A,0
+ 003A           ;       
+ 003A           ;       SCDAC_Stop();
+ 003A 7C0000            xcall _SCDAC_Stop
+ 003D                   .dbline 60
+ 003D           ;       SCGain_Stop();
+ 003D 7C0000            xcall _SCGain_Stop
+ 0040 20                pop X
+ 0041                   .dbline 63
+ 0041           ;       
+ 0041           ;     // add code to enable VC3 interrupt and global interrupts
+ 0041           ;       M8C_EnableIntMask(INT_MSK0, INT_MSK0_VC3);
+ 0041 43E080            or REG[0xe0],-128
+ 0044                   .dbline 64
+ 0044           ;       M8C_EnableGInt; //enable global interrupt
+ 0044 7101                      or  F, 01h
+ 0046           
+ 0046                   .dbline 67
+ 0046           ; 
+ 0046           ;     // write gain value
+ 0046           ;     SCGain_cr0 = Gain; 
+ 0046 5102              mov A,[_Gain]
+ 0048 6090              mov REG[0x90],A
+ 004A 811C              xjmp L4
+ 004C           L3:
+ 004C                   .dbline 69
+ 004C           ;       
+ 004C           ;     while (1) {               
+ 004C                   .dbline 71
+ 004C           ;               // put Phase value
+ 004C           ;               ptr = line_1;
+ 004C 5A00              mov [__r0],X
+ 004E 060002            add [__r0],2
+ 0051 5100              mov A,[__r0]
+ 0053 5401              mov [X+1],A
+ 0055                   .dbline 72
+ 0055           ;               cstrcpy(ptr, "Phase:");
+ 0055 500D              mov A,>L6
+ 0057 08                push A
+ 0058 500D              mov A,<L6
+ 005A 08                push A
+ 005B 5200              mov A,[X+0]
+ 005D 08                push A
+ 005E 5201              mov A,[X+1]
+ 0060 08                push A
+ 0061 7C0000            xcall _cstrcpy
+ 0064 38FC              add SP,-4
+ 0066                   .dbline 73
+ 0066           ;               ptr += strlen(ptr);
+ 0066 5200              mov A,[X+0]
+ 0068 08                push A
+ 0069 5201              mov A,[X+1]
  006B 08                push A
- 006C 500A              mov A,10
- 006E 08                push A
- 006F 5200              mov A,[X+0]
- 0071 08                push A
- 0072 5201              mov A,[X+1]
- 0074 08                push A
- 0075 5F0000            mov [__r1],[_Phase]
- 0078 5000              mov A,0
- 007A 08                push A
- 007B 5100              mov A,[__r1]
+ 006C 7C0000            xcall _strlen
+ 006F 5100              mov A,[__r1]
+ 0071 0301              add A,[X+1]
+ 0073 5401              mov [X+1],A
+ 0075 5100              mov A,[__r0]
+ 0077 0B00              adc A,[X+0]
+ 0079 5400              mov [X+0],A
+ 007B                   .dbline 74
+ 007B           ;               itoa(Phase, ptr, 10);
+ 007B 5000              mov A,0
  007D 08                push A
- 007E 910D              xcall _itoa
- 0080 38F8              add SP,-8
- 0082                   .dbline 71
- 0082           ;               LCD_line_print(line_1, 0);
- 0082 5000              mov A,0
- 0084 08                push A
- 0085 5A00              mov [__r1],X
- 0087 060002            add [__r1],2
- 008A 5100              mov A,[__r0]
+ 007E 500A              mov A,10
+ 0080 08                push A
+ 0081 5200              mov A,[X+0]
+ 0083 08                push A
+ 0084 5201              mov A,[X+1]
+ 0086 08                push A
+ 0087 5F0000            mov [__r1],[_Phase]
+ 008A 5000              mov A,0
  008C 08                push A
  008D 5100              mov A,[__r1]
  008F 08                push A
- 0090 9209              xcall _LCD_line_print
- 0092                   .dbline 73
- 0092           ;               //put gain and rate
- 0092           ;               ptr = line_2;
- 0092 5A00              mov [__r0],X
- 0094 060013            add [__r0],19
- 0097 5100              mov A,[__r0]
- 0099 5401              mov [X+1],A
- 009B                   .dbline 74
- 009B           ;               cstrcpy(ptr, "Gain:");
- 009B 5007              mov A,>L7
- 009D 08                push A
- 009E 5007              mov A,<L7
- 00A0 08                push A
- 00A1 5200              mov A,[X+0]
- 00A3 08                push A
- 00A4 5201              mov A,[X+1]
- 00A6 08                push A
- 00A7 7C0000            xcall _cstrcpy
- 00AA 38F9              add SP,-7
- 00AC                   .dbline 75
- 00AC           ;               ptr += strlen(ptr);
- 00AC 5200              mov A,[X+0]
- 00AE 08                push A
- 00AF 5201              mov A,[X+1]
- 00B1 08                push A
- 00B2 7C0000            xcall _strlen
- 00B5 5100              mov A,[__r1]
- 00B7 0301              add A,[X+1]
- 00B9 5401              mov [X+1],A
- 00BB 5100              mov A,[__r0]
- 00BD 0B00              adc A,[X+0]
- 00BF 5400              mov [X+0],A
- 00C1                   .dbline 76
- 00C1           ;               itoa(Gain, ptr, 10);
- 00C1 5000              mov A,0
+ 0090 910D              xcall _itoa
+ 0092 38F8              add SP,-8
+ 0094                   .dbline 75
+ 0094           ;               LCD_line_print(line_1, 0);
+ 0094 5000              mov A,0
+ 0096 08                push A
+ 0097 5A00              mov [__r1],X
+ 0099 060002            add [__r1],2
+ 009C 5100              mov A,[__r0]
+ 009E 08                push A
+ 009F 5100              mov A,[__r1]
+ 00A1 08                push A
+ 00A2 9209              xcall _LCD_line_print
+ 00A4                   .dbline 77
+ 00A4           ;               //put gain and rate
+ 00A4           ;               ptr = line_2;
+ 00A4 5A00              mov [__r0],X
+ 00A6 060013            add [__r0],19
+ 00A9 5100              mov A,[__r0]
+ 00AB 5401              mov [X+1],A
+ 00AD                   .dbline 78
+ 00AD           ;               cstrcpy(ptr, "Gain:");
+ 00AD 5007              mov A,>L7
+ 00AF 08                push A
+ 00B0 5007              mov A,<L7
+ 00B2 08                push A
+ 00B3 5200              mov A,[X+0]
+ 00B5 08                push A
+ 00B6 5201              mov A,[X+1]
+ 00B8 08                push A
+ 00B9 7C0000            xcall _cstrcpy
+ 00BC 38F9              add SP,-7
+ 00BE                   .dbline 79
+ 00BE           ;               ptr += strlen(ptr);
+ 00BE 5200              mov A,[X+0]
+ 00C0 08                push A
+ 00C1 5201              mov A,[X+1]
  00C3 08                push A
- 00C4 500A              mov A,10
- 00C6 08                push A
- 00C7 5200              mov A,[X+0]
- 00C9 08                push A
- 00CA 5201              mov A,[X+1]
- 00CC 08                push A
- 00CD 5F0002            mov [__r1],[_Gain]
- 00D0 5000              mov A,0
- 00D2 08                push A
- 00D3 5100              mov A,[__r1]
+ 00C4 7C0000            xcall _strlen
+ 00C7 5100              mov A,[__r1]
+ 00C9 0301              add A,[X+1]
+ 00CB 5401              mov [X+1],A
+ 00CD 5100              mov A,[__r0]
+ 00CF 0B00              adc A,[X+0]
+ 00D1 5400              mov [X+0],A
+ 00D3                   .dbline 80
+ 00D3           ;               itoa(Gain, ptr, 10);
+ 00D3 5000              mov A,0
  00D5 08                push A
- 00D6 90B5              xcall _itoa
- 00D8 38F8              add SP,-8
- 00DA                   .dbline 77
- 00DA           ;               ptr += strlen(ptr);
- 00DA 5200              mov A,[X+0]
- 00DC 08                push A
- 00DD 5201              mov A,[X+1]
- 00DF 08                push A
- 00E0 7C0000            xcall _strlen
- 00E3 5100              mov A,[__r1]
- 00E5 0301              add A,[X+1]
- 00E7 5401              mov [X+1],A
- 00E9 5100              mov A,[__r0]
- 00EB 0B00              adc A,[X+0]
- 00ED 5400              mov [X+0],A
- 00EF                   .dbline 79
- 00EF           ;               
- 00EF           ;               cstrcpy(ptr, " Rate:");
- 00EF 5000              mov A,>L8
+ 00D6 500A              mov A,10
+ 00D8 08                push A
+ 00D9 5200              mov A,[X+0]
+ 00DB 08                push A
+ 00DC 5201              mov A,[X+1]
+ 00DE 08                push A
+ 00DF 5F0002            mov [__r1],[_Gain]
+ 00E2 5000              mov A,0
+ 00E4 08                push A
+ 00E5 5100              mov A,[__r1]
+ 00E7 08                push A
+ 00E8 90B5              xcall _itoa
+ 00EA 38F8              add SP,-8
+ 00EC                   .dbline 81
+ 00EC           ;               ptr += strlen(ptr);
+ 00EC 5200              mov A,[X+0]
+ 00EE 08                push A
+ 00EF 5201              mov A,[X+1]
  00F1 08                push A
- 00F2 5000              mov A,<L8
- 00F4 08                push A
- 00F5 5200              mov A,[X+0]
- 00F7 08                push A
- 00F8 5201              mov A,[X+1]
- 00FA 08                push A
- 00FB 7C0000            xcall _cstrcpy
- 00FE 38FA              add SP,-6
- 0100                   .dbline 80
- 0100           ;               ptr += strlen(ptr);
- 0100 5200              mov A,[X+0]
- 0102 08                push A
- 0103 5201              mov A,[X+1]
- 0105 08                push A
- 0106 7C0000            xcall _strlen
- 0109 5100              mov A,[__r1]
- 010B 0301              add A,[X+1]
- 010D 5401              mov [X+1],A
- 010F 5100              mov A,[__r0]
- 0111 0B00              adc A,[X+0]
- 0113 5400              mov [X+0],A
- 0115                   .dbline 81
- 0115           ;               itoa(PhaseRate, ptr, 10);
- 0115 5000              mov A,0
+ 00F2 7C0000            xcall _strlen
+ 00F5 5100              mov A,[__r1]
+ 00F7 0301              add A,[X+1]
+ 00F9 5401              mov [X+1],A
+ 00FB 5100              mov A,[__r0]
+ 00FD 0B00              adc A,[X+0]
+ 00FF 5400              mov [X+0],A
+ 0101                   .dbline 83
+ 0101           ;               
+ 0101           ;               cstrcpy(ptr, " Rate:");
+ 0101 5000              mov A,>L8
+ 0103 08                push A
+ 0104 5000              mov A,<L8
+ 0106 08                push A
+ 0107 5200              mov A,[X+0]
+ 0109 08                push A
+ 010A 5201              mov A,[X+1]
+ 010C 08                push A
+ 010D 7C0000            xcall _cstrcpy
+ 0110 38FA              add SP,-6
+ 0112                   .dbline 84
+ 0112           ;               ptr += strlen(ptr);
+ 0112 5200              mov A,[X+0]
+ 0114 08                push A
+ 0115 5201              mov A,[X+1]
  0117 08                push A
- 0118 500A              mov A,10
- 011A 08                push A
- 011B 5200              mov A,[X+0]
- 011D 08                push A
- 011E 5201              mov A,[X+1]
- 0120 08                push A
- 0121 5F0001            mov [__r1],[_PhaseRate]
- 0124 5000              mov A,0
- 0126 08                push A
- 0127 5100              mov A,[__r1]
+ 0118 7C0000            xcall _strlen
+ 011B 5100              mov A,[__r1]
+ 011D 0301              add A,[X+1]
+ 011F 5401              mov [X+1],A
+ 0121 5100              mov A,[__r0]
+ 0123 0B00              adc A,[X+0]
+ 0125 5400              mov [X+0],A
+ 0127                   .dbline 85
+ 0127           ;               itoa(PhaseRate, ptr, 10);
+ 0127 5000              mov A,0
  0129 08                push A
- 012A 9061              xcall _itoa
- 012C 38F8              add SP,-8
- 012E                   .dbline 82
- 012E           ;               ptr += strlen(ptr);
- 012E 5200              mov A,[X+0]
- 0130 08                push A
- 0131 5201              mov A,[X+1]
- 0133 08                push A
- 0134 7C0000            xcall _strlen
- 0137 5100              mov A,[__r1]
- 0139 0301              add A,[X+1]
- 013B 5401              mov [X+1],A
- 013D 5100              mov A,[__r0]
- 013F 0B00              adc A,[X+0]
- 0141 5400              mov [X+0],A
- 0143                   .dbline 83
- 0143           ;               LCD_line_print(line_2, 1);
- 0143 5001              mov A,1
+ 012A 500A              mov A,10
+ 012C 08                push A
+ 012D 5200              mov A,[X+0]
+ 012F 08                push A
+ 0130 5201              mov A,[X+1]
+ 0132 08                push A
+ 0133 5F0001            mov [__r1],[_PhaseRate]
+ 0136 5000              mov A,0
+ 0138 08                push A
+ 0139 5100              mov A,[__r1]
+ 013B 08                push A
+ 013C 9061              xcall _itoa
+ 013E 38F8              add SP,-8
+ 0140                   .dbline 86
+ 0140           ;               ptr += strlen(ptr);
+ 0140 5200              mov A,[X+0]
+ 0142 08                push A
+ 0143 5201              mov A,[X+1]
  0145 08                push A
- 0146 5A00              mov [__r1],X
- 0148 060013            add [__r1],19
- 014B 5100              mov A,[__r0]
- 014D 08                push A
- 014E 5100              mov A,[__r1]
- 0150 08                push A
- 0151 9148              xcall _LCD_line_print
- 0153 38FB              add SP,-5
- 0155                   .dbline 84
- 0155           ;     }
- 0155           L4:
- 0155                   .dbline 65
- 0155 8EE4              xjmp L3
- 0157           X0:
- 0157                   .dbline -2
- 0157           L1:
- 0157 38DC              add SP,-36
- 0159 20                pop X
- 015A                   .dbline 0 ; func end
- 015A 8FFF              jmp .
- 015C                   .dbsym l line_2 19 A[17:17]c
- 015C                   .dbsym l line_1 2 A[17:17]c
- 015C                   .dbsym l ptr 0 pc
- 015C                   .dbend
- 015C                   .dbfunc e VC3_Interrupt _VC3_Interrupt fV
- 015C           _VC3_Interrupt::
- 015C                   .dbline -1
- 015C 08                push A
+ 0146 7C0000            xcall _strlen
+ 0149 5100              mov A,[__r1]
+ 014B 0301              add A,[X+1]
+ 014D 5401              mov [X+1],A
+ 014F 5100              mov A,[__r0]
+ 0151 0B00              adc A,[X+0]
+ 0153 5400              mov [X+0],A
+ 0155                   .dbline 87
+ 0155           ;               LCD_line_print(line_2, 1);
+ 0155 5001              mov A,1
+ 0157 08                push A
+ 0158 5A00              mov [__r1],X
+ 015A 060013            add [__r1],19
  015D 5100              mov A,[__r0]
  015F 08                push A
  0160 5100              mov A,[__r1]
  0162 08                push A
- 0163                   .dbline 88
- 0163           ; } // end main 
- 0163           ; 
- 0163           ; #pragma interrupt_handler VC3_Interrupt // use SleepTimerISR as ISR
- 0163           ; void VC3_Interrupt(void) { 
- 0163                   .dbline 90
- 0163           ;     // change SCDAC_cr0 to next value in table 
- 0163           ;     M8C_Stall; // required to avoid glitch 
- 0163 436501            or REG[0x65],1
- 0166                   .dbline 91
- 0166           ;     SCDAC_cr0 = SineTable[Phase]; 
- 0166 5F0000            mov [__r1],[_Phase]
- 0169 550000            mov [__r0],0
- 016C 060000            add [__r1],<_SineTable
- 016F 0E0000            adc [__r0],>_SineTable
- 0172 5100              mov A,[__r0]
- 0174 10                push X
- 0175 5800              mov X,[__r1]
- 0177 28                romx
- 0178 20                pop X
- 0179 6080              mov REG[0x80],A
- 017B                   .dbline 92
- 017B           ;     M8C_Unstall; 
- 017B 4165FE            and REG[0x65],-2
- 017E                   .dbline 95
- 017E           ;       
- 017E           ;     // adjust SineTable index based on step used 
- 017E           ;     Phase = (Phase + PhaseRate); // use modulo 256 since the table index 
- 017E 5101              mov A,[_PhaseRate]
- 0180 0400              add [_Phase],A
- 0182                   .dbline 98
- 0182           ;     // should go only from 0 to 25, but phase is defined as int 
- 0182           ;     
- 0182           ;     M8C_ClearIntFlag(INT_CLR0, INT_MSK0_VC3); // needed to avoid nested 
- 0182 62DA7F            mov REG[0xda],127
- 0185                   .dbline -2
- 0185           L9:
- 0185 18                pop A
- 0186 5300              mov [__r1],A
- 0188 18                pop A
- 0189 5300              mov [__r0],A
- 018B 18                pop A
- 018C                   .dbline 0 ; func end
- 018C 7E                reti
- 018D                   .dbend
- 018D                   .dbfunc e itoa _itoa fV
- 018D           ;          digit -> X+4
- 018D           ;              n -> X+2
- 018D           ;              d -> X+0
- 018D           ;           base -> X-9
- 018D           ;            str -> X-7
- 018D           ;          input -> X-5
- 018D           _itoa::
- 018D                   .dbline -1
- 018D 10                push X
- 018E 4F                mov X,SP
- 018F 3808              add SP,8
- 0191                   .dbline 105
- 0191           ;       // interrupts since stall/unstall are used and this can take  
- 0191           ;     // quite some time. 
- 0191           ; }// end VC3 interrupt 
- 0191           ; 
- 0191           ; 
- 0191           ; void itoa(unsigned short input, char *str, int base)
- 0191           ; {
- 0191                   .dbline 106
- 0191           ;       int n = 0;
- 0191 560300            mov [X+3],0
- 0194 560200            mov [X+2],0
- 0197                   .dbline 107
- 0197           ;       unsigned int d = 1;
- 0197 560101            mov [X+1],1
- 019A 560000            mov [X+0],0
- 019D 801A              xjmp L12
- 019F           L11:
- 019F                   .dbline 110
- 019F           ;       
- 019F           ;       while ((input / d) >= base)
- 019F           ;       {
- 019F                   .dbline 111
- 019F           ;               d *= base;
- 019F 52F7              mov A,[X-9]
- 01A1 08                push A
- 01A2 52F8              mov A,[X-8]
- 01A4 08                push A
- 01A5 5200              mov A,[X+0]
- 01A7 08                push A
- 01A8 5201              mov A,[X+1]
- 01AA 08                push A
- 01AB 7C0000            xcall __mul16
- 01AE 38FC              add SP,-4
- 01B0 5100              mov A,[__rX]
- 01B2 5401              mov [X+1],A
- 01B4 5100              mov A,[__rY]
- 01B6 5400              mov [X+0],A
- 01B8                   .dbline 112
- 01B8           ;       }
- 01B8           L12:
- 01B8                   .dbline 109
- 01B8 5200              mov A,[X+0]
- 01BA 08                push A
- 01BB 5201              mov A,[X+1]
- 01BD 08                push A
- 01BE 52FB              mov A,[X-5]
- 01C0 08                push A
- 01C1 52FC              mov A,[X-4]
- 01C3 08                push A
- 01C4 7C0000            xcall __divmodu_16X16_16
- 01C7 18                pop A
- 01C8 5300              mov [__r1],A
- 01CA 18                pop A
- 01CB 5300              mov [__r0],A
- 01CD 38FE              add SP,-2
- 01CF 5100              mov A,[__r1]
- 01D1 13F8              sub A,[X-8]
- 01D3 5100              mov A,[__r0]
- 01D5 1BF7              sbb A,[X-9]
- 01D7 DFC7              jnc L11
- 01D9           X1:
- 01D9 80AB              xjmp L15
- 01DB           L14:
- 01DB                   .dbline 114
- 01DB           ;       while (d != 0)
- 01DB           ;       {
- 01DB                   .dbline 115
- 01DB           ;               int digit = input / d;
- 01DB 5200              mov A,[X+0]
- 01DD 08                push A
- 01DE 5201              mov A,[X+1]
- 01E0 08                push A
- 01E1 52FB              mov A,[X-5]
- 01E3 08                push A
- 01E4 52FC              mov A,[X-4]
- 01E6 08                push A
- 01E7 7C0000            xcall __divmodu_16X16_16
- 01EA 18                pop A
- 01EB 5300              mov [__r1],A
- 01ED 18                pop A
- 01EE 5300              mov [__r0],A
- 01F0 38FE              add SP,-2
- 01F2 5100              mov A,[__r1]
- 01F4 5405              mov [X+5],A
- 01F6 5100              mov A,[__r0]
- 01F8 5404              mov [X+4],A
- 01FA                   .dbline 116
- 01FA           ;               input %= d;
- 01FA 5200              mov A,[X+0]
- 01FC 08                push A
- 01FD 5201              mov A,[X+1]
- 01FF 08                push A
- 0200 52FB              mov A,[X-5]
- 0202 08                push A
- 0203 52FC              mov A,[X-4]
- 0205 08                push A
- 0206 7C0000            xcall __divmodu_16X16_16
- 0209 38FE              add SP,-2
- 020B 18                pop A
- 020C 54FC              mov [X-4],A
- 020E 18                pop A
- 020F 54FB              mov [X-5],A
- 0211                   .dbline 117
- 0211           ;               d /= base;
- 0211 52F7              mov A,[X-9]
- 0213 08                push A
- 0214 52F8              mov A,[X-8]
- 0216 08                push A
- 0217 5200              mov A,[X+0]
- 0219 08                push A
- 021A 5201              mov A,[X+1]
- 021C 08                push A
- 021D 7C0000            xcall __divmodu_16X16_16
+ 0163 9148              xcall _LCD_line_print
+ 0165 38FB              add SP,-5
+ 0167                   .dbline 88
+ 0167           ;     }
+ 0167           L4:
+ 0167                   .dbline 69
+ 0167 8EE4              xjmp L3
+ 0169           X0:
+ 0169                   .dbline -2
+ 0169           L1:
+ 0169 38DC              add SP,-36
+ 016B 20                pop X
+ 016C                   .dbline 0 ; func end
+ 016C 8FFF              jmp .
+ 016E                   .dbsym l line_2 19 A[17:17]c
+ 016E                   .dbsym l line_1 2 A[17:17]c
+ 016E                   .dbsym l ptr 0 pc
+ 016E                   .dbend
+ 016E                   .dbfunc e VC3_Interrupt _VC3_Interrupt fV
+ 016E           _VC3_Interrupt::
+ 016E                   .dbline -1
+ 016E 08                push A
+ 016F 5100              mov A,[__r0]
+ 0171 08                push A
+ 0172 5100              mov A,[__r1]
+ 0174 08                push A
+ 0175                   .dbline 92
+ 0175           ; } // end main 
+ 0175           ; 
+ 0175           ; #pragma interrupt_handler VC3_Interrupt // use SleepTimerISR as ISR
+ 0175           ; void VC3_Interrupt(void) { 
+ 0175                   .dbline 94
+ 0175           ;     // change SCDAC_cr0 to next value in table 
+ 0175           ;     M8C_Stall; // required to avoid glitch 
+ 0175 436501            or REG[0x65],1
+ 0178                   .dbline 95
+ 0178           ;     SCDAC_cr0 = SineTable[Phase]; 
+ 0178 5F0000            mov [__r1],[_Phase]
+ 017B 550000            mov [__r0],0
+ 017E 060000            add [__r1],<_SineTable
+ 0181 0E0000            adc [__r0],>_SineTable
+ 0184 5100              mov A,[__r0]
+ 0186 10                push X
+ 0187 5800              mov X,[__r1]
+ 0189 28                romx
+ 018A 20                pop X
+ 018B 6080              mov REG[0x80],A
+ 018D                   .dbline 96
+ 018D           ;     M8C_Unstall; 
+ 018D 4165FE            and REG[0x65],-2
+ 0190                   .dbline 99
+ 0190           ;       
+ 0190           ;     // adjust SineTable index based on step used 
+ 0190           ;     Phase = (Phase + PhaseRate); // use modulo 256 since the table index 
+ 0190 5101              mov A,[_PhaseRate]
+ 0192 0400              add [_Phase],A
+ 0194                   .dbline 102
+ 0194           ;     // should go only from 0 to 25, but phase is defined as int 
+ 0194           ;     
+ 0194           ;     M8C_ClearIntFlag(INT_CLR0, INT_MSK0_VC3); // needed to avoid nested 
+ 0194 62DA7F            mov REG[0xda],127
+ 0197                   .dbline -2
+ 0197           L9:
+ 0197 18                pop A
+ 0198 5300              mov [__r1],A
+ 019A 18                pop A
+ 019B 5300              mov [__r0],A
+ 019D 18                pop A
+ 019E                   .dbline 0 ; func end
+ 019E 7E                reti
+ 019F                   .dbend
+ 019F                   .dbfunc e itoa _itoa fV
+ 019F           ;          digit -> X+4
+ 019F           ;              n -> X+2
+ 019F           ;              d -> X+0
+ 019F           ;           base -> X-9
+ 019F           ;            str -> X-7
+ 019F           ;          input -> X-5
+ 019F           _itoa::
+ 019F                   .dbline -1
+ 019F 10                push X
+ 01A0 4F                mov X,SP
+ 01A1 3808              add SP,8
+ 01A3                   .dbline 109
+ 01A3           ;       // interrupts since stall/unstall are used and this can take  
+ 01A3           ;     // quite some time. 
+ 01A3           ; }// end VC3 interrupt 
+ 01A3           ; 
+ 01A3           ; 
+ 01A3           ; void itoa(unsigned short input, char *str, int base)
+ 01A3           ; {
+ 01A3                   .dbline 110
+ 01A3           ;       int n = 0;
+ 01A3 560300            mov [X+3],0
+ 01A6 560200            mov [X+2],0
+ 01A9                   .dbline 111
+ 01A9           ;       unsigned int d = 1;
+ 01A9 560101            mov [X+1],1
+ 01AC 560000            mov [X+0],0
+ 01AF 801A              xjmp L12
+ 01B1           L11:
+ 01B1                   .dbline 114
+ 01B1           ;       
+ 01B1           ;       while ((input / d) >= base)
+ 01B1           ;       {
+ 01B1                   .dbline 115
+ 01B1           ;               d *= base;
+ 01B1 52F7              mov A,[X-9]
+ 01B3 08                push A
+ 01B4 52F8              mov A,[X-8]
+ 01B6 08                push A
+ 01B7 5200              mov A,[X+0]
+ 01B9 08                push A
+ 01BA 5201              mov A,[X+1]
+ 01BC 08                push A
+ 01BD 7C0000            xcall __mul16
+ 01C0 38FC              add SP,-4
+ 01C2 5100              mov A,[__rX]
+ 01C4 5401              mov [X+1],A
+ 01C6 5100              mov A,[__rY]
+ 01C8 5400              mov [X+0],A
+ 01CA                   .dbline 116
+ 01CA           ;       }
+ 01CA           L12:
+ 01CA                   .dbline 113
+ 01CA 5200              mov A,[X+0]
+ 01CC 08                push A
+ 01CD 5201              mov A,[X+1]
+ 01CF 08                push A
+ 01D0 52FB              mov A,[X-5]
+ 01D2 08                push A
+ 01D3 52FC              mov A,[X-4]
+ 01D5 08                push A
+ 01D6 7C0000            xcall __divmodu_16X16_16
+ 01D9 18                pop A
+ 01DA 5300              mov [__r1],A
+ 01DC 18                pop A
+ 01DD 5300              mov [__r0],A
+ 01DF 38FE              add SP,-2
+ 01E1 5100              mov A,[__r1]
+ 01E3 13F8              sub A,[X-8]
+ 01E5 5100              mov A,[__r0]
+ 01E7 1BF7              sbb A,[X-9]
+ 01E9 DFC7              jnc L11
+ 01EB           X1:
+ 01EB 80AB              xjmp L15
+ 01ED           L14:
+ 01ED                   .dbline 118
+ 01ED           ;       while (d != 0)
+ 01ED           ;       {
+ 01ED                   .dbline 119
+ 01ED           ;               int digit = input / d;
+ 01ED 5200              mov A,[X+0]
+ 01EF 08                push A
+ 01F0 5201              mov A,[X+1]
+ 01F2 08                push A
+ 01F3 52FB              mov A,[X-5]
+ 01F5 08                push A
+ 01F6 52FC              mov A,[X-4]
+ 01F8 08                push A
+ 01F9 7C0000            xcall __divmodu_16X16_16
+ 01FC 18                pop A
+ 01FD 5300              mov [__r1],A
+ 01FF 18                pop A
+ 0200 5300              mov [__r0],A
+ 0202 38FE              add SP,-2
+ 0204 5100              mov A,[__r1]
+ 0206 5405              mov [X+5],A
+ 0208 5100              mov A,[__r0]
+ 020A 5404              mov [X+4],A
+ 020C                   .dbline 120
+ 020C           ;               input %= d;
+ 020C 5200              mov A,[X+0]
+ 020E 08                push A
+ 020F 5201              mov A,[X+1]
+ 0211 08                push A
+ 0212 52FB              mov A,[X-5]
+ 0214 08                push A
+ 0215 52FC              mov A,[X-4]
+ 0217 08                push A
+ 0218 7C0000            xcall __divmodu_16X16_16
+ 021B 38FE              add SP,-2
+ 021D 18                pop A
+ 021E 54FC              mov [X-4],A
  0220 18                pop A
- 0221 5401              mov [X+1],A
- 0223 18                pop A
- 0224 5400              mov [X+0],A
- 0226 38FE              add SP,-2
- 0228                   .dbline 118
- 0228           ;               if (n || digit > 0 || d == 0)
- 0228 3D0200            cmp [X+2],0
- 022B B020              jnz L20
- 022D 3D0300            cmp [X+3],0
- 0230 B01B              jnz L20
- 0232           X2:
- 0232 5000              mov A,0
- 0234 1305              sub A,[X+5]
- 0236 5204              mov A,[X+4]
- 0238 3180              xor A,-128
- 023A 5300              mov [__rX],A
- 023C 5080              mov A,(0 ^ 0x80)
- 023E 1A00              sbb A,[__rX]
- 0240 C00B              jc L20
- 0242           X3:
- 0242 3D0000            cmp [X+0],0
- 0245 B03F              jnz L17
- 0247 3D0100            cmp [X+1],0
- 024A B03A              jnz L17
- 024C           X4:
- 024C           L20:
- 024C                   .dbline 120
- 024C           ;               {
- 024C           ;                       *str++ = digit + ((digit < 10)? '0': 'a' - 10);
- 024C                   .dbline 120
- 024C 52FA              mov A,[X-6]
- 024E 5300              mov [__r1],A
- 0250 52F9              mov A,[X-7]
- 0252 5300              mov [__r0],A
- 0254 5100              mov A,[__r1]
- 0256 0101              add A,1
- 0258 54FA              mov [X-6],A
- 025A 5100              mov A,[__r0]
- 025C 0900              adc A,0
- 025E 54F9              mov [X-7],A
- 0260 5205              mov A,[X+5]
- 0262 110A              sub A,10
- 0264 5204              mov A,[X+4]
- 0266 3180              xor A,-128
- 0268 1980              sbb A,(0 ^ 0x80)
- 026A D009              jnc L22
- 026C           X5:
- 026C 560730            mov [X+7],48
- 026F 560600            mov [X+6],0
- 0272 8007              xjmp L23
- 0274           L22:
- 0274 560757            mov [X+7],87
- 0277 560600            mov [X+6],0
- 027A           L23:
- 027A 5205              mov A,[X+5]
- 027C 0307              add A,[X+7]
- 027E 3F00              mvi [__r1],A
- 0280                   .dbline 121
- 0280           ;                       n++;
- 0280 7703              inc [X+3]
- 0282 0F0200            adc [X+2],0
- 0285                   .dbline 122
- 0285           ;               }
- 0285           L17:
- 0285                   .dbline 123
- 0285           ;       }
- 0285           L15:
- 0285                   .dbline 113
- 0285 3D0000            cmp [X+0],0
- 0288 BF52              jnz L14
- 028A 3D0100            cmp [X+1],0
- 028D BF4D              jnz L14
- 028F           X6:
- 028F                   .dbline 124
- 028F           ;       *str = '\0';
- 028F 52FA              mov A,[X-6]
- 0291 5300              mov [__r1],A
- 0293 5000              mov A,0
- 0295 3F00              mvi [__r1],A
- 0297                   .dbline -2
- 0297           L10:
- 0297 38F8              add SP,-8
- 0299 20                pop X
- 029A                   .dbline 0 ; func end
- 029A 7F                ret
- 029B                   .dbsym l digit 4 I
- 029B                   .dbsym l n 2 I
- 029B                   .dbsym l d 0 i
- 029B                   .dbsym l base -9 I
- 029B                   .dbsym l str -7 pc
- 029B                   .dbsym l input -5 s
- 029B                   .dbend
+ 0221 54FB              mov [X-5],A
+ 0223                   .dbline 121
+ 0223           ;               d /= base;
+ 0223 52F7              mov A,[X-9]
+ 0225 08                push A
+ 0226 52F8              mov A,[X-8]
+ 0228 08                push A
+ 0229 5200              mov A,[X+0]
+ 022B 08                push A
+ 022C 5201              mov A,[X+1]
+ 022E 08                push A
+ 022F 7C0000            xcall __divmodu_16X16_16
+ 0232 18                pop A
+ 0233 5401              mov [X+1],A
+ 0235 18                pop A
+ 0236 5400              mov [X+0],A
+ 0238 38FE              add SP,-2
+ 023A                   .dbline 122
+ 023A           ;               if (n || digit > 0 || d == 0)
+ 023A 3D0200            cmp [X+2],0
+ 023D B020              jnz L20
+ 023F 3D0300            cmp [X+3],0
+ 0242 B01B              jnz L20
+ 0244           X2:
+ 0244 5000              mov A,0
+ 0246 1305              sub A,[X+5]
+ 0248 5204              mov A,[X+4]
+ 024A 3180              xor A,-128
+ 024C 5300              mov [__rX],A
+ 024E 5080              mov A,(0 ^ 0x80)
+ 0250 1A00              sbb A,[__rX]
+ 0252 C00B              jc L20
+ 0254           X3:
+ 0254 3D0000            cmp [X+0],0
+ 0257 B03F              jnz L17
+ 0259 3D0100            cmp [X+1],0
+ 025C B03A              jnz L17
+ 025E           X4:
+ 025E           L20:
+ 025E                   .dbline 124
+ 025E           ;               {
+ 025E           ;                       *str++ = digit + ((digit < 10)? '0': 'a' - 10);
+ 025E                   .dbline 124
+ 025E 52FA              mov A,[X-6]
+ 0260 5300              mov [__r1],A
+ 0262 52F9              mov A,[X-7]
+ 0264 5300              mov [__r0],A
+ 0266 5100              mov A,[__r1]
+ 0268 0101              add A,1
+ 026A 54FA              mov [X-6],A
+ 026C 5100              mov A,[__r0]
+ 026E 0900              adc A,0
+ 0270 54F9              mov [X-7],A
+ 0272 5205              mov A,[X+5]
+ 0274 110A              sub A,10
+ 0276 5204              mov A,[X+4]
+ 0278 3180              xor A,-128
+ 027A 1980              sbb A,(0 ^ 0x80)
+ 027C D009              jnc L22
+ 027E           X5:
+ 027E 560730            mov [X+7],48
+ 0281 560600            mov [X+6],0
+ 0284 8007              xjmp L23
+ 0286           L22:
+ 0286 560757            mov [X+7],87
+ 0289 560600            mov [X+6],0
+ 028C           L23:
+ 028C 5205              mov A,[X+5]
+ 028E 0307              add A,[X+7]
+ 0290 3F00              mvi [__r1],A
+ 0292                   .dbline 125
+ 0292           ;                       n++;
+ 0292 7703              inc [X+3]
+ 0294 0F0200            adc [X+2],0
+ 0297                   .dbline 126
+ 0297           ;               }
+ 0297           L17:
+ 0297                   .dbline 127
+ 0297           ;       }
+ 0297           L15:
+ 0297                   .dbline 117
+ 0297 3D0000            cmp [X+0],0
+ 029A BF52              jnz L14
+ 029C 3D0100            cmp [X+1],0
+ 029F BF4D              jnz L14
+ 02A1           X6:
+ 02A1                   .dbline 128
+ 02A1           ;       *str = '\0';
+ 02A1 52FA              mov A,[X-6]
+ 02A3 5300              mov [__r1],A
+ 02A5 5000              mov A,0
+ 02A7 3F00              mvi [__r1],A
+ 02A9                   .dbline -2
+ 02A9           L10:
+ 02A9 38F8              add SP,-8
+ 02AB 20                pop X
+ 02AC                   .dbline 0 ; func end
+ 02AC 7F                ret
+ 02AD                   .dbsym l digit 4 I
+ 02AD                   .dbsym l n 2 I
+ 02AD                   .dbsym l d 0 i
+ 02AD                   .dbsym l base -9 I
+ 02AD                   .dbsym l str -7 pc
+ 02AD                   .dbsym l input -5 s
+ 02AD                   .dbend
                         .area bss(ram, con, rel)
  0000                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab7\Lab7D\Lab7D\main.c
  0000           L25:
  0000                   .blkb 17
                         .area text(rom, con, rel)
- 029B                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab7\Lab7D\Lab7D\main.c
- 029B                   .dbfunc e LCD_line_print _LCD_line_print fV
- 029B                   .dbsym s buffer L25 A[17:17]c
- 029B           ;           line -> X-6
- 029B           ;            str -> X-5
- 029B           _LCD_line_print::
- 029B                   .dbline -1
- 029B 10                push X
- 029C 4F                mov X,SP
- 029D                   .dbline 128
- 029D           ; }
- 029D           ; 
- 029D           ; void LCD_line_print(char *str, unsigned char line)
- 029D           ; {
- 029D                   .dbline 130
- 029D           ;       static char buffer[17];
- 029D           ;       memset(buffer, ' ', 16);
- 029D 5000              mov A,0
- 029F 08                push A
- 02A0 5010              mov A,16
- 02A2 08                push A
- 02A3 5000              mov A,0
- 02A5 08                push A
- 02A6 5020              mov A,32
- 02A8 08                push A
- 02A9 5000              mov A,>L25
- 02AB 08                push A
- 02AC 5000              mov A,<L25
- 02AE 08                push A
- 02AF 7C0000            xcall _memset
- 02B2 38FA              add SP,-6
- 02B4                   .dbline 131
- 02B4           ;       memcpy(buffer, str, strlen(str));
- 02B4 52FB              mov A,[X-5]
- 02B6 08                push A
- 02B7 52FC              mov A,[X-4]
- 02B9 08                push A
- 02BA 7C0000            xcall _strlen
- 02BD 5100              mov A,[__r0]
- 02BF 08                push A
- 02C0 5100              mov A,[__r1]
- 02C2 08                push A
- 02C3 52FB              mov A,[X-5]
- 02C5 08                push A
- 02C6 52FC              mov A,[X-4]
+ 02AD                   .dbfile C:\Dropbox\DOCUME~1\School\SENIOR~3\ESE366~1\lab_git\Lab7\Lab7D\Lab7D\main.c
+ 02AD                   .dbfunc e LCD_line_print _LCD_line_print fV
+ 02AD                   .dbsym s buffer L25 A[17:17]c
+ 02AD           ;           line -> X-6
+ 02AD           ;            str -> X-5
+ 02AD           _LCD_line_print::
+ 02AD                   .dbline -1
+ 02AD 10                push X
+ 02AE 4F                mov X,SP
+ 02AF                   .dbline 132
+ 02AF           ; }
+ 02AF           ; 
+ 02AF           ; void LCD_line_print(char *str, unsigned char line)
+ 02AF           ; {
+ 02AF                   .dbline 134
+ 02AF           ;       static char buffer[17];
+ 02AF           ;       memset(buffer, ' ', 16);
+ 02AF 5000              mov A,0
+ 02B1 08                push A
+ 02B2 5010              mov A,16
+ 02B4 08                push A
+ 02B5 5000              mov A,0
+ 02B7 08                push A
+ 02B8 5020              mov A,32
+ 02BA 08                push A
+ 02BB 5000              mov A,>L25
+ 02BD 08                push A
+ 02BE 5000              mov A,<L25
+ 02C0 08                push A
+ 02C1 7C0000            xcall _memset
+ 02C4 38FA              add SP,-6
+ 02C6                   .dbline 135
+ 02C6           ;       memcpy(buffer, str, strlen(str));
+ 02C6 52FB              mov A,[X-5]
  02C8 08                push A
- 02C9 5000              mov A,>L25
+ 02C9 52FC              mov A,[X-4]
  02CB 08                push A
- 02CC 5000              mov A,<L25
- 02CE 08                push A
- 02CF 7C0000            xcall _memcpy
- 02D2 38F8              add SP,-8
- 02D4                   .dbline 132
- 02D4           ;       buffer[17] = '\0';
- 02D4 551100            mov [L25+17],0
- 02D7                   .dbline 133
- 02D7           ;       LCD_1_Position(line, 0);
- 02D7 10                push X
- 02D8 5000              mov A,0
+ 02CC 7C0000            xcall _strlen
+ 02CF 5100              mov A,[__r0]
+ 02D1 08                push A
+ 02D2 5100              mov A,[__r1]
+ 02D4 08                push A
+ 02D5 52FB              mov A,[X-5]
+ 02D7 08                push A
+ 02D8 52FC              mov A,[X-4]
  02DA 08                push A
- 02DB 52FA              mov A,[X-6]
- 02DD 20                pop X
- 02DE 7C0000            xcall _LCD_1_Position
- 02E1                   .dbline 134
- 02E1           ;       LCD_1_PrString(buffer);
- 02E1 5000              mov A,>L25
- 02E3 08                push A
- 02E4 5000              mov A,<L25
- 02E6 5C                mov X,A
- 02E7 18                pop A
- 02E8 7C0000            xcall _LCD_1_PrString
- 02EB 20                pop X
- 02EC                   .dbline -2
- 02EC           L24:
- 02EC 20                pop X
- 02ED                   .dbline 0 ; func end
- 02ED 7F                ret
- 02EE                   .dbsym l line -6 c
- 02EE                   .dbsym l str -5 pc
- 02EE                   .dbend
+ 02DB 5000              mov A,>L25
+ 02DD 08                push A
+ 02DE 5000              mov A,<L25
+ 02E0 08                push A
+ 02E1 7C0000            xcall _memcpy
+ 02E4 38F8              add SP,-8
+ 02E6                   .dbline 136
+ 02E6           ;       buffer[17] = '\0';
+ 02E6 551100            mov [L25+17],0
+ 02E9                   .dbline 137
+ 02E9           ;       LCD_1_Position(line, 0);
+ 02E9 10                push X
+ 02EA 5000              mov A,0
+ 02EC 08                push A
+ 02ED 52FA              mov A,[X-6]
+ 02EF 20                pop X
+ 02F0 7C0000            xcall _LCD_1_Position
+ 02F3                   .dbline 138
+ 02F3           ;       LCD_1_PrString(buffer);
+ 02F3 5000              mov A,>L25
+ 02F5 08                push A
+ 02F6 5000              mov A,<L25
+ 02F8 5C                mov X,A
+ 02F9 18                pop A
+ 02FA 7C0000            xcall _LCD_1_PrString
+ 02FD 20                pop X
+ 02FE                   .dbline -2
+ 02FE           L24:
+ 02FE 20                pop X
+ 02FF                   .dbline 0 ; func end
+ 02FF 7F                ret
+ 0300                   .dbsym l line -6 c
+ 0300                   .dbsym l str -5 pc
+ 0300                   .dbend
                         .area lit(rom, con, rel, lit)
  0100           L8:
  0100 20526174653A00    .byte 32,'R,'a,'t,'e,58,0
