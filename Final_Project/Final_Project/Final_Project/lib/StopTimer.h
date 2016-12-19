@@ -71,7 +71,7 @@ extern WORD wStopTimer_CaptureCounter(void);         // Obsolete
 // Constants for StopTimer user defined values
 //--------------------------------------------------
 
-#define StopTimer_PERIOD                       ( 0xc80 )
+#define StopTimer_PERIOD                       ( 0x7d00 )
 #define StopTimer_COMPARE_VALUE                ( 0x3e8 )
 
 

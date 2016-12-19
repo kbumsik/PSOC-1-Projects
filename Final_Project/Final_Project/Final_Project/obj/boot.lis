@@ -1286,9 +1286,10 @@
  0037 7E                reti
  0038           
                     org   38h                      ;PSoC Block DCB12 Interrupt Vector
-                    // call     void_handler
- 0038 7E            reti
- 0039           
+                    ;ljmp       _MuteTimer_ISR
+ 0038 7D0000        ljmp _MuteTimer_ISR
+ 003B 7E            reti
+ 003C           
                     org   3Ch                      ;PSoC Block DCB13 Interrupt Vector
                     // call     void_handler
  003C 7E            reti

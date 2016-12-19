@@ -70,6 +70,11 @@ LoadConfigTBL_project1_Bank0:
 	db		8dh, 40h		;LPF2_2_FLOUT_CR1(ASD13CR1)
 	db		8eh, 9fh		;LPF2_2_FLOUT_CR2(ASD13CR2)
 	db		8fh, 20h		;LPF2_2_FLOUT_CR3(ASD13CR3)
+;  Instance name MuteTimer, User Module Counter8
+;       Instance name MuteTimer, Block Name CNTR8(DCB12)
+	db		3bh, 00h		;MuteTimer_CONTROL_REG(DCB12CR0)
+	db		39h, a0h		;MuteTimer_PERIOD_REG(DCB12DR1)
+	db		3ah, 64h		;MuteTimer_COMPARE_REG(DCB12DR2)
 ;  Instance name PGA_1, User Module PGA
 ;       Instance name PGA_1, Block Name GAIN(ACB00)
 	db		71h, fdh		;PGA_1_GAIN_CR0(ACB00CR0)
@@ -97,11 +102,11 @@ LoadConfigTBL_project1_Bank0:
 ;  Instance name StopTimer, User Module Timer16
 ;       Instance name StopTimer, Block Name TIMER16_LSB(DBB10)
 	db		33h, 00h		;StopTimer_CONTROL_LSB_REG(DBB10CR0)
-	db		31h, 80h		;StopTimer_PERIOD_LSB_REG(DBB10DR1)
+	db		31h, 00h		;StopTimer_PERIOD_LSB_REG(DBB10DR1)
 	db		32h, e8h		;StopTimer_COMPARE_LSB_REG(DBB10DR2)
 ;       Instance name StopTimer, Block Name TIMER16_MSB(DBB11)
 	db		37h, 04h		;StopTimer_CONTROL_MSB_REG(DBB11CR0)
-	db		35h, 0ch		;StopTimer_PERIOD_MSB_REG(DBB11DR1)
+	db		35h, 7dh		;StopTimer_PERIOD_MSB_REG(DBB11DR1)
 	db		36h, 03h		;StopTimer_COMPARE_MSB_REG(DBB11DR2)
 ;  Global Register values Bank 0
 	db		60h, 28h		; AnalogColumnInputSelect register (AMX_IN)
@@ -153,6 +158,11 @@ LoadConfigTBL_project1_Bank1:
 ;  Instance name LPF2_2, User Module LPF2
 ;       Instance name LPF2_2, Block Name FLIN(ASC12)
 ;       Instance name LPF2_2, Block Name FLOUT(ASD13)
+;  Instance name MuteTimer, User Module Counter8
+;       Instance name MuteTimer, Block Name CNTR8(DCB12)
+	db		38h, 31h		;MuteTimer_FUNC_REG(DCB12FN)
+	db		39h, 17h		;MuteTimer_INPUT_REG(DCB12IN)
+	db		3ah, 40h		;MuteTimer_OUTPUT_REG(DCB12OU)
 ;  Instance name PGA_1, User Module PGA
 ;       Instance name PGA_1, Block Name GAIN(ACB00)
 ;  Instance name PGA_2, User Module PGA

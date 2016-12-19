@@ -169,7 +169,8 @@ ENDIF
 	reti
 
     org   38h                      ;PSoC Block DCB12 Interrupt Vector
-    `@INTERRUPT_14`
+    ;`@INTERRUPT_14`
+    ljmp _MuteTimer_ISR
     reti
 
     org   3Ch                      ;PSoC Block DCB13 Interrupt Vector

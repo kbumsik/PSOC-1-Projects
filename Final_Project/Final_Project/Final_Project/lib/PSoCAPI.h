@@ -22,6 +22,7 @@
 #include "LCD.h"
 #include "LPF2_1.h"
 #include "LPF2_2.h"
+#include "MuteTimer.h"
 #include "PGA_1.h"
 #include "PGA_2.h"
 #include "PGA_3.h"

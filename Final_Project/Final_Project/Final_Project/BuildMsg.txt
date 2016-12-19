@@ -11,6 +11,10 @@ lib/lpf2_1.asm
 
 lib/lpf2_2.asm
 
+lib/mutetimer.asm
+
+lib/mutetimerint.asm
+
 lib/pga_1.asm
 
 lib/pga_2.asm
@@ -31,12 +35,12 @@ lib/stoptimerint.asm
 
 Linking..
 
-  ROM 16% full. 2528 out of 16384 bytes used (does not include absolute areas).
+  ROM 24% full. 3775 out of 16384 bytes used (does not include absolute areas).
 
-  RAM 18% full. 44 bytes used (does not include stack usage).
+  RAM 30% full. 75 bytes used (does not include stack usage).
 
 Built with ICCM8C STD V7.05.00
 
  
-Final_Project - 0 error(s) 0 warning(s) 03:32:18
+Final_Project - 0 error(s) 0 warning(s) 09:11:42
 

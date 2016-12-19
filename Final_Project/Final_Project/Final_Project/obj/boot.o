@@ -1,7 +1,8 @@
 XH
-H B areas 12 global symbols
+H B areas 13 global symbols
 M boot.asm
 S _main Ref0000
+S _MuteTimer_ISR Ref0000
 S _StopTimer_ISR Ref0000
 S __r0 Ref0000
 S LoadConfigInit Ref0000
@@ -33,57 +34,58 @@ dbline A6 30
 dbline AA 34
 dbline AB 37
 dbline AF 38
-dbline B3 3C
-dbline B7 60
-dbline BB 64
+dbline B0 3B
+dbline B4 3C
+dbline B8 60
+dbline BC 64
 dbline 2 68
-dbline D4 6A
+dbline D5 6A
 dbline 2 6D
 dbline 2 6F
-dbline DF 72
-dbline F0 75
-dbline F1 77
+dbline E0 72
+dbline F1 75
+dbline F2 77
 dbline 2 78
-dbline 105 7B
-dbline 106 7E
+dbline 106 7B
+dbline 107 7E
 dbline 2 81
-dbline 11F 83
+dbline 120 83
 dbline 2 86
 dbline 2 88
-dbline 14B 8B
-dbline 14C 8E
-dbline 14D 91
-dbline 14E 94
-dbline 162 97
-dbline 168 9A
-dbline 169 9C
-dbline 16B 9F
-dbline 16C A2
-dbline 16D A4
-dbline 16E A6
-dbline 170 A8
-dbline 171 AA
-dbline 172 AC
-dbline 174 AF
-dbline 175 B2
-dbline 176 B4
-dbline 177 B5
-dbline 178 B6
-dbline 179 B8
-dbline 17A B9
-dbline 17B BA
-dbline 17C BC
+dbline 14C 8B
+dbline 14D 8E
+dbline 14E 91
+dbline 14F 94
+dbline 163 97
+dbline 169 9A
+dbline 16A 9C
+dbline 16C 9F
+dbline 16D A2
+dbline 16E A4
+dbline 16F A6
+dbline 171 A8
+dbline 172 AA
+dbline 173 AC
+dbline 175 AF
+dbline 176 B2
+dbline 177 B4
+dbline 178 B5
+dbline 179 B6
+dbline 17A B8
+dbline 17B B9
+dbline 17C BA
+dbline 17D BC
 dbline 2 BE
 dbline 2 C0
-dbline 1B5 C2
+dbline 1B6 C2
 dbline 2 C5
-dbline 1BA C7
+dbline 1BB C7
 dbline 2 CA
-dbline 1C1 CC
-dbline 1C9 CF
-dbline 1CB D2
-dbline 1DA D4
-dbline 1DE D6
+dbline 1C2 CC
+dbline 1CA CF
+dbline 1CC D2
+dbline 1DB D4
+dbline 1DF D6
 S bGetPowerSetting Def00D4
 S _bGetPowerSetting Def00D4
 S __Start Def0068
@@ -135,19 +137,19 @@ R 00 00 00 00
 T 00 1C 7E
 R 00 00 00 00
 T 00 20 7D 00 00 7E
-R 00 00 00 00 02 03 00 05
+R 00 00 00 00 02 03 00 06
 T 00 24 7E
 R 00 00 00 00
 T 00 28 7D 00 00 7E
-R 00 00 00 00 02 03 00 08
+R 00 00 00 00 02 03 00 09
 T 00 2C 7D 00 00 7E
-R 00 00 00 00 02 03 00 07
+R 00 00 00 00 02 03 00 08
 T 00 30 7E
 R 00 00 00 00
 T 00 34 7D 00 00 7E
+R 00 00 00 00 02 03 00 02
+T 00 38 7D 00 00 7E
 R 00 00 00 00 02 03 00 01
-T 00 38 7E
-R 00 00 00 00
 T 00 3C 7E
 R 00 00 00 00
 T 00 60 7E
@@ -157,19 +159,19 @@ R 00 00 00 00
 T 00 68 71 10 62 E3 87 70 EF 62 E3 38 41 FE FB 50
 R 00 00 00 00
 T 00 76 00 00 4E 62 E3 38 55 F8 00 55 F9 00 71 10
-R 00 00 00 00 03 02 00 06
+R 00 00 00 00 03 02 00 07
 T 00 83 62 E0 02 70 EF 62 E3 38 62 71 05 62 75 05
 R 00 00 00 00
 T 00 91 62 79 05 62 7D 05 7C 00 00 50 00 55 00 00
-R 00 00 00 00 02 09 00 03 03 0E 00 02
+R 00 00 00 00 02 09 00 04 03 0E 00 03
 T 00 9E 00 00 3C 00 00 00 00 A0 05 3F
-R 00 00 00 00 01 02 00 0A 03 05 00 02 03 07 00 04
+R 00 00 00 00 01 02 00 0A 03 05 00 03 03 07 00 05
 T 00 A5 00 00 8F F8 50 00 00 57 00 00 55
-R 00 00 00 00 03 02 00 02 41 07 00 02 01 0A 00 02
+R 00 00 00 00 03 02 00 03 41 07 00 02 01 0A 00 02
 T 00 AD 00 00 00 00 3C 00 00
-R 00 00 00 00 03 02 00 02 01 04 00 07 03 07 00 02
+R 00 00 00 00 03 02 00 03 01 04 00 07 03 07 00 03
 T 00 B1 00 00 A0 0B 08 28 3F 00 00 18 75 09 00 8F
-R 00 00 00 00 03 02 00 09 03 09 00 02
+R 00 00 00 00 03 02 00 0A 03 09 00 03
 T 00 BD F2 71 10 70 EF 62 E0 00 71 10 62 E0 00 70
 R 00 00 00 00
 T 00 CB EF 62 E2 00 7C 00 00 8F FF 50 10 7F

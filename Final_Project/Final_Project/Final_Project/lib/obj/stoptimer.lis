@@ -1521,7 +1521,7 @@
  0000           ; Constants for StopTimer user defined values
  0000           ;--------------------------------------------------
  0000           
- 0C80           StopTimer_PERIOD:                          equ 0xc80
+ 7D00           StopTimer_PERIOD:                          equ 0x7d00
  03E8           StopTimer_COMPARE_VALUE:                   equ 0x3e8
  0000           
  0000           

@@ -6,87 +6,87 @@ dbfile lib/psocconfigtbl.asm
 dbfunc 0 ? 0 I
 dbfile C:/PROGRA~2/Cypress/PSOCDE~1/5.4/Common/CYPRES~1/tools/include/CY8C27~1/m8c.inc
 dbfunc 0 ? 0 I
-A lit size E6 flags 0
+A lit size F2 flags 0
 S LoadConfigTBL_project1_Bank0 Def0000
-S LoadConfigTBL_project1_Bank1 Def009F
+S LoadConfigTBL_project1_Bank1 Def00A5
 A psoc_config size C5 flags 0
 dbfile lib/psocconfigtbl.asm
 dbfunc 0 ? 0 I
 dbline 2 0
-dbline C4 2
+dbline CE 2
 dbline 2 5
-dbline C6 7
-dbline C7 A
+dbline D0 7
+dbline D1 A
 dbline 2 D
-dbline C9 F
-dbline CA 12
+dbline D3 F
+dbline D4 12
 dbline 2 15
-dbline CC 17
-dbline CD 1A
+dbline D6 17
+dbline D7 1A
 dbline 2 1D
-dbline CF 1F
-dbline D0 22
+dbline D9 1F
+dbline DA 22
 dbline 2 25
-dbline D2 27
-dbline D3 2A
+dbline DC 27
+dbline DD 2A
 dbline 2 2D
-dbline D5 2F
-dbline D6 32
+dbline DF 2F
+dbline E0 32
 dbline 2 35
-dbline D8 37
-dbline D9 3A
+dbline E2 37
+dbline E3 3A
 dbline 2 3D
-dbline DB 3F
-dbline DC 42
+dbline E5 3F
+dbline E6 42
 dbline 2 45
-dbline DE 47
-dbline DF 4A
+dbline E8 47
+dbline E9 4A
 dbline 2 4D
-dbline E1 4F
-dbline E2 52
+dbline EB 4F
+dbline EC 52
 dbline 2 55
-dbline E4 57
-dbline E5 5A
+dbline EE 57
+dbline EF 5A
 dbline 2 5D
-dbline E7 5F
-dbline E8 62
+dbline F1 5F
+dbline F2 62
 dbline 2 65
-dbline EA 67
-dbline EB 6A
+dbline F4 67
+dbline F5 6A
 dbline 2 6D
-dbline ED 6F
-dbline EE 72
+dbline F7 6F
+dbline F8 72
 dbline 2 75
-dbline F0 77
-dbline F1 7A
+dbline FA 77
+dbline FB 7A
 dbline 2 7D
-dbline F3 7F
-dbline F4 82
+dbline FD 7F
+dbline FE 82
 dbline 2 85
-dbline F6 87
-dbline F7 8A
+dbline 100 87
+dbline 101 8A
 dbline 2 8D
-dbline F9 8F
-dbline FA 92
+dbline 103 8F
+dbline 104 92
 dbline 2 95
-dbline FC 97
-dbline FD 9A
+dbline 106 97
+dbline 107 9A
 dbline 2 9D
-dbline FF 9F
-dbline 100 A2
+dbline 109 9F
+dbline 10A A2
 dbline 2 A5
-dbline 102 A7
-dbline 103 AA
+dbline 10C A7
+dbline 10D AA
 dbline 2 AD
-dbline 105 AF
-dbline 106 B2
+dbline 10F AF
+dbline 110 B2
 dbline 2 B5
-dbline 108 B7
-dbline 109 BA
+dbline 112 B7
+dbline 113 BA
 dbline 2 BD
-dbline 10B BF
+dbline 115 BF
 dbline 2 C2
-dbline 10D C4
+dbline 117 C4
 S LoadConfigTBL_project1_Ordered Def0000
 T 00 00 90 90 91 A0 92 61 93 F0 98 90 99 A0 9A 60
 R 00 00 00 01
@@ -98,29 +98,31 @@ T 00 2A 81 88 82 00 83 24 84 92 85 40 86 9F 87 20
 R 00 00 00 01
 T 00 38 88 94 89 88 8A 00 8B 24 8C 92 8D 40 8E 9F
 R 00 00 00 01
-T 00 46 8F 20 71 FD 72 A3 73 20 70 00 75 1D 76 21
+T 00 46 8F 20 3B 00 39 A0 3A 64 71 FD 72 A3 73 20
 R 00 00 00 01
-T 00 54 77 20 74 01 79 FD 7A A3 7B 20 78 00 7D 1D
+T 00 54 70 00 75 1D 76 21 77 20 74 01 79 FD 7A A3
 R 00 00 00 01
-T 00 62 7E 21 7F 20 7C 01 33 00 31 80 32 E8 37 04
+T 00 62 7B 20 78 00 7D 1D 7E 21 7F 20 7C 01 33 00
 R 00 00 00 01
-T 00 70 35 0C 36 03 60 28 66 00 63 15 65 00 E6 50
+T 00 70 31 00 32 E8 37 04 35 7D 36 03 60 28 66 00
 R 00 00 00 01
-T 00 7E E7 00 D6 00 B0 00 B1 00 B2 00 B3 33 B4 33
+T 00 7E 63 15 65 00 E6 50 E7 00 D6 00 B0 00 B1 00
 R 00 00 00 01
-T 00 8C B5 00 B6 00 B8 55 B9 00 BA 10 BB 33 BC 33
+T 00 8C B2 00 B3 33 B4 33 B5 00 B6 00 B8 55 B9 00
 R 00 00 00 01
-T 00 9A BD 00 BE 00 FF 20 21 21 45 22 40 2C 21 2D
+T 00 9A BA 10 BB 33 BC 33 BD 00 BE 00 FF 20 21 21
 R 00 00 00 01
-T 00 A8 65 2E 40 24 01 25 15 26 40 28 21 29 35 2A
+T 00 A8 45 22 40 2C 21 2D 65 2E 40 24 01 25 15 26
 R 00 00 00 01
-T 00 B6 40 30 00 31 17 32 40 34 20 35 37 36 40 61
+T 00 B6 40 28 21 29 35 2A 40 38 31 39 17 3A 40 30
 R 00 00 00 01
-T 00 C4 00 69 00 60 00 62 BC 67 33 68 33 63 00 66
+T 00 C4 00 31 17 32 40 34 20 35 37 36 40 61 00 69
 R 00 00 00 01
-T 00 D2 00 D1 00 D3 00 D0 00 D2 00 E1 27 E2 00 DF
+T 00 D2 00 60 00 62 BC 67 33 68 33 63 00 66 00 D1
 R 00 00 00 01
-T 00 E0 19 DE 02 DD 00 FF
+T 00 E0 00 D3 00 D0 00 D2 00 E1 27 E2 00 DF 19 DE
+R 00 00 00 01
+T 00 EE 02 DD 00 FF
 R 00 00 00 01
 T 00 00 70 EF 62 00 00 71 10 62 00 00 62 01 FF 70
 R 00 00 00 02
