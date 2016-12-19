@@ -69,6 +69,7 @@ void stopwatch_fsm(enum event event_input){
 	static const struct transition mic_running_transitions[] = {
 	//	Event	Task				Next_state
 		{mic,	stop_timer_record,	mic_stopped},
+		{sp,	stop_timer_record,	mic_stopped},
 		{eol,	do_nothing,			mic_running}
 	};
 	static const struct transition statistic_transitions[] = {
@@ -114,11 +115,20 @@ void stopwatch_fsm(enum event event_input){
 
 // global variable
 unsigned short time;
+unsigned short time_displayed;
+unsigned short time_record[10] = {0,0,0,0,0,0,0,0,0,0};
+unsigned short hh = 0;
+unsigned short mm = 0;
+unsigned short ss = 0;
+unsigned short ll = 0;
 unsigned short MuteTime;
 unsigned char MicSensitivity = 1;
 int MicSenseValue = 350;
 unsigned char TimeAccuracy = 0;
+unsigned char stat_show = 0;
+unsigned char stat_result = 0;
 char str_buf[17];
+char * tmp_ptr;
 
 /*******************************************************************************
  * Main function
@@ -160,9 +170,9 @@ void main(void){
 		bSwitchState &= 0x0f;
 		bSwitchState |= (PRT1DR & 0x01);
 		if(bSwitchState == 0x0f){	// press detected 0x07
-			if (PressedTime < 200){
+			if (PressedTime < 25){
 				PressedTime++;	// Time button being pressed counted
-			} else if (PressedTime == 200){
+			} else if (PressedTime == 25){
 				// Long pressed Event
 				PressedTime++; // to prevent Repeated event
 				stopwatch_fsm(lp);
@@ -175,7 +185,7 @@ void main(void){
 		} else {
 			if (PressedTime == 0){
 				// Not pressed. No Event
-			} else if (PressedTime >= 200){
+			} else if (PressedTime >= 25){
 				// Release after Long pressed Event
 				cstrcpy(str_buf, "Released");
 				LCD_line_print(str_buf, LCD_LINE_2);
@@ -221,34 +231,158 @@ void main(void){
 		/****************************************************
 		 * Main Loop
 		 ***************************************************/
+		time_displayed = time;
 		switch(cs){
 		case pb_stopped:
-			itoa(time, str_buf, 10);
-			LCD_line_print(str_buf, LCD_LINE_1);
-			break;
 		case pb_running:
-			itoa(time, str_buf, 10);
-			LCD_line_print(str_buf, LCD_LINE_1);
-			break;
 		case mic_stopped:
-			itoa(time, str_buf, 10);
-			LCD_line_print(str_buf, LCD_LINE_1);
-			break;
 		case mic_running:
-			itoa(time, str_buf, 10);
+			switch(TimeAccuracy) {
+			case 0: // 1 sec
+				ll = 0;
+				break;
+			case 1: // 1/2 sec
+				ll = (time_displayed % 2) * 5;
+				time_displayed >>= 1;	// division by 2
+				break;
+			case 2: // 1/10 sec
+				ll = (time_displayed % 10);
+				time_displayed /= 10;
+				break;
+			}
+			ss = time_displayed % 60;
+			time_displayed /= 60;
+			mm = time_displayed % 60;
+			time_displayed /= 60;
+			hh = time_displayed;
+			
+			// display time
+			tmp_ptr = str_buf;
+			itoa(hh, tmp_ptr, 10);
+			tmp_ptr = tmp_ptr + strlen(tmp_ptr);
+			*tmp_ptr++ = ':';
+			itoa(mm, tmp_ptr, 10);
+			tmp_ptr = tmp_ptr + strlen(tmp_ptr);
+			*tmp_ptr++ = ':';
+			itoa(ss, tmp_ptr, 10);
+			tmp_ptr = tmp_ptr + strlen(tmp_ptr);
+			*tmp_ptr++ = ':';
+			itoa(ll, tmp_ptr, 10);
 			LCD_line_print(str_buf, LCD_LINE_1);
+			
+			
+			switch(cs){
+			case pb_stopped:
+				cstrcpy(str_buf, "PB Mode - Stop");
+				LCD_line_print(str_buf, LCD_LINE_2);
+				break;
+			case pb_running:
+				cstrcpy(str_buf, "PB Mode - Run");
+				LCD_line_print(str_buf, LCD_LINE_2);
+				break;
+			case mic_stopped:
+				// display mic level
+				tmp_ptr = tmp_ptr + strlen(tmp_ptr);
+				*tmp_ptr++ = ' ';
+				itoa(MicValue, tmp_ptr, 10);
+
+				cstrcpy(str_buf, "Mic Mode - Stop");
+				LCD_line_print(str_buf, LCD_LINE_2);
+				break;
+			case mic_running:
+				// display mic level
+				tmp_ptr = tmp_ptr + strlen(tmp_ptr);
+				*tmp_ptr++ = ' ';
+				itoa(MicValue, tmp_ptr, 10);
+
+				cstrcpy(str_buf, "Mic Mode - Run");
+				LCD_line_print(str_buf, LCD_LINE_2);
+				break;
+			}
 			break;
 		case statistic:
-			itoa(time, str_buf, 10);
+			tmp_ptr = str_buf;
+			switch(stat_show) {
+			case 0:	// Average
+				cstrcpy(tmp_ptr, "Avg");
+				tmp_ptr = tmp_ptr + strlen(tmp_ptr);
+				*tmp_ptr++ = '-';
+				
+				stat_result = 0;
+				for(i = 0; i<10; i++) {
+					stat_result += time_record[i];
+				}
+				stat_result /= 10;
+				break;
+			case 1: // longest
+				cstrcpy(tmp_ptr, "Long");
+				tmp_ptr = tmp_ptr + strlen(tmp_ptr);
+				*tmp_ptr++ = '-';
+
+				stat_result = 0;
+				for(i = 0; i<10; i++) {
+					if(stat_result < time_record[i]) {
+						stat_result = time_record[i];
+					}
+				}
+				break;
+			case 2:	// shortest
+				cstrcpy(tmp_ptr, "Short");
+				tmp_ptr = tmp_ptr + strlen(tmp_ptr);
+				*tmp_ptr++ = '-';
+				
+				stat_result = time_record[0];
+				for(i = 0; i<10; i++) {
+					if(stat_result > time_record[i]) {
+						stat_result = time_record[i];
+					}
+				}
+				break;
+			}
+			time_displayed = stat_result;
+			ll = 0;
+			ss = time_displayed % 60;
+			time_displayed /= 60;
+			mm = time_displayed % 60;
+			time_displayed /= 60;
+			hh = time_displayed;
+
+			// display time
+			itoa(hh, tmp_ptr, 10);
+			tmp_ptr = tmp_ptr + strlen(tmp_ptr);
+			*tmp_ptr++ = ':';
+			itoa(mm, tmp_ptr, 10);
+			tmp_ptr = tmp_ptr + strlen(tmp_ptr);
+			*tmp_ptr++ = ':';
+			itoa(ss, tmp_ptr, 10);
 			LCD_line_print(str_buf, LCD_LINE_1);
+			
+			cstrcpy(str_buf, "Memory");
+			LCD_line_print(str_buf, LCD_LINE_2);
 			break;
 		case accuracy:
-			itoa(TimeAccuracy, str_buf, 10);
+			switch(TimeAccuracy) {
+			case 0:
+				cstrcpy(str_buf, "1 Sec");
+				break;
+			case 1:
+				cstrcpy(str_buf, "1/2 Sec");
+				break;
+			case 2:
+				cstrcpy(str_buf, "1/10 Sec");
+				break;
+			}
 			LCD_line_print(str_buf, LCD_LINE_1);
+				
+			cstrcpy(str_buf, "Accu Setting");
+			LCD_line_print(str_buf, LCD_LINE_2);
 			break;
 		case sensitivity:
 			itoa(MicSensitivity, str_buf, 10);
 			LCD_line_print(str_buf, LCD_LINE_1);
+			
+			cstrcpy(str_buf, "Sens Setting");
+			LCD_line_print(str_buf, LCD_LINE_2);
 			break;
 		}
 	}
@@ -294,14 +428,58 @@ void do_nothing(void) {
 	return;
 }
 void start_timer(void) {
+	time = 0;
 	StopTimer_Start();
 }
 void stop_timer_record(void) {
 	StopTimer_Stop();
+	
+	// move and then record
+	memmove(time_record + 1, time_record, sizeof (time)*9);
+	
+	// record according to resolution
+	switch(TimeAccuracy) {
+	case 0: // 1 sec
+		time_record[0] = time;
+		break;
+	case 1: // 1/2 sec
+		time_record[0] = time >>1; // division by 2
+		break;
+	case 2: // 1/10 sec
+		time_record[0] = time / 10; // division by 10
+		break;
+	}
+	
+	// Stop for 3 seconds
+	time = 0;
+	StopTimer_WritePeriod(3200);	// set the resolution by 1/10 sec
+	StopTimer_Start();
+	while(time < 30) {
+		// Just wait
+	}
+	StopTimer_Stop();
+	
+	// restore resolution
+	switch(TimeAccuracy) {
+	case 0:
+		StopTimer_WritePeriod(32000);	// 1 sec
+		break;
+	case 1:
+		StopTimer_WritePeriod(16000);	// 1/2 sec
+		break;
+	case 2:
+		StopTimer_WritePeriod(3200);	// 1/10 sec
+		break;
+	}
 	time = 0;
 }
 
 void show_next_record(void) {
+	if(stat_show < 2) {
+		stat_show += 1;
+	} else {
+		stat_show = 0;
+	}
 	return;
 }
 
@@ -325,7 +503,7 @@ void inc_accuracy(void) {
 }
 
 void inc_sensitivity(void) {
-	if(MicSensitivity < 10) {
+	if(MicSensitivity < 20) {
 		MicSensitivity += 1;
 	} else {
 		MicSensitivity = 1;

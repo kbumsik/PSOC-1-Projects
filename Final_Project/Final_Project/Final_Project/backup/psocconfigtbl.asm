@@ -102,11 +102,11 @@ LoadConfigTBL_project1_Bank0:
 ;  Instance name StopTimer, User Module Timer16
 ;       Instance name StopTimer, Block Name TIMER16_LSB(DBB10)
 	db		33h, 00h		;StopTimer_CONTROL_LSB_REG(DBB10CR0)
-	db		31h, 80h		;StopTimer_PERIOD_LSB_REG(DBB10DR1)
+	db		31h, 00h		;StopTimer_PERIOD_LSB_REG(DBB10DR1)
 	db		32h, e8h		;StopTimer_COMPARE_LSB_REG(DBB10DR2)
 ;       Instance name StopTimer, Block Name TIMER16_MSB(DBB11)
 	db		37h, 04h		;StopTimer_CONTROL_MSB_REG(DBB11CR0)
-	db		35h, 0ch		;StopTimer_PERIOD_MSB_REG(DBB11DR1)
+	db		35h, 7dh		;StopTimer_PERIOD_MSB_REG(DBB11DR1)
 	db		36h, 03h		;StopTimer_COMPARE_MSB_REG(DBB11DR2)
 ;  Global Register values Bank 0
 	db		60h, 28h		; AnalogColumnInputSelect register (AMX_IN)

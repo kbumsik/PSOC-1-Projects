@@ -26,7 +26,7 @@ StopTimer_INT_MASK:                        equ 0x20
 ; Constants for StopTimer user defined values
 ;--------------------------------------------------
 
-StopTimer_PERIOD:                          equ 0xc80
+StopTimer_PERIOD:                          equ 0x7d00
 StopTimer_COMPARE_VALUE:                   equ 0x3e8
 
 

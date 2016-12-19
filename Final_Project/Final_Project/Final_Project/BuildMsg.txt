@@ -35,12 +35,12 @@ lib/stoptimerint.asm
 
 Linking..
 
-  ROM 24% full. 3775 out of 16384 bytes used (does not include absolute areas).
+  ROM 36% full. 5852 out of 16384 bytes used (does not include absolute areas).
 
-  RAM 30% full. 75 bytes used (does not include stack usage).
+  RAM 43% full. 109 bytes used (does not include stack usage).
 
 Built with ICCM8C STD V7.05.00
 
  
-Final_Project - 0 error(s) 0 warning(s) 09:11:42
+Final_Project - 0 error(s) 0 warning(s) 10:49:10
 
