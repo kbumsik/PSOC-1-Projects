@@ -2907,8 +2907,8 @@
  0C26           ; 
  0C26           ; void inc_sensitivity(void) {
  0C26                   .dbline 506
- 0C26           ;       if(MicSensitivity < 20) {
- 0C26 3C2B14            cmp [_MicSensitivity],20
+ 0C26           ;       if(MicSensitivity < 10) {
+ 0C26 3C2B0A            cmp [_MicSensitivity],10
  0C29 D005              jnc L154
  0C2B           X51:
  0C2B                   .dbline 507

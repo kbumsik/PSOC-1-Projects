@@ -503,7 +503,7 @@ void inc_accuracy(void) {
 }
 
 void inc_sensitivity(void) {
-	if(MicSensitivity < 20) {
+	if(MicSensitivity < 10) {
 		MicSensitivity += 1;
 	} else {
 		MicSensitivity = 1;
